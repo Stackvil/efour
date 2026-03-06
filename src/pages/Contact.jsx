@@ -15,7 +15,7 @@ const Contact = () => {
                     <h1 className="text-5xl md:text-7xl font-heading font-bold mb-8 text-charcoal-grey">Get in Touch With <br /><span className="text-sunset-orange">Efour.</span></h1>
                     <p className="text-lg text-gray-500 font-body">
 
-                        Located at the heart of Eluru, Efour is easily accessible from any part of the city. We're right OPP TO RTC Main bustand NR Peta.
+                        Located at the heart of Eluru, Efour is easily accessible from any part of the city. We're right Opp: New RTC Main Bus Stand, NR Peta.
                     </p>
                 </div>
 
@@ -35,7 +35,7 @@ const Contact = () => {
                                     <MapPin className="text-riverside-teal shrink-0" size={28} />
                                     <div>
                                         <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Address</p>
-                                        <p className="font-bold text-charcoal-grey leading-relaxed">OPP TO RTC Main bustand NR Peta, Eluru, Andhra Pradesh.</p>
+                                        <p className="font-bold text-charcoal-grey leading-relaxed">Opp: New RTC Main Bus Stand,<br />NR Peta, ELURU - 534 006</p>
                                     </div>
                                 </div>
 
@@ -70,10 +70,10 @@ const Contact = () => {
                             <div className="absolute inset-0 bg-riverside-teal/20" />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="bg-white p-6 rounded-3xl shadow-2xl flex items-center gap-6 max-w-sm">
-                                    <img src="/E4LOGO.jpeg" alt="E4 Logo" className="w-16 h-16 rounded-2xl object-cover" />
+                                    <img src="/E4LOGO.jpeg" alt="E4 Logo" className="h-16 w-auto object-contain drop-shadow-xl" />
                                     <div>
                                         <h4 className="font-bold text-lg">Efour Eluru</h4>
-                                        <p className="text-xs text-gray-500 mb-4 font-body">OPP TO RTC Main bustand NR Peta</p>
+                                        <p className="text-xs text-gray-500 mb-4 font-body">Opp: New RTC Main Bus Stand, NR Peta</p>
                                         <a href="https://www.google.com/maps/place/EFOUR/@16.7089355,81.0863275,17z/data=!3m1!4b1!4m6!3m5!1s0x3a36131a0e74054d:0x366c34d3c0b4589c!8m2!3d16.7089304!4d81.0889024!16s%2Fg%2F11wnjn71fc?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D" target="_blank" rel="noopener noreferrer" className="bg-sunset-orange text-white px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest inline-block">Open in Maps</a>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4 className="font-bold">Public Transport</h4>
-                                    <p className="text-sm text-gray-400">Right OPP TO RTC Main bustand NR Peta.</p>
+                                    <p className="text-sm text-gray-400">Right Opp: New RTC Main Bus Stand, NR Peta.</p>
                                 </div>
                             </div>
                         </div>

@@ -26,7 +26,7 @@ const CircularProgress = ({ pct, color }) => {
                 strokeWidth="3"
                 strokeDasharray={circ}
                 strokeDashoffset="0"
-                className="text-white/10"
+                className="text-gray-100"
             />
             <circle
                 r={r}
@@ -106,7 +106,7 @@ const TicketCard = memo(({ ticket, item }) => {
             >
                 {/* Front Side */}
                 <div className="absolute inset-0 backface-hidden">
-                    <div className={`h-full w-full rounded-[2.5rem] bg-slate-900/40 backdrop-blur-2xl border border-white/10 p-7 flex flex-col justify-between overflow-hidden shadow-2xl transition-all duration-500 ${status === 'expiring' ? 'animate-pulse-subtle ring-1 ring-orange-500/20' : ''}`}>
+                    <div className={`h-full w-full rounded-[2.5rem] bg-white border border-gray-200 p-7 flex flex-col justify-between overflow-hidden shadow-xl transition-all duration-500 ${status === 'expiring' ? 'animate-pulse-subtle ring-2 ring-orange-500' : ''}`}>
                         {/* Status Header */}
                         <div className="flex justify-between items-start mb-6">
                             <div className={`px-4 py-1.5 rounded-full ${config.bg} ${config.border} flex items-center gap-2`}>
@@ -114,28 +114,28 @@ const TicketCard = memo(({ ticket, item }) => {
                                 <span className={`text-[10px] font-black uppercase tracking-widest ${config.color}`}>{config.label}</span>
                             </div>
                             <div className="opacity-40 hover:opacity-100 transition-opacity">
-                                <QrCode className="text-white" size={24} />
+                                <QrCode className="text-charcoal-grey" size={24} />
                             </div>
                         </div>
 
                         {/* Main Content */}
                         <div className="space-y-6">
                             <div className="relative">
-                                <h3 className="text-white font-black text-2xl tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-2">
+                                <h3 className="text-charcoal-grey font-black text-2xl tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-2">
                                     {item.name}
                                 </h3>
-                                <p className="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase">Efour Digital Pass</p>
+                                <p className="text-gray-400 text-[10px] font-bold tracking-[0.3em] uppercase">Efour Digital Pass</p>
                             </div>
 
                             <div className="flex items-end gap-6">
                                 <div className="relative">
                                     <CircularProgress pct={timeLeft.pct} color={status === 'expired' ? 'text-red-500' : (status === 'expiring' ? 'text-orange-500' : 'text-emerald-500')} />
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <Clock className="text-white/20" size={14} />
+                                        <Clock className="text-gray-200" size={14} />
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Time Remaining</span>
+                                    <span className="text-gray-400 text-[9px] font-black uppercase tracking-widest block">Time Remaining</span>
                                     <span className={`text-xl font-mono font-black tabular-nums transition-colors duration-500 ${config.color}`}>
                                         {timeLeft.h}h {timeLeft.m}m {timeLeft.s}s
                                     </span>
@@ -144,20 +144,20 @@ const TicketCard = memo(({ ticket, item }) => {
                         </div>
 
                         {/* Bottom Metadata */}
-                        <div className="mt-auto pt-8 border-t border-white/5 space-y-5">
+                        <div className="mt-auto pt-8 border-t border-gray-100 space-y-5">
                             <div className="flex justify-between items-end">
                                 <div className="space-y-1">
-                                    <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Pass Cost</span>
-                                    <span className="text-white font-black text-2xl tracking-tight">₹{item.price * item.quantity}</span>
+                                    <span className="text-gray-400 text-[9px] font-black uppercase tracking-widest block">Pass Cost</span>
+                                    <span className="text-charcoal-grey font-black text-2xl tracking-tight">₹{item.price * item.quantity}</span>
                                 </div>
                                 <div className="text-right space-y-1">
-                                    <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Valid Date</span>
-                                    <span className="text-white/80 font-bold text-sm">{safeDate(ticket.date || ticket.createdAt).toLocaleDateString()}</span>
+                                    <span className="text-gray-400 text-[9px] font-black uppercase tracking-widest block">Valid Date</span>
+                                    <span className="text-gray-600 font-bold text-sm">{safeDate(ticket.date || ticket.createdAt).toLocaleDateString()}</span>
                                 </div>
                             </div>
 
                             <button
-                                className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${status === 'expired' ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white text-slate-900 hover:bg-sunset-orange hover:text-white shadow-xl shadow-black/20'}`}
+                                className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${status === 'expired' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-charcoal-grey text-white hover:bg-sunset-orange hover:text-white shadow-xl shadow-black/10'}`}
                             >
                                 {status === 'expired' ? 'Pass Expired' : 'View Verification QR'}
                             </button>
@@ -165,12 +165,12 @@ const TicketCard = memo(({ ticket, item }) => {
 
                         {/* Expired Overlay */}
                         {status === 'expired' && (
-                            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-8 text-center">
-                                <div className="w-16 h-16 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center mb-4">
+                            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-8 text-center rounded-[2.5rem]">
+                                <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
                                     <History className="text-red-500" size={32} />
                                 </div>
-                                <h4 className="text-white font-black text-2xl uppercase italic tracking-tighter mb-2">Expired</h4>
-                                <p className="text-white/40 text-xs font-medium leading-relaxed">This digital pass has reached its 24-hour limit and is no longer valid for entry.</p>
+                                <h4 className="text-charcoal-grey font-black text-2xl uppercase italic tracking-tighter mb-2">Expired</h4>
+                                <p className="text-gray-500 text-xs font-medium leading-relaxed">This digital pass has reached its 24-hour limit and is no longer valid for entry.</p>
                             </div>
                         )}
                     </div>
@@ -218,13 +218,13 @@ const TicketCard = memo(({ ticket, item }) => {
 });
 
 const StatsCard = ({ icon: Icon, label, value, color }) => (
-    <div className="bg-slate-900/40 backdrop-blur-xl border border-white/5 p-6 rounded-3xl flex items-center gap-5 transition-transform hover:scale-105 duration-300">
-        <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center text-white shadow-lg`}>
+    <div className="bg-white border border-gray-100 shadow-sm p-6 rounded-3xl flex items-center gap-5 transition-transform hover:scale-105 duration-300">
+        <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center text-white shadow-md`}>
             <Icon size={24} />
         </div>
         <div>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-widest block mb-1">{label}</span>
-            <span className="text-white font-black text-2xl tabular-nums">{value}</span>
+            <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest block mb-1">{label}</span>
+            <span className="text-charcoal-grey font-black text-2xl tabular-nums">{value}</span>
         </div>
     </div>
 );
@@ -304,13 +304,13 @@ const YourTickets = () => {
 
     if (!user || (!loading && tickets.length === 0)) {
         return (
-            <div className="min-h-screen bg-[#0F172A] pt-32 pb-12 px-6 flex flex-col items-center justify-center text-center">
-                <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8">
-                    <Ticket size={48} className="text-white/20" />
+            <div className="min-h-screen bg-creamy-white pt-32 pb-12 px-6 flex flex-col items-center justify-center text-center">
+                <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-8 shadow-sm border border-gray-100">
+                    <Ticket size={48} className="text-gray-300" />
                 </div>
-                <h2 className="text-4xl font-black text-white mb-4 uppercase italic tracking-tighter transform -skew-x-12">No Passes Found</h2>
-                <p className="text-white/40 mb-10 max-w-sm font-medium leading-relaxed italic">Your digital vault is empty. Experience the thrill of Efour and your passes will appear here.</p>
-                <Link to="/" className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-sunset-orange hover:text-white transition-all shadow-2xl">
+                <h2 className="text-4xl font-black text-charcoal-grey mb-4 uppercase italic tracking-tighter transform -skew-x-12">No Passes Found</h2>
+                <p className="text-gray-500 mb-10 max-w-sm font-medium leading-relaxed italic">Your digital vault is empty. Experience the thrill of Efour and your passes will appear here.</p>
+                <Link to="/" className="bg-sunset-orange text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/20">
                     Discover Attractions
                 </Link>
             </div>
@@ -318,7 +318,7 @@ const YourTickets = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#0F172A] text-white pt-32 pb-24 selection:bg-sunset-orange/30">
+        <div className="min-h-screen bg-creamy-white text-charcoal-grey pt-32 pb-24 selection:bg-sunset-orange/30">
             <div className="container mx-auto px-6 max-w-7xl">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
@@ -327,25 +327,25 @@ const YourTickets = () => {
                             <LayoutDashboard size={20} />
                             <span className="text-xs font-black uppercase tracking-[0.4em]">Digital Vault</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6 drop-shadow-2xl">
-                            Your <span className="text-white">Passes</span>
+                        <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6">
+                            Your <span className="text-sunset-orange">Passes</span>
                         </h1>
-                        <p className="text-white/40 text-sm font-medium max-w-md italic">
+                        <p className="text-gray-500 text-sm font-medium max-w-md italic">
                             Manage your premium access tokens. Tickets are valid for 24 hours from the moment of purchase.
                         </p>
                     </div>
 
-                    <div className="flex gap-2 bg-slate-900/40 p-1.5 rounded-2xl border border-white/5">
+                    <div className="flex gap-2 bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm">
                         {['all', 'active', 'expiring', 'expired'].map(btn => (
                             <button
                                 key={btn}
                                 onClick={() => setFilter(btn)}
-                                className={`px-6 py-2.5 rounded-xl text-[10px] font-black font-heading uppercase tracking-widest transition-all relative ${filter === btn ? 'text-white' : 'text-white/40 hover:text-white/60'}`}
+                                className={`px-6 py-2.5 rounded-xl text-[10px] font-black font-heading uppercase tracking-widest transition-all relative ${filter === btn ? 'text-white' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 {filter === btn && (
                                     <motion.div
                                         layoutId="tab-bg"
-                                        className="absolute inset-0 bg-white/10 rounded-xl"
+                                        className="absolute inset-0 bg-charcoal-grey rounded-xl"
                                         transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                                     />
                                 )}
@@ -367,7 +367,7 @@ const YourTickets = () => {
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="h-[420px] rounded-[2.5rem] bg-white/5 animate-pulse border border-white/5" />
+                            <div key={i} className="h-[420px] rounded-[2.5rem] bg-white animate-pulse border border-gray-100 shadow-sm" />
                         ))}
                     </div>
                 ) : (
@@ -396,10 +396,10 @@ const YourTickets = () => {
                 {/* Empty State for Filter */}
                 {!loading && filteredTickets.length === 0 && (
                     <div className="py-32 flex flex-col items-center text-center">
-                        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                            <Clock className="text-white/10" size={32} />
+                        <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm border border-gray-100">
+                            <Clock className="text-gray-300" size={32} />
                         </div>
-                        <p className="text-white/30 font-black uppercase tracking-[0.2em] text-sm">No passes match the current filter</p>
+                        <p className="text-gray-400 font-black uppercase tracking-[0.2em] text-sm">No passes match the current filter</p>
                     </div>
                 )}
             </div>

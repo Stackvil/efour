@@ -229,7 +229,7 @@ const Cart = () => {
                                             </div>
                                             <div>
                                                 <h2 className="text-2xl font-heading font-bold">Your Order</h2>
-                                                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{cart.length} Stalls Selected</p>
+                                                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{cart.length} Rides Selected</p>
                                             </div>
                                         </div>
                                         <button onClick={toggleCart} className="p-2 hover:bg-gray-200 rounded-xl transition-all">
@@ -247,7 +247,7 @@ const Cart = () => {
                                                     onClick={toggleCart}
                                                     className="mt-6 text-sunset-orange font-bold underline"
                                                 >
-                                                    Browse Stalls
+                                                    Browse Rides
                                                 </button>
                                             </div>
                                         ) : (

@@ -394,7 +394,7 @@ const Login = () => {
                             transition={{ delay: 0.2 }}
                             src="/E4LOGO.jpeg"
                             alt="E4 Logo"
-                            className="w-20 h-20 rounded-2xl shadow-2xl mb-8 border-4 border-white/20 backdrop-blur-sm"
+                            className="h-24 md:h-32 w-auto object-contain drop-shadow-2xl mb-8"
                         />
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}

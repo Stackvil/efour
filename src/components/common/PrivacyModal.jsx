@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, BookHeart, Scale, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import { X, ShieldCheck, UserCheck, Lock, CheckCircle2 } from 'lucide-react';
 
-const TermsModal = ({ isOpen, onClose }) => {
+const PrivacyModal = ({ isOpen, onClose }) => {
     // Prevent scrolling on body when modal is open
     useEffect(() => {
         if (isOpen) {
@@ -40,9 +40,9 @@ const TermsModal = ({ isOpen, onClose }) => {
                             <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative z-10">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100">
-                                        <BookHeart size={20} className="text-riverside-teal" />
+                                        <ShieldCheck size={20} className="text-riverside-teal" />
                                     </div>
-                                    <h2 className="text-2xl font-heading font-black text-charcoal-grey">Terms of Use</h2>
+                                    <h2 className="text-2xl font-heading font-black text-charcoal-grey">Privacy Policy</h2>
                                 </div>
                                 <button
                                     onClick={onClose}
@@ -55,55 +55,72 @@ const TermsModal = ({ isOpen, onClose }) => {
                             {/* Content */}
                             <div className="p-6 sm:p-8 overflow-y-auto bg-[#F4F7F8] flex-grow">
                                 <p className="text-gray-500 mb-6 text-sm font-medium">
-                                    Usage of <span className="font-bold text-gray-700">efour-eluru.com</span> is subject to these Terms. Acceptance is implied by using the site.
+                                    <span className="font-bold text-gray-700">Efour</span> protects any information you give when visiting the Website. Effective from May 1st, 2019.
                                 </p>
 
                                 <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                                    {/* Obligations */}
+                                    {/* Collected Info */}
                                     <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-3 mb-3">
+                                        <div className="flex items-center gap-3 mb-4">
                                             <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Scale size={16} className="text-riverside-teal" />
+                                                <UserCheck size={16} className="text-riverside-teal" />
                                             </div>
-                                            <h3 className="font-bold text-charcoal-grey">Obligations</h3>
+                                            <h3 className="font-bold text-charcoal-grey">Collected Info</h3>
                                         </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            Use for lawful purposes only. You must provide accurate info and keep your login credentials secure.
-                                        </p>
+                                        <ul className="space-y-3">
+                                            <li className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <CheckCircle2 size={14} className="text-riverside-teal" />
+                                                Name & Mobile
+                                            </li>
+                                            <li className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <CheckCircle2 size={14} className="text-riverside-teal" />
+                                                Email & Address
+                                            </li>
+                                            <li className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <CheckCircle2 size={14} className="text-riverside-teal" />
+                                                Survey Data
+                                            </li>
+                                        </ul>
                                     </div>
 
-                                    {/* Content */}
+                                    {/* Security */}
                                     <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-3 mb-3">
+                                        <div className="flex items-center gap-3 mb-4">
                                             <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <LinkIcon size={16} className="text-riverside-teal" />
+                                                <ShieldCheck size={16} className="text-riverside-teal" />
                                             </div>
-                                            <h3 className="font-bold text-charcoal-grey">Content</h3>
+                                            <h3 className="font-bold text-charcoal-grey">Security</h3>
                                         </div>
                                         <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            Materials are for PERSONAL USE ONLY. No data mining or scraping. We aren't responsible for external links.
+                                            We use suitable physical and electronic procedures to safeguard your info. We won't sell your data unless required by law.
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Liability & Terms */}
+                                {/* Usage */}
                                 <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm">
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                            <AlertCircle size={16} className="text-riverside-teal" />
+                                            <Lock size={16} className="text-riverside-teal" />
                                         </div>
-                                        <h3 className="font-bold text-charcoal-grey">Liability & Terms</h3>
+                                        <h3 className="font-bold text-charcoal-grey">Usage</h3>
                                     </div>
-                                    <div className="grid sm:grid-cols-2 gap-6">
-                                        <div>
-                                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                                <span className="font-bold text-gray-700">Indemnity:</span> You hold us harmless from claims arising from your site usage.
-                                            </p>
+                                    <div className="grid sm:grid-cols-2 gap-4">
+                                        <div className="flex items-center gap-3">
+                                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-sunset-orange text-[10px] font-bold">1</span>
+                                            <span className="text-xs text-gray-500 font-medium">Internal record keeping</span>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                                <span className="font-bold text-gray-700">Risk:</span> Service use is at your own risk. We offer no guarantees of error-free service.
-                                            </p>
+                                        <div className="flex items-center gap-3">
+                                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-sunset-orange text-[10px] font-bold">2</span>
+                                            <span className="text-xs text-gray-500 font-medium">Improving services</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-sunset-orange text-[10px] font-bold">3</span>
+                                            <span className="text-xs text-gray-500 font-medium">Promotional emails</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-sunset-orange text-[10px] font-bold">4</span>
+                                            <span className="text-xs text-gray-500 font-medium">Market research</span>
                                         </div>
                                     </div>
                                 </div>
@@ -126,4 +143,4 @@ const TermsModal = ({ isOpen, onClose }) => {
     );
 };
 
-export default TermsModal;
+export default PrivacyModal;

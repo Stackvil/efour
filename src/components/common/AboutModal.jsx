@@ -61,7 +61,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                                         Eat. Enjoy. <span className="text-riverside-teal">Entertain.</span>
                                     </h3>
                                     <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                                        Ethree is a premier Food Court and Play Zone bringing families together through diverse cuisines and recreation under one roof.
+                                        Efour is a premier Food Court and Play Zone bringing families together through diverse cuisines and recreation under one roof.
                                     </p>
                                 </div>
 
