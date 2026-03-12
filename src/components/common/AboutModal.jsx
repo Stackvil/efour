@@ -58,7 +58,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                                 <div className="mb-6 max-w-lg text-center">
                                     <span className="text-[10px] font-bold tracking-[0.2em] text-sunset-orange uppercase mb-2 block">Our Story</span>
                                     <h3 className="text-3xl sm:text-4xl font-heading font-black text-charcoal-grey mb-4">
-                                        Eat. Enjoy. <span className="text-riverside-teal">Entertain.</span>
+                                        Eat. Enjoy. <span className="text-riverside-teal">Entertain.</span> Eluru
                                     </h3>
                                     <p className="text-sm font-medium text-gray-500 leading-relaxed">
                                         Efour is a premier Food Court and Play Zone bringing families together through diverse cuisines and recreation under one roof.
@@ -97,13 +97,17 @@ const AboutModal = ({ isOpen, onClose }) => {
                                     <p className="text-sm italic text-gray-500 font-medium leading-relaxed mb-8 px-2">
                                         "We designed an ample space for all cuisines and play zone activities to suit all ages and promote local talent."
                                     </p>
-                                    <div className="flex items-center gap-3 border-t border-gray-50 pt-4 px-2 mt-auto">
-                                        <div className="w-10 h-10 rounded-full bg-charcoal-grey text-white flex items-center justify-center font-bold text-sm">
-                                            JK
+                                    <div className="flex items-center gap-5 sm:gap-6 border-t border-gray-100 pt-6 px-2 mt-auto">
+                                        <div className="shrink-0">
+                                            <img
+                                                src="/jaynarayana.jpeg"
+                                                alt="Jayanarayana Kureti"
+                                                className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl object-cover object-top shadow-md border-4 border-white ring-1 ring-gray-100"
+                                            />
                                         </div>
                                         <div>
-                                            <p className="font-bold text-charcoal-grey text-sm">Jayanarayana Kureti</p>
-                                            <p className="text-xs text-gray-400 font-medium mt-0.5">Founder & CEO</p>
+                                            <p className="font-black bg-gradient-to-r from-sunset-orange via-riverside-teal to-charcoal-grey bg-clip-text text-transparent text-xl sm:text-2xl tracking-tight">Jayanarayana Kureti</p>
+                                            <p className="text-[10px] font-black text-riverside-teal/60 mt-1 uppercase tracking-[0.3em]">Founder & CEO</p>
                                         </div>
                                     </div>
                                 </div>

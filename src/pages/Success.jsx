@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowRight, User, X } from 'lucide-react';
+import { BASE_URL } from '../utils/api';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import useStore from '../store/useStore';
 
@@ -23,7 +24,7 @@ const Success = () => {
                 return;
             }
             try {
-                const res = await fetch(`/api/payment/status/${orderId}`);
+                const res = await fetch(`${BASE_URL}/api/payment/status/${orderId}`);
                 if (res.ok) {
                     const data = await res.json();
                     setOrderDetails(data.order || data);
@@ -105,7 +106,7 @@ const Success = () => {
                         <div key={item.id || item._id} className="bg-white border rounded-2xl p-4 shadow-sm flex items-center justify-between gap-4 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-2 h-full bg-sunset-orange" />
                             <div className="flex items-center gap-4">
-                                <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover" />
+                                <img src={item.image ? decodeURIComponent(item.image) : ''} alt={item.name} className="w-16 h-16 rounded-xl object-cover" />
                                 <div>
                                     <h3 className="font-bold text-lg">{item.name}</h3>
                                     <p className="text-sm text-gray-500">Qty: {item.quantity} • ₹{item.price * item.quantity}</p>

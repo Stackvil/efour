@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, BookHeart, Scale, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import { X, BookHeart, Scale, Link as LinkIcon, AlertCircle, Globe, Power, Gavel, Building2, Mail, Phone } from 'lucide-react';
 
 const TermsModal = ({ isOpen, onClose }) => {
     // Prevent scrolling on body when modal is open
@@ -86,15 +86,15 @@ const TermsModal = ({ isOpen, onClose }) => {
                                     </div>
                                 </div>
 
-                                {/* Liability & Terms */}
-                                <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm">
+                                {/* Liability & Refunds */}
+                                <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm mt-4">
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
                                             <AlertCircle size={16} className="text-riverside-teal" />
                                         </div>
-                                        <h3 className="font-bold text-charcoal-grey">Liability & Terms</h3>
+                                        <h3 className="font-bold text-charcoal-grey">Liability & Refunds</h3>
                                     </div>
-                                    <div className="grid sm:grid-cols-2 gap-6">
+                                    <div className="grid sm:grid-cols-2 gap-6 mb-6">
                                         <div>
                                             <p className="text-xs text-gray-500 leading-relaxed font-medium">
                                                 <span className="font-bold text-gray-700">Indemnity:</span> You hold us harmless from claims arising from your site usage.
@@ -104,6 +104,78 @@ const TermsModal = ({ isOpen, onClose }) => {
                                             <p className="text-xs text-gray-500 leading-relaxed font-medium">
                                                 <span className="font-bold text-gray-700">Risk:</span> Service use is at your own risk. We offer no guarantees of error-free service.
                                             </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Refund & Return Policy */}
+                                    <div className="bg-red-50/50 p-4 rounded-xl border border-red-100">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <AlertCircle size={16} className="text-red-600" />
+                                            <h4 className="font-bold text-sm text-red-600">Refund & Return Policy</h4>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium italic">
+                                            "All bookings and purchases are final. We maintain a strict no-refund and no-return policy once a service has been booked, food has been served, or entry has been granted. Please double-check your order before proceeding."
+                                        </p>
+                                    </div>
+                                </div>
+                                {/* Privacy & Legal Cards */}
+                                <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                                    {/* Service Availability */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Globe size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Service Availability</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            We strive for 24/7 uptime but do not guarantee uninterrupted access. We reserve the right to perform maintenance without prior notice.
+                                        </p>
+                                    </div>
+
+                                    {/* Termination */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Power size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Termination</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            We reserve the right to suspend or terminate your account at our sole discretion if these terms are violated.
+                                        </p>
+                                    </div>
+
+                                    {/* Governing Law */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Gavel size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Governing Law</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            These terms are governed by the laws of India. Any disputes are subject to the exclusive jurisdiction of the courts in Vijayawada.
+                                        </p>
+                                    </div>
+
+                                    {/* Contact Information */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Building2 size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Contact Information</h3>
+                                        </div>
+                                        <div className="space-y-3 mt-1">
+                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <Mail size={14} className="text-riverside-teal" />
+                                                ceo@efour-eluru.com
+                                            </div>
+                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <Phone size={14} className="text-riverside-teal" />
+                                                +91 70369 23456
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

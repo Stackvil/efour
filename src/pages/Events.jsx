@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
 import OptimizedImage from '../components/common/OptimizedImage';
+import { BASE_URL } from '../utils/api';
 
 const Events = () => {
     const { addToCart, toggleCart } = useStore();
@@ -25,10 +26,10 @@ const Events = () => {
     React.useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await fetch('/api/events?location=E4');
+                const res = await fetch(`${BASE_URL}/api/events?location=E4`);
                 if (res.ok) {
                     const data = await res.json();
-                    const eventsArr = Array.isArray(data) ? data : [];
+                    const eventsArr = (Array.isArray(data) ? data : []).filter(Boolean);
                     setEventsList(eventsArr);
                     if (eventsArr.length > 0 && !selectedRoom) {
                         setSelectedRoom(eventsArr[0].name);
@@ -51,7 +52,7 @@ const Events = () => {
             }
             setLoadingSlots(true);
             try {
-                const res = await fetch(`/api/bookings/slots?location=e4&date=${selectedDate}`);
+                const res = await fetch(`${BASE_URL}/api/bookings/slots?location=e4&date=${selectedDate}`);
                 if (res.ok) {
                     const data = await res.json();
                     setSlots(data.slots || []);

@@ -21,8 +21,14 @@ const BottomNav = () => {
                     to="/dine"
                     className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-sunset-orange' : 'text-gray-400'}`}
                 >
-                    <Utensils size={22} />
-                    <span className="text-[10px] font-bold uppercase tracking-tight">Dine</span>
+                    <div className="relative">
+                        <Utensils size={22} />
+                        <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sunset-orange opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-sunset-orange"></span>
+                        </span>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-tight">Soon</span>
                 </NavLink>
 
                 <NavLink

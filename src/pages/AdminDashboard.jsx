@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../supabaseClient';
+// import { supabase } from '../supabaseClient';
 import {
     LayoutDashboard, ShoppingCart, Calendar, Users, Package, Power,
     Plus, Trash2, Edit2, X, Check, Utensils, Gamepad2, Download,
     Monitor, Smartphone, Ticket, Menu, Search, Filter, ChevronDown,
     Bell, Settings, MoreVertical, ArrowUpRight, ArrowDownRight, IndianRupee, MapPin
 } from 'lucide-react';
+import { BASE_URL } from '../utils/api';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('analytics');
@@ -40,9 +41,7 @@ const AdminDashboard = () => {
             const headers = { 'x-auth-token': currentToken, 'Authorization': `Bearer ${currentToken}` };
             // In dev: use Vite proxy (`/api` -> backend) to avoid CORS.
             // In prod: use configured backend URL (or fallback to the deployed backend).
-            const apiUrl = import.meta.env.DEV
-                ? '/api'
-                : (import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app/api');
+            const apiUrl = `${BASE_URL}/api`;
 
             // Parallel Fetch – E4 orders via /orders/e4/all (Admin only)
             // Use ?all=true for rides and dine to ensure inactive items are visible.
@@ -58,9 +57,10 @@ const AdminDashboard = () => {
             let rideProducts = [];
             if (ridesRes.ok) {
                 const data = await ridesRes.json();
-                rideProducts = Array.isArray(data) ? data.map(item => ({
+                rideProducts = Array.isArray(data) ? data.filter(Boolean).map(item => ({
                     ...item,
                     id: item._id || item.id,
+                    image: item.image ? decodeURIComponent(item.image) : '',
                     description: item.desc || item.description
                 })) : [];
             }
@@ -70,9 +70,10 @@ const AdminDashboard = () => {
             if (dineRes.ok) {
                 const data = await dineRes.json();
                 dineProducts = Array.isArray(data)
-                    ? data.map(item => ({
+                    ? data.filter(Boolean).map(item => ({
                         ...item,
                         id: item._id || item.id,
+                        image: item.image ? decodeURIComponent(item.image) : '',
                         category: item.category || 'food',
                         description: item.desc || item.description
                     }))
@@ -93,7 +94,7 @@ const AdminDashboard = () => {
             //         : [];
             // }
 
-            setProducts([...rideProducts, ...dineProducts]);
+            setProducts((rideProducts || []).concat(dineProducts || []).filter(Boolean));
 
             let finalBookings = [];
             if (bookingsRes.ok) {
@@ -102,7 +103,7 @@ const AdminDashboard = () => {
                     finalBookings = Array.isArray(raw) ? raw : (raw?.bookings || raw?.data || raw?.result || Object.values(raw).find(v => Array.isArray(v)) || []);
                 } catch (_) { }
             }
-            setBookings(finalBookings);
+            setBookings((finalBookings || []).filter(Boolean));
 
             let ordersData = [];
             if (ordersRes.ok) {
@@ -111,7 +112,7 @@ const AdminDashboard = () => {
                     ordersData = Array.isArray(raw) ? raw : (raw?.orders || raw?.data || raw?.result || Object.values(raw).find(v => Array.isArray(v)) || []);
                 } catch (_) { }
             }
-            setOrders(ordersData);
+            setOrders((ordersData || []).filter(Boolean));
 
         } catch (err) {
             console.error('Fetch error:', err);
@@ -125,15 +126,20 @@ const AdminDashboard = () => {
     }, []);
 
     // --- Search Filtering ---
-    const filteredOrders = orders.filter(o =>
-        (o.userDetails?.name || o.name || o.userId || '').toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (o._id || o.id || '').toString().includes(searchQuery)
+    const filteredOrders = (orders || []).filter(o =>
+        o && (
+            (o.userDetails?.name || o.name || o.userId || '').toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (o._id || o.id || '').toString().includes(searchQuery)
+        )
     );
-    const filteredBookings = bookings.filter(b =>
-        (b.userDetails?.name || b.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (b._id || b.id || '').toString().includes(searchQuery)
+    const filteredBookings = (bookings || []).filter(b =>
+        b && (
+            (b.userDetails?.name || b.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (b._id || b.id || '').toString().includes(searchQuery)
+        )
     );
-    const filteredProducts = products.filter(p => {
+    const filteredProducts = (products || []).filter(p => {
+        if (!p) return false;
         const matchesSearch = (p.name || '').toLowerCase().includes(searchQuery.toLowerCase());
         const itemStatus = (p.status || (p.open === false ? 'off' : 'on')).toLowerCase();
         const matchesStatus = statusFilter === 'all' || itemStatus === statusFilter;
@@ -146,9 +152,7 @@ const AdminDashboard = () => {
         if (!window.confirm('Delete this item?')) return;
         try {
             if (type === 'product') {
-                const apiUrl = import.meta.env.DEV
-                    ? '/api'
-                    : (import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app/api');
+                const apiUrl = `${BASE_URL}/api`;
                 const currentToken = localStorage.getItem('token');
                 if (!currentToken) {
                     alert('Admin token missing. Please login again.');
@@ -176,9 +180,7 @@ const AdminDashboard = () => {
                     alert('Failed to delete item.');
                 }
             } else if (type === 'booking') {
-                const apiUrl = import.meta.env.DEV
-                    ? '/api'
-                    : (import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app/api');
+                const apiUrl = `${BASE_URL}/api`;
                 const res = await fetch(`${apiUrl}/bookings/${id}`, { method: 'DELETE', headers: { 'x-auth-token': token } });
                 if (res.ok) setBookings(prev => prev.filter(b => b._id !== id));
             }
@@ -188,9 +190,7 @@ const AdminDashboard = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            const apiUrl = import.meta.env.DEV
-                ? '/api'
-                : (import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app/api');
+            const apiUrl = `${BASE_URL}/api`;
             const currentToken = localStorage.getItem('token');
             if (!currentToken) {
                 alert('Admin token missing. Please login again.');
@@ -323,20 +323,20 @@ const AdminDashboard = () => {
         } catch (err) { alert(err.message); }
     };
 
-    // Image Upload
-    const handleImageUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 5 * 1024 * 1024) return alert("Max 5MB");
-        try {
-            const fileExt = file.name.split('.').pop();
-            const filePath = `${Math.random()}.${fileExt}`;
-            const { error } = await supabase.storage.from('ride-images').upload(filePath, file);
-            if (error) throw error;
-            const { data } = supabase.storage.from('ride-images').getPublicUrl(filePath);
-            setFormData(prev => ({ ...prev, image: data.publicUrl }));
-        } catch (error) { console.error(error); alert('Upload failed'); }
-    };
+    // Image Upload (Disabled per user request to forget about Supabase)
+    // const handleImageUpload = async (e) => {
+    //     const file = e.target.files[0];
+    //     if (!file) return;
+    //     if (file.size > 5 * 1024 * 1024) return alert("Max 5MB");
+    //     try {
+    //         const fileExt = file.name.split('.').pop();
+    //         const filePath = `${Math.random()}.${fileExt}`;
+    //         const { error } = await supabase.storage.from('ride-images').upload(filePath, file);
+    //         if (error) throw error;
+    //         const { data } = supabase.storage.from('ride-images').getPublicUrl(filePath);
+    //         setFormData(prev => ({ ...prev, image: data.publicUrl }));
+    //     } catch (error) { console.error(error); alert('Upload failed'); }
+    // };
 
 
     // --- Helpers (match backend API: orders use amount, bookings use totalPrice) ---
@@ -358,9 +358,7 @@ const AdminDashboard = () => {
             return;
         }
         try {
-            const apiUrl = import.meta.env.DEV
-                ? '/api'
-                : (import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app/api');
+            const apiUrl = `${BASE_URL}/api`;
             const id = (item._id || item.id || '').toString();
             if (!id) return;
 
@@ -429,11 +427,13 @@ const AdminDashboard = () => {
             }
 
             setProducts(prev =>
-                prev.map(p =>
-                    (p._id === id || p.id === id || (p._id && p._id.toString() === id) || (p.id && p.id.toString() === id))
+                prev.map(p => {
+                    if (!p) return p;
+                    const pId = (p._id || p.id || '').toString();
+                    return (pId === id)
                         ? { ...p, status: newStatus, open: newStatus === 'on' }
-                        : p
-                )
+                        : p;
+                })
             );
         } catch (err) {
             console.error('Error updating status:', err);
@@ -777,7 +777,7 @@ const AdminDashboard = () => {
 
                                                     return (
                                                         <>
-                                                            {displayList.map((item, idx) => (
+                                                            {displayList.filter(Boolean).map((item, idx) => (
                                                                 <tr key={item._id || item.id || idx} className="hover:bg-gray-50 transition-colors">
                                                                     <td className="px-6 py-4 text-sm font-medium text-gray-500 font-mono">
                                                                         #{String(item._id || item.id || '').slice(-6).toUpperCase()}
@@ -802,7 +802,7 @@ const AdminDashboard = () => {
                                                                     </td>
                                                                     <td className="px-6 py-4 text-right">
                                                                         <button
-                                                                            onClick={() => handleDelete(item._id, isBookingsTab ? 'booking' : 'order')}
+                                                                            onClick={() => handleDelete(item._id || item.id, isBookingsTab ? 'booking' : 'order')}
                                                                             className="text-gray-400 hover:text-red-500 transition-colors"
                                                                         >
                                                                             <Trash2 size={18} />
@@ -907,13 +907,21 @@ const AdminDashboard = () => {
                                         </div>
                                     </>
                                 )}
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Image</label>
+                                <div className="flex flex-col gap-3">
                                     <div className="flex items-center gap-4">
                                         <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200">
                                             {formData.image ? <img src={formData.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No Img</div>}
                                         </div>
-                                        <input type="file" onChange={handleImageUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-riverside-teal/10 file:text-riverside-teal hover:file:bg-riverside-teal/20" />
+                                        <div className="flex-1 space-y-1">
+                                            <input
+                                                type="text"
+                                                placeholder="Paste Image URL here (https://...)"
+                                                value={formData.image}
+                                                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                                                className="w-full px-4 py-2 text-sm rounded-lg border border-gray-200 focus:border-riverside-teal outline-none"
+                                            />
+                                            <p className="text-[10px] text-gray-400">Supabase uploads are disabled. Please provide a direct image URL.</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="space-y-1">

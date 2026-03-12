@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Phone, MapPin, Instagram, Facebook, Twitter, Mail, ArrowUp } from 'lucide-react'
+import { Phone, MapPin, Instagram, Facebook, Youtube, Mail, ArrowUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const Footer = () => {
@@ -24,22 +24,34 @@ const Footer = () => {
                         <p className="text-text-secondary text-xl font-light max-w-lg mb-12 leading-relaxed">
                             Located OPP TO RTC Main bustand NR Peta, Eluru. We are the premier destination for families and youth who seek the best in food and entertainment.
                         </p>
-                        <div className="flex gap-6">
+                        <div className="flex gap-8">
                             {[
-                                { Icon: Instagram, href: 'https://www.instagram.com/efoureluru?igsh=MXkxOTA5djhzM2dpeA==' },
-                                { Icon: Facebook, href: 'https://www.facebook.com/share/1DHuqH8gAA/?mibextid=wwXIfr' },
-                                { Icon: Twitter, href: '#' },
-                                { Icon: Mail, href: 'mailto:efoureluru@gmail.com' }
-                            ].map(({ Icon, href }, i) => (
+                                { Icon: Instagram, href: 'https://www.instagram.com/efoureluru?igsh=MXkxOTA5djhzM2dpeA==', color: 'from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]', shadow: 'shadow-pink-500/20' },
+                                { Icon: Facebook, href: 'https://www.facebook.com/share/1DHuqH8gAA/?mibextid=wwXIfr', color: 'from-[#1877F2] to-[#0a52be]', shadow: 'shadow-blue-500/20' },
+                                { Icon: Youtube, href: '#', color: 'from-[#FF0000] to-[#cc0000]', shadow: 'shadow-red-500/20' }
+                            ].map(({ Icon, href, color, shadow }, i) => (
                                 <motion.a
                                     key={i}
                                     href={href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    whileHover={{ y: -5, color: '#10b981' }}
-                                    className="w-14 h-14 premium-glass rounded-full flex items-center justify-center transition-colors"
+                                    whileHover={{ y: -8, scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="group relative"
                                 >
-                                    <Icon size={20} />
+                                    {/* Advanced Glow Effect */}
+                                    <div className={`absolute -inset-2 bg-gradient-to-tr ${color} blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-full`} />
+
+                                    {/* The Icon Container */}
+                                    <div className={`w-16 h-16 premium-glass rounded-[1.5rem] flex items-center justify-center border border-white/10 group-hover:border-transparent transition-all duration-500 relative z-10 overflow-hidden`}>
+                                        {/* Colorful background that slides in */}
+                                        <div className={`absolute inset-0 bg-gradient-to-tr ${color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+                                        <Icon size={26} className="text-white relative z-20 group-hover:scale-110 transition-transform duration-500 drop-shadow-md" />
+                                    </div>
+
+                                    {/* Dot Indicator */}
+                                    <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${color} shadow-lg ${shadow} opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-50 group-hover:scale-100`} />
                                 </motion.a>
                             ))}
                         </div>
@@ -79,8 +91,8 @@ const Footer = () => {
 
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5">
                     <div className="flex flex-col items-center md:items-start gap-1.5">
-                        <p className="text-[10px] uppercase tracking-widest text-text-dim">
-                            © 2024 KURETI JAYANARAYANA. All rights reserved.
+                        <p className="text-[10px] uppercase tracking-widest text-text-dim flex items-center gap-1.5 flex-wrap">
+                            © 2024 <span className="font-black bg-gradient-to-r from-sunset-orange via-orange-400 to-yellow-500 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-default">KURETI JAYANARAYANA</span>. All rights reserved.
                         </p>
                         <div className="flex flex-wrap items-center gap-2 mt-0.5">
                             <span className="text-[9px] uppercase tracking-widest text-text-dim/60 font-medium">

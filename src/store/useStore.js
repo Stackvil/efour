@@ -65,17 +65,18 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, rides: true } }));
                 try {
-                    const res = await fetch('https://e3-e4-backend.vercel.app/api/e4/rides');
+                    const baseUrl = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.ethree.in';
+                    const res = await fetch(`${baseUrl}/api/e4/rides`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
                     let items = Array.isArray(data) ? data : (data.rides || data.data || []);
 
-                    const mappedRides = items.map(item => ({
+                    const mappedRides = items.filter(Boolean).map(item => ({
                         id: item._id || item.id,
                         title: item.name,
                         price: typeof item.price === 'string' ? parseFloat(item.price) : item.price,
-                        image: item.image,
-                        desc: item.desc || '',
+                        image: item.image ? decodeURIComponent(item.image) : '',
+                        desc: item.desc || item.description || '',
                         category: item.category,
                         ageGroup: item.ageGroup,
                         status: item.status,
@@ -100,7 +101,8 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, menu: true } }));
                 try {
-                    const res = await fetch('https://e3-e4-backend.vercel.app/api/e4/dine');
+                    const baseUrl = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.ethree.in';
+                    const res = await fetch(`${baseUrl}/api/e4/dine`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
 
@@ -116,8 +118,13 @@ const useStore = create(
                         items = data.products;
                     }
 
+                    const decodedItems = items.filter(Boolean).map(item => ({
+                        ...item,
+                        image: item.image ? decodeURIComponent(item.image) : '',
+                    }));
+
                     set({
-                        menuData: items,
+                        menuData: decodedItems,
                         lastFetched: { ...get().lastFetched, menu: Date.now() }
                     });
                 } catch (err) {

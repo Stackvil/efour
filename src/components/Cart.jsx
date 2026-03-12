@@ -5,7 +5,7 @@ import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight, Phone, Mail } from 'lu
 import useStore from '../store/useStore';
 import PaymentGateway from './PaymentGateway';
 import OptimizedImage from './common/OptimizedImage';
-import { fetchWithAuth } from '../utils/api';
+import { fetchWithAuth, sendOtp, verifyOtp, BASE_URL } from '../utils/api';
 
 const Cart = () => {
     const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity, clearCart, user, setUser } = useStore();
@@ -35,12 +35,7 @@ const Cart = () => {
         e.preventDefault();
         setAuthLoading(true);
         try {
-            const res = await fetch('/api/auth/send-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                // Backend expects: { mobile, location }
-                body: JSON.stringify({ mobile: phone, email, location: 'E4' })
-            });
+            const res = await sendOtp(phone, { email });
 
             if (res.ok) {
                 setAuthStep(2);
@@ -49,9 +44,8 @@ const Cart = () => {
                 alert(data.message || 'Failed to send OTP');
             }
         } catch (err) {
-            console.warn("Backend unavailable, proceeding with demo flow");
-            // Fallback for demo: Always allow proceeding to OTP step
-            setAuthStep(2);
+            console.error("OTP send error:", err);
+            alert("Failed to send OTP. Please check your connection.");
         } finally {
             setAuthLoading(false);
         }
@@ -150,29 +144,19 @@ const Cart = () => {
         setAuthLoading(true);
 
         try {
-            const url = otp === '000000'
-                ? '/api/auth/bypass-login'
-                : '/api/auth/verify-otp';
+            let res;
+            if (otp === '000000') {
+                res = await fetch(`${BASE_URL}/api/auth/bypass-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: phone, email, location: 'E4' })
+                });
+            } else {
+                res = await verifyOtp(phone, otp, { email, name: 'Guest' });
+            }
 
-            // For real verify, backend expects: { mobile, otp, name, location }
-            const payload = otp === '000000'
-                ? { mobile: phone, email, location: 'E4' }
-                : {
-                    mobile: phone,
-                    otp,
-                    email,
-                    name: 'Guest',
-                    location: 'E4',
-                };
-
-            const res = await fetch(url, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
             const data = await res.json();
-            if (data.token) {
+            if (res.ok && data.token) {
                 const finalUser = {
                     ...(data.user || {}),
                     id: data.user?.id || data.user?._id || data.userId || 'user_id',
@@ -189,7 +173,12 @@ const Cart = () => {
                 // Proceed to pay with explicit new data
                 handlePaymentInitiation(finalUser, data.token);
             } else {
-                alert(data.message || 'Invalid OTP');
+                const message = data.message || 'Invalid OTP';
+                if (message && typeof message === 'string' && message.includes("reading '_id'")) {
+                    alert("Server-side database error. Please try again or contact support.");
+                } else {
+                    alert(message);
+                }
             }
         } catch (err) {
             console.error("Backend Error:", err);

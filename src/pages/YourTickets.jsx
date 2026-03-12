@@ -261,7 +261,7 @@ const YourTickets = () => {
 
     const tickets = useMemo(() => {
         if (!rawTickets || rawTickets.length === 0) return [];
-        return rawTickets.flatMap(ticket =>
+        return rawTickets.filter(Boolean).flatMap(ticket =>
             (ticket.items || []).map(item => ({
                 ...item,
                 ticketId: ticket.id || ticket._id,

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShieldCheck, UserCheck, Lock, CheckCircle2 } from 'lucide-react';
+import { X, ShieldCheck, UserCheck, Lock, CheckCircle2, UserCog, Cookie, Share2, History, ThumbsUp, Building2, Mail, Phone } from 'lucide-react';
 
 const PrivacyModal = ({ isOpen, onClose }) => {
     // Prevent scrolling on body when modal is open
@@ -55,7 +55,7 @@ const PrivacyModal = ({ isOpen, onClose }) => {
                             {/* Content */}
                             <div className="p-6 sm:p-8 overflow-y-auto bg-[#F4F7F8] flex-grow">
                                 <p className="text-gray-500 mb-6 text-sm font-medium">
-                                    <span className="font-bold text-gray-700">Efour</span> protects any information you give when visiting the Website. Effective from May 1st, 2019.
+                                    <span className="font-bold text-gray-700">Efour</span> protects any information you give when visiting the Website. Effective from March 1st, 2026.
                                 </p>
 
                                 <div className="grid sm:grid-cols-2 gap-4 mb-4">
@@ -121,6 +121,94 @@ const PrivacyModal = ({ isOpen, onClose }) => {
                                         <div className="flex items-center gap-3">
                                             <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-sunset-orange text-[10px] font-bold">4</span>
                                             <span className="text-xs text-gray-500 font-medium">Market research</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Six New Policy Cards */}
+                                <div className="grid sm:grid-cols-2 gap-4 mt-6">
+                                    {/* User Rights */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <UserCog size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">User Rights</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            You can access, correct, or request deletion of your data. We respect your right to privacy as per latest guidelines.
+                                        </p>
+                                    </div>
+
+                                    {/* Cookies */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Cookie size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Cookies</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            We use cookies to enhance your experience. You can choose to accept or decline cookies through your browser settings.
+                                        </p>
+                                    </div>
+
+                                    {/* Data Sharing */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Share2 size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Data Sharing</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            We share data with trusted service providers only. We don't share with third parties for their marketing without consent.
+                                        </p>
+                                    </div>
+
+                                    {/* Data Retention */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <History size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Data Retention</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            We store data only as long as necessary for the purpose it was collected or as required by regulatory policies.
+                                        </p>
+                                    </div>
+
+                                    {/* Consent */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <ThumbsUp size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Consent</h3>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                                            By using <span className="font-bold text-gray-700">Efour Food Court</span>, you consent to our policy. You can withdraw consent at any time.
+                                        </p>
+                                    </div>
+
+                                    {/* Contact Info */}
+                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                                                <Building2 size={16} className="text-riverside-teal" />
+                                            </div>
+                                            <h3 className="font-bold text-charcoal-grey">Contact Info</h3>
+                                        </div>
+                                        <div className="space-y-3 mt-1">
+                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <Mail size={14} className="text-riverside-teal" />
+                                                ceo@efour-eluru.com
+                                            </div>
+                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                                <Phone size={14} className="text-riverside-teal" />
+                                                +91 70369 23456
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

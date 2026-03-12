@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'E4LOGO.jpeg'],
       manifest: {
         name: 'Efour | Eat, Enjoy, Entertainment',
         short_name: 'Efour',
@@ -18,14 +18,14 @@ export default defineConfig({
         theme_color: '#FF5E14',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: 'E4LOGO.jpeg',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/jpeg'
           },
           {
-            src: 'pwa-512x512.png',
+            src: 'E4LOGO.jpeg',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'any maskable'
           }
         ]
@@ -36,7 +36,7 @@ export default defineConfig({
     proxy: {
       // Proxy API requests during development to avoid CORS issues
       '/api': {
-        target: 'https://e3-e4-backend.vercel.app',
+        target: 'https://e3-e4-backend.ethree.in',
         changeOrigin: true,
         secure: true,
         cookieDomainRewrite: {

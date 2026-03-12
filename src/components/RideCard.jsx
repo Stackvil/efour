@@ -61,7 +61,9 @@ const RideCard = memo(({ ride }) => {
                         </p>
                     </div>
 
-
+                    <p className="text-gray-600 text-[10px] font-bold leading-relaxed line-clamp-2 mt-1 italic">
+                        {ride.desc || 'Experience the thrill of our premium amusement attractions.'}
+                    </p>
                 </div>
 
                 {/* Buttons Block - Streamlined */}

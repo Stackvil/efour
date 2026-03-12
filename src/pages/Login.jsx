@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import useStore from '../store/useStore';
 import { User, Edit2, Save, X, Phone, ArrowRight, Mail, Check, ChevronRight, Zap, Trophy, LogOut } from 'lucide-react';
+import { sendOtp, verifyOtp, logout as apiLogout } from '../utils/api';
 
 const Login = () => {
     const { user, setUser } = useStore();
@@ -62,12 +63,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const res = await fetch('/api/auth/send-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mobile: phone, location: 'E4' })
-            });
-
+            const res = await sendOtp(phone);
             const data = await res.json();
 
             if (res.ok) {
@@ -100,17 +96,7 @@ const Login = () => {
                 return;
             }
 
-            const res = await fetch('/api/auth/verify-otp', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    mobile: phone,
-                    otp: otp,
-                    location: "E4"
-                })
-            });
-
+            const res = await verifyOtp(phone, otp);
             const data = await res.json();
 
             if (res.ok) {
@@ -132,11 +118,16 @@ const Login = () => {
                     navigate('/admin');
                 } else {
                     // Only force edit if name is missing or Guest
-                    const needsName = !finalUser.name || finalUser.name === 'Guest' || finalUser.name === 'string' || finalUser.name.trim() === '';
+                    const needsName = !finalUser.name || finalUser.name === 'Guest' || finalUser.name === 'string' || (finalUser.name?.trim?.() || '') === '';
                     navigate('/login', { state: { forceEdit: needsName } });
                 }
             } else {
-                alert(data.message || 'Invalid OTP');
+                const message = data.message || 'Invalid OTP';
+                if (message.includes("reading '_id'")) {
+                    alert("A database error occurred on the server while logging you in. Please contact support.");
+                } else {
+                    alert(message);
+                }
                 setLoading(false);
             }
         } catch (error) {
@@ -157,10 +148,10 @@ const Login = () => {
 
     // After login, redirect user to fill profile (name only - email is optional)
     useEffect(() => {
-        if (!user) return;
+        if (!user || user.role === 'admin') return;
         const forceEdit = Boolean(location?.state?.forceEdit);
         // Only force edit if name is missing or Guest - email is optional
-        const missingName = !user?.name || user.name === 'Guest' || user.name === 'string' || user.name.trim() === '';
+        const missingName = !user?.name || user.name === 'Guest' || user.name === 'string' || (user.name?.trim?.() || '') === '';
         if (forceEdit || missingName) {
             setEditName(user?.name && user.name !== 'Guest' && user.name !== 'string' ? user.name : '');
             setEditEmail(user?.email || '');
@@ -174,9 +165,8 @@ const Login = () => {
     const inputClasses = "w-full pl-12 pr-5 py-4 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-sunset-orange focus:ring-4 focus:ring-sunset-orange/10 transition-all outline-none font-bold text-charcoal-grey disabled:bg-gray-100 disabled:text-gray-400";
     const labelClasses = "block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1";
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+    const handleLogout = async () => {
+        await apiLogout();
         setUser(null);
         navigate('/login');
     };
