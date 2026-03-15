@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, BookHeart, Scale, Link as LinkIcon, AlertCircle, Globe, Power, Gavel, Building2, Mail, Phone } from 'lucide-react';
+import { X, BookHeart, Scale, Link as LinkIcon, AlertCircle, Globe, Power, Gavel, Building2, Mail, Phone, Zap } from 'lucide-react';
 
 const TermsModal = ({ isOpen, onClose }) => {
-    // Prevent scrolling on body when modal is open
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -19,175 +18,125 @@ const TermsModal = ({ isOpen, onClose }) => {
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+                        className="fixed inset-0 bg-[#070B14]/80 backdrop-blur-2xl z-[100]"
                     />
 
-                    {/* Modal Container */}
-                    <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+                    <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-8 pointer-events-none">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            initial={{ opacity: 0, scale: 0.9, y: 40 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden pointer-events-auto flex flex-col max-h-full"
+                            exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                            className="glass-card rounded-[3rem] shadow-3xl w-full max-w-3xl overflow-hidden pointer-events-auto flex flex-col max-h-[90vh] border border-white/10"
                         >
                             {/* Header */}
-                            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative z-10">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100">
-                                        <BookHeart size={20} className="text-riverside-teal" />
+                            <div className="px-10 py-8 border-b border-white/5 flex items-center justify-between bg-white/2 relative z-10">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-16 h-16 rounded-2xl bg-[#5B8CFF]/10 flex items-center justify-center border border-[#5B8CFF]/20 shadow-[0_0_20px_rgba(91,140,255,0.1)]">
+                                        <BookHeart size={28} className="text-[#5B8CFF]" />
                                     </div>
-                                    <h2 className="text-2xl font-heading font-black text-charcoal-grey">Terms of Use</h2>
+                                    <div>
+                                        <span className="text-[13px] font-bold text-[#5B8CFF] uppercase tracking-[0.4em] mb-1 block italic">User Agreement</span>
+                                        <h2 className="text-3xl font-black italic tracking-tighter uppercase transform -skew-x-6 text-white">Terms of Use</h2>
+                                    </div>
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                                    className="w-12 h-12 flex items-center justify-center text-[#AAB2C5] hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-white/5"
                                 >
-                                    <X size={20} />
+                                    <X size={24} />
                                 </button>
                             </div>
 
                             {/* Content */}
-                            <div className="p-6 sm:p-8 overflow-y-auto bg-[#F4F7F8] flex-grow">
-                                <p className="text-gray-500 mb-6 text-sm font-medium">
-                                    Usage of <span className="font-bold text-gray-700">efour-eluru.com</span> is subject to these Terms. Acceptance is implied by using the site.
-                                </p>
+                            <div className="p-10 overflow-y-auto bg-transparent flex-grow custom-scrollbar">
+                                <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] mb-10 shadow-inner">
+                                    <p className="text-[#AAB2C5] text-base font-bold italic uppercase tracking-wider leading-relaxed">
+                                        Engagement with <span className="text-white">EFOUR-ELURU.COM</span> constitutes formal acceptance of this Eluru Protocol. Acceptance is non-optional for system interaction.
+                                    </p>
+                                </div>
 
-                                <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                                    {/* Obligations */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Scale size={16} className="text-riverside-teal" />
+                                <div className="grid sm:grid-cols-2 gap-8 mb-8">
+                                    <div className="glass-card p-8 rounded-[2rem] border border-white/5 shadow-2xl hover:border-[#5B8CFF]/30 transition-all group">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                                <Scale size={18} className="text-[#5B8CFF]" />
                                             </div>
-                                            <h3 className="font-bold text-charcoal-grey">Obligations</h3>
+                                            <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Obligations</h3>
                                         </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            Use for lawful purposes only. You must provide accurate info and keep your login credentials secure.
+                                        <p className="text-[13px] text-[#AAB2C5] leading-relaxed font-bold uppercase tracking-widest italic">
+                                            Usage must align with Tier-1 legal frameworks. You are the sole architect of your account security. Provision of false telemetry is strictly prohibited.
                                         </p>
                                     </div>
 
-                                    {/* Content */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <LinkIcon size={16} className="text-riverside-teal" />
+                                    <div className="glass-card p-8 rounded-[2rem] border border-white/5 shadow-2xl hover:border-[#FF7A18]/30 transition-all group">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                                <LinkIcon size={18} className="text-[#FF7A18]" />
                                             </div>
-                                            <h3 className="font-bold text-charcoal-grey">Content</h3>
+                                            <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Data Rights</h3>
                                         </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            Materials are for PERSONAL USE ONLY. No data mining or scraping. We aren't responsible for external links.
+                                        <p className="text-[13px] text-[#AAB2C5] leading-relaxed font-bold uppercase tracking-widest italic">
+                                            Interface assets are for isolated personal viewing. External extraction, mining, or harvesting of protocol data is a security violation.
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Liability & Refunds */}
-                                <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm mt-4">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                            <AlertCircle size={16} className="text-riverside-teal" />
+                                {/* Liability & Finality */}
+                                <div className="glass-card p-8 rounded-[2.5rem] border border-white/5 bg-white/2 mb-8 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/10 to-transparent rounded-bl-full blur-2xl" />
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                            <AlertCircle size={18} className="text-red-500" />
                                         </div>
-                                        <h3 className="font-bold text-charcoal-grey">Liability & Refunds</h3>
+                                        <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Liability & Finality</h3>
                                     </div>
-                                    <div className="grid sm:grid-cols-2 gap-6 mb-6">
-                                        <div>
-                                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                                <span className="font-bold text-gray-700">Indemnity:</span> You hold us harmless from claims arising from your site usage.
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                                <span className="font-bold text-gray-700">Risk:</span> Service use is at your own risk. We offer no guarantees of error-free service.
-                                            </p>
-                                        </div>
+                                    <div className="grid sm:grid-cols-2 gap-8 mb-8">
+                                        <p className="text-[13px] text-[#AAB2C5] leading-relaxed font-bold uppercase tracking-widest italic">
+                                            <span className="text-white">Indemnity:</span> You release Efour from all liability arising from interface engagement errors.
+                                        </p>
+                                        <p className="text-[13px] text-[#AAB2C5] leading-relaxed font-bold uppercase tracking-widest italic">
+                                            <span className="text-white">Protocol Risk:</span> Service availability is provided "as-is". No guarantees for 100% Eluru uptime.
+                                        </p>
                                     </div>
 
-                                    {/* Refund & Return Policy */}
-                                    <div className="bg-red-50/50 p-4 rounded-xl border border-red-100">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <AlertCircle size={16} className="text-red-600" />
-                                            <h4 className="font-bold text-sm text-red-600">Refund & Return Policy</h4>
+                                    <div className="bg-red-500/5 p-6 rounded-2xl border border-red-500/20 shadow-inner">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <AlertCircle size={14} className="text-red-500" />
+                                            <h4 className="font-bold text-[12px] text-red-500 uppercase tracking-widest italic">Terminal Transaction Policy</h4>
                                         </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium italic">
-                                            "All bookings and purchases are final. We maintain a strict no-refund and no-return policy once a service has been booked, food has been served, or entry has been granted. Please double-check your order before proceeding."
+                                        <p className="text-[13px] text-red-400 font-bold uppercase tracking-widest leading-relaxed italic opacity-70">
+                                            All resource transfers are terminal. No refunds, returns, or reversal of credits once a booking or culinary request is initiated.
                                         </p>
                                     </div>
                                 </div>
-                                {/* Privacy & Legal Cards */}
-                                <div className="grid sm:grid-cols-2 gap-4 mt-4">
-                                    {/* Service Availability */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Globe size={16} className="text-riverside-teal" />
-                                            </div>
-                                            <h3 className="font-bold text-charcoal-grey">Service Availability</h3>
-                                        </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            We strive for 24/7 uptime but do not guarantee uninterrupted access. We reserve the right to perform maintenance without prior notice.
-                                        </p>
-                                    </div>
 
-                                    {/* Termination */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Power size={16} className="text-riverside-teal" />
-                                            </div>
-                                            <h3 className="font-bold text-charcoal-grey">Termination</h3>
+                                <div className="grid sm:grid-cols-3 gap-6">
+                                    {[
+                                        { icon: Globe, title: "Domain", desc: "India Core Legal Jurisdiction", color: "#5B8CFF" },
+                                        { icon: Power, title: "Status", desc: "Right to Terminate Connection", color: "#FF7A18" },
+                                        { icon: Gavel, title: "Justice", desc: "Court Resolution: Vijayawada", color: "#AAB2C5" }
+                                    ].map((item, idx) => (
+                                        <div key={idx} className="glass-card p-6 rounded-3xl border border-white/5 shadow-xl hover:bg-white/5 transition-all">
+                                            <item.icon size={20} className="mb-4" style={{ color: item.color }} />
+                                            <h4 className="text-[12px] font-bold text-white uppercase tracking-[0.3em] mb-2 italic">{item.title}</h4>
+                                            <p className="text-[12px] text-[#AAB2C5]/50 font-bold uppercase tracking-widest leading-relaxed italic">{item.desc}</p>
                                         </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            We reserve the right to suspend or terminate your account at our sole discretion if these terms are violated.
-                                        </p>
-                                    </div>
-
-                                    {/* Governing Law */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Gavel size={16} className="text-riverside-teal" />
-                                            </div>
-                                            <h3 className="font-bold text-charcoal-grey">Governing Law</h3>
-                                        </div>
-                                        <p className="text-xs text-gray-500 leading-relaxed font-medium">
-                                            These terms are governed by the laws of India. Any disputes are subject to the exclusive jurisdiction of the courts in Vijayawada.
-                                        </p>
-                                    </div>
-
-                                    {/* Contact Information */}
-                                    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-                                                <Building2 size={16} className="text-riverside-teal" />
-                                            </div>
-                                            <h3 className="font-bold text-charcoal-grey">Contact Information</h3>
-                                        </div>
-                                        <div className="space-y-3 mt-1">
-                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                                                <Mail size={14} className="text-riverside-teal" />
-                                                ceo@efour-eluru.com
-                                            </div>
-                                            <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                                                <Phone size={14} className="text-riverside-teal" />
-                                                +91 70369 23456
-                                            </div>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
 
                             {/* Footer */}
-                            <div className="px-6 py-5 bg-white border-t border-gray-100 flex justify-center">
+                            <div className="px-10 py-8 bg-white/2 border-t border-white/5">
                                 <button
                                     onClick={onClose}
-                                    className="bg-sunset-orange hover:bg-orange-600 text-white font-bold py-3 px-12 rounded-xl transition-colors shadow-md shadow-orange-500/20 uppercase tracking-wider text-sm"
+                                    className="btn-premium w-full py-6 rounded-3xl font-bold uppercase tracking-[0.4em] text-[14px] transform hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 italic shadow-2xl shadow-[#FF7A18]/20"
                                 >
-                                    Accept
+                                    Accept Protocol <Zap size={18} />
                                 </button>
                             </div>
                         </motion.div>

@@ -1,12 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-base: #070B14;
+  --bg-secondary: #0F172A;
+  --card-surface: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #F8FAFC;
+  --text-secondary: #AAB2C5;
+  --accent-primary: linear-gradient(135deg, #FF7A18, #FF3D3D);
+  --accent-secondary: linear-gradient(135deg, #5B8CFF, #7F5CFF);
+  --success: #22C55E;
+}
+
 @layer base {
+  * {
+    @apply border-white/5;
+  }
+
   body {
-    @apply bg-creamy-white text-charcoal-grey font-body;
+    @apply bg-[#070B14] text-[#F8FAFC] font-body;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255, 122, 24, 0.08), transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(91, 140, 255, 0.08), transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 1), rgba(7, 11, 20, 1));
   }
 
   h1,
@@ -15,24 +35,123 @@
   h4,
   h5,
   h6 {
-    @apply font-heading font-bold;
+    @apply font-heading;
+    letter-spacing: -0.04em;
+    font-weight: 900;
+  }
+
+  p,
+  span,
+  div {
+    font-weight: 500;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #070B14;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #FF7A18;
   }
 }
 
 @layer components {
-  .btn-orange {
-    @apply bg-sunset-orange text-white px-6 py-2 rounded-lg font-bold transition-all hover:bg-opacity-90 active:scale-95;
+  .btn-premium {
+    @apply relative overflow-hidden px-10 py-4 rounded-[1.5rem] font-bold italic text-[12px] uppercase tracking-[0.4em] text-white transition-all duration-500 active:scale-95 flex items-center justify-center gap-3 transform -skew-x-6;
+    background: linear-gradient(135deg, #FF7A18, #FF3D3D);
+    box-shadow: 0 15px 45px rgba(255, 122, 24, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    will-change: transform;
   }
 
-  .glass-header {
-    @apply sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-200;
+  .btn-premium:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px) -skew-x-6;
+    box-shadow: 0 20px 60px rgba(255, 122, 24, 0.55);
   }
 
-  .section-alt {
-    @apply bg-gray-50;
+  .btn-premium:disabled {
+    @apply opacity-30 grayscale cursor-not-allowed transform-none;
+    box-shadow: none;
   }
 
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  .glass-card {
+    @apply backdrop-blur-md transition-all duration-500;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
   }
+
+  .glass-card-hover:hover {
+    @apply -translate-y-2;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 122, 24, 0.3);
+    box-shadow: 0 40px 100px rgba(255, 122, 24, 0.25);
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(135deg, #FFFFFF, #FF7A18, #FF3D3D);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-price {
+    background: linear-gradient(135deg, #FF7A18, #FF3D3D);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-luxury {
+    @apply font-black italic uppercase tracking-tighter transform -skew-x-6;
+  }
+
+  .neon-glow-orange {
+    box-shadow: 0 0 20px rgba(255, 122, 24, 0.3), inset 0 0 10px rgba(255, 122, 24, 0.2);
+  }
+
+  .neon-glow-blue {
+    box-shadow: 0 0 20px rgba(91, 140, 255, 0.3), inset 0 0 10px rgba(91, 140, 255, 0.2);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .status-badge-open {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22C55E;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.section-depth {
+  box-shadow: inset 0 -100px 200px rgba(0, 0, 0, 0.8);
+}
+
+.matrix-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }

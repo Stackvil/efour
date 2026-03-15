@@ -22,7 +22,7 @@ const ActivityCard = memo(({ activity }) => {
                     alt={activity.title}
                     className="w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute top-1.5 right-1.5 bg-white/90 backdrop-blur-md px-1.5 py-0.5 rounded-md font-black text-riverside-teal text-[10px]">
+                <div className="absolute top-1.5 right-1.5 bg-white/90 backdrop-blur-md px-1.5 py-0.5 rounded-md font-black text-eluru-teal text-[10px]">
                     {typeof activity.price === 'number' ? `₹${activity.price}` : activity.price}
                 </div>
             </div>

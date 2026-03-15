@@ -3,18 +3,14 @@ import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom
 import Layout from './components/layout/Layout';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
-// Eager load core pages for instant navigation
+// Eager load all pages for instant navigation - eliminate lazy loading lag
 import Home from './pages/Home';
 import Dine from './pages/Dine';
-
 import Login from './pages/Login';
-
-
-// Lazy load secondary pages
-const Contact = React.lazy(() => import('./pages/Contact'));
-const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard'));
-const YourTickets = React.lazy(() => import('./pages/YourTickets'));
-const Success = React.lazy(() => import('./pages/Success'));
+import Contact from './pages/Contact';
+import AdminDashboard from './pages/AdminDashboard';
+import YourTickets from './pages/YourTickets';
+import Success from './pages/Success';
 
 import ScrollToTop from './components/common/ScrollToTop';
 import ProtectedRoute from './components/common/ProtectedRoute';

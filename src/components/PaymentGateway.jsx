@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, Smartphone, Building, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { X, CreditCard, Smartphone, Building, ShieldCheck, CheckCircle2, Lock, Cpu, Zap, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../store/useStore';
 
@@ -33,88 +33,111 @@ const PaymentGateway = ({ amount, isOpen, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 selection:bg-[#FF7A18] selection:text-white">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-charcoal-grey/60 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#070B14]/80 backdrop-blur-xl"
             />
 
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-white rounded-3xl overflow-hidden shadow-2xl w-full max-w-md relative z-10 border border-gray-100"
+                className="bg-[#0F172A] rounded-[3rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)] w-full max-w-md relative z-10 border border-white/10"
             >
-                {/* Razorpay-style Header */}
-                <div className="bg-[#1D2B44] text-white p-6 flex justify-between items-center">
-                    <div>
-                        <h2 className="text-xl font-bold tracking-tight">Efour Entertainment</h2>
-                        <p className="text-blue-300 text-xs">efour.eluru@payment</p>
-                    </div>
-                    <div className="text-right">
-                        <span className="text-xs opacity-60 block">Amount</span>
-                        <span className="text-xl font-bold">₹{amount}</span>
+                {/* Protocol Header */}
+                <div className="bg-gradient-to-br from-[#1D2B44] to-[#0F172A] p-10 border-b border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
+                    <div className="flex justify-between items-center relative z-10">
+                        <div className="space-y-1">
+                            <div className="flex items-center gap-2 text-[#FF7A18]">
+                                <Globe size={14} className="animate-pulse" />
+                                <span className="text-[10px] font-black tracking-[0.4em] uppercase italic opacity-60">NETWORK_PAY_v4.2</span>
+                            </div>
+                            <h2 className="text-3xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 leading-none">
+                                EFOUR <span className="text-[#FF7A18]">ELURU</span>
+                            </h2>
+                        </div>
+                        <div className="text-right">
+                            <span className="text-[9px] font-black text-[#AAB2C5] uppercase tracking-[0.3em] block mb-1 opacity-40 italic">CREDIT_SYNC_REQUIRED</span>
+                            <span className="text-3xl font-black text-white italic transform -skew-x-12">₹{amount}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="p-8">
+                <div className="p-10 relative">
+                    <div className="absolute inset-0 matrix-grid opacity-5 pointer-events-none" />
+
                     {isPaying ? (
-                        <div className="py-12 text-center">
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                                className="w-16 h-16 border-4 border-riverside-teal border-t-transparent rounded-full mx-auto mb-6"
-                            />
-                            <p className="font-bold text-charcoal-grey">Processing Payment...</p>
-                            <p className="text-gray-400 text-sm mt-2">Please do not close the window</p>
+                        <div className="py-16 text-center space-y-8 relative z-10">
+                            <div className="relative inline-block">
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                                    className="w-24 h-24 border-2 border-[#FF7A18]/20 border-t-[#FF7A18] rounded-[2rem] mx-auto"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center text-[#FF7A18]">
+                                    <Cpu size={32} className="animate-pulse" />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="font-black text-[#F8FAFC] uppercase tracking-widest italic text-xl transform -skew-x-12">SYNCHRONIZING_ASSETS</p>
+                                <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.3em] opacity-40 italic">PLEASE MAINTAIN CONNECTION INTEGRITY</p>
+                            </div>
                         </div>
                     ) : (
                         <>
-                            <div className="flex gap-4 mb-8">
-                                <button
-                                    onClick={() => setMethod('upi')}
-                                    className={`flex-1 p-3 rounded-2xl flex flex-col items-center gap-2 border-2 transition-all ${method === 'upi' ? 'border-riverside-teal bg-teal-50 text-riverside-teal' : 'border-gray-100 text-gray-400'}`}
-                                >
-                                    <Smartphone size={24} />
-                                    <span className="text-xs font-bold">UPI</span>
-                                </button>
-                                <button
-                                    onClick={() => setMethod('card')}
-                                    className={`flex-1 p-3 rounded-2xl flex flex-col items-center gap-2 border-2 transition-all ${method === 'card' ? 'border-riverside-teal bg-teal-50 text-riverside-teal' : 'border-gray-100 text-gray-400'}`}
-                                >
-                                    <CreditCard size={24} />
-                                    <span className="text-xs font-bold">Card</span>
-                                </button>
-                                <button
-                                    onClick={() => setMethod('netbanking')}
-                                    className={`flex-1 p-3 rounded-2xl flex flex-col items-center gap-2 border-2 transition-all ${method === 'netbanking' ? 'border-riverside-teal bg-teal-50 text-riverside-teal' : 'border-gray-100 text-gray-400'}`}
-                                >
-                                    <Building size={24} />
-                                    <span className="text-xs font-bold">Net Banking</span>
-                                </button>
+                            <div className="grid grid-cols-3 gap-4 mb-10 relative z-10">
+                                {[
+                                    { id: 'upi', icon: <Smartphone size={20} />, label: 'UPI' },
+                                    { id: 'card', icon: <CreditCard size={20} />, label: 'CARD' },
+                                    { id: 'netbanking', icon: <Building size={20} />, label: 'BANK' }
+                                ].map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => setMethod(item.id)}
+                                        className={`p-5 rounded-3xl flex flex-col items-center gap-3 border transition-all duration-500 group ${method === item.id
+                                            ? 'border-[#FF7A18] bg-[#FF7A18]/10 text-[#FF7A18] shadow-[0_0_30px_rgba(255,122,24,0.1)]'
+                                            : 'border-white/5 bg-white/[0.02] text-[#AAB2C5]/40 hover:border-white/20 hover:text-[#F8FAFC]'}`}
+                                    >
+                                        <div className={`transition-transform duration-500 ${method === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>
+                                            {item.icon}
+                                        </div>
+                                        <span className="text-[9px] font-black uppercase tracking-[0.3em] italic">{item.label}</span>
+                                    </button>
+                                ))}
                             </div>
 
-                            <div className="space-y-4 mb-8">
+                            <div className="space-y-4 mb-10 relative z-10">
                                 {method === 'upi' && (
                                     <div className="space-y-3">
-                                        <div onClick={handlePay} className="p-4 border rounded-xl flex items-center justify-between hover:border-riverside-teal cursor-pointer transition-colors active:bg-gray-50">
-                                            <span className="font-medium">PhonePe</span>
-                                            <div className="w-4 h-4 rounded-full border border-gray-300" />
-                                        </div>
-                                        <div onClick={handlePay} className="p-4 border rounded-xl flex items-center justify-between hover:border-riverside-teal cursor-pointer transition-colors active:bg-gray-50">
-                                            <span className="font-medium">Google Pay</span>
-                                            <div className="w-4 h-4 rounded-full border border-gray-300" />
-                                        </div>
+                                        {['PhonePe', 'Google Pay'].map((gateway) => (
+                                            <div
+                                                key={gateway}
+                                                onClick={handlePay}
+                                                className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center justify-between hover:border-[#FF7A18]/50 cursor-pointer transition-all active:scale-95 group"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-2 h-2 rounded-full bg-[#FF7A18]/20 group-hover:bg-[#FF7A18] transition-colors" />
+                                                    <span className="font-black text-[#F8FAFC] uppercase tracking-widest italic text-sm">{gateway}</span>
+                                                </div>
+                                                <div className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#AAB2C5]/20 group-hover:text-[#FF7A18] group-hover:border-[#FF7A18]/20">
+                                                    <Zap size={14} />
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                                 {method === 'card' && (
                                     <div className="space-y-4">
-                                        <input type="text" placeholder="Card Number" className="w-full p-3 border rounded-xl outline-none focus:border-riverside-teal" />
+                                        <div className="relative group">
+                                            <input type="text" placeholder="CARD_SERIAL_IDENTIFIER" className="w-full p-5 bg-white/[0.02] border border-white/5 rounded-2xl outline-none focus:border-[#FF7A18]/50 text-[#F8FAFC] font-black uppercase tracking-widest italic text-xs placeholder-[#AAB2C5]/10" />
+                                        </div>
                                         <div className="flex gap-4">
-                                            <input type="text" placeholder="Expiry" className="w-1/2 p-3 border rounded-xl outline-none focus:border-riverside-teal" />
-                                            <input type="password" placeholder="CVV" className="w-1/2 p-3 border rounded-xl outline-none focus:border-riverside-teal" />
+                                            <input type="text" placeholder="EXP_CYCLE" className="w-1/2 p-5 bg-white/[0.02] border border-white/5 rounded-2xl outline-none focus:border-[#FF7A18]/50 text-[#F8FAFC] font-black uppercase tracking-widest italic text-xs placeholder-[#AAB2C5]/10" />
+                                            <input type="password" placeholder="SEC_TOKEN" className="w-1/2 p-5 bg-white/[0.02] border border-white/5 rounded-2xl outline-none focus:border-[#FF7A18]/50 text-[#F8FAFC] font-black uppercase tracking-widest italic text-xs placeholder-[#AAB2C5]/10" />
                                         </div>
                                     </div>
                                 )}
@@ -122,14 +145,17 @@ const PaymentGateway = ({ amount, isOpen, onClose }) => {
 
                             <button
                                 onClick={handlePay}
-                                className="w-full bg-riverside-teal text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all"
+                                className="btn-premium w-full py-6 rounded-3xl text-[11px] font-black uppercase tracking-[0.4em] shadow-[0_20px_60px_rgba(255,122,24,0.3)] relative overflow-hidden group/btn italic"
                             >
-                                Pay ₹{amount}
+                                <span className="relative z-10 flex items-center justify-center gap-4">
+                                    EXECUTE_CREDIT_SYNC <ShieldCheck size={18} />
+                                </span>
                             </button>
 
-                            <div className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs">
-                                <ShieldCheck size={14} />
-                                <span>Secured by dummy Razorpay</span>
+                            <div className="mt-8 flex items-center justify-center gap-4 text-[#AAB2C5] text-[9px] font-black tracking-[0.3em] uppercase opacity-30 italic">
+                                <div className="flex items-center gap-2"><Lock size={12} /> <span>AES_256_ENC</span></div>
+                                <div className="w-1 h-1 rounded-full bg-white/20" />
+                                <div className="flex items-center gap-2"><Globe size={12} /> <span>ELURU_SECURED</span></div>
                             </div>
                         </>
                     )}

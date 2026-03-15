@@ -30,17 +30,17 @@ const PolicyConsent = ({ onOpenTerms, onOpenPrivacy }) => {
                 >
                     <div className="relative group">
                         {/* More Intense Premium Glow */}
-                        <div className="absolute -inset-1 bg-gradient-to-r from-riverside-teal via-riverside-teal/50 to-sunset-orange blur-xl opacity-40 group-hover:opacity-100 transition duration-1000 rounded-[2.5rem]"></div>
+                        <div className="absolute -inset-1 bg-gradient-to-r from-eluru-teal via-eluru-teal/50 to-sunset-orange blur-xl opacity-40 group-hover:opacity-100 transition duration-1000 rounded-[2.5rem]"></div>
 
                         <div className="relative bg-[#080808]/95 backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
                             <div className="relative z-10">
                                 <div className="flex items-center justify-between mb-8">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-riverside-teal/20 to-riverside-teal/5 flex items-center justify-center border border-riverside-teal/30 shadow-inner">
-                                            <ShieldCheck className="text-riverside-teal" size={28} />
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-eluru-teal/20 to-eluru-teal/5 flex items-center justify-center border border-eluru-teal/30 shadow-inner">
+                                            <ShieldCheck className="text-eluru-teal" size={28} />
                                         </div>
                                         <div>
-                                            <h4 className="text-[10px] font-black text-riverside-teal uppercase tracking-[0.4em] mb-1">
+                                            <h4 className="text-[10px] font-black text-eluru-teal uppercase tracking-[0.4em] mb-1">
                                                 Cookies & Privacy
                                             </h4>
                                             <h3 className="text-white font-black text-xl leading-tight uppercase tracking-tight">
@@ -58,22 +58,22 @@ const PolicyConsent = ({ onOpenTerms, onOpenPrivacy }) => {
                                 </div>
 
                                 <p className="text-gray-400 text-[13px] font-bold leading-relaxed mb-10">
-                                    We use <span className="text-white underline decoration-riverside-teal/50 decoration-2 underline-offset-4">Cookies</span> to enhance your experience. By exploring <span className="text-white">efour-eluru.com</span>, you consent to our
-                                    <button onClick={onOpenPrivacy} className="mx-1 text-riverside-teal hover:text-white transition-colors border-b-2 border-riverside-teal/20 hover:border-riverside-teal">Privacy Policy</button>
+                                    We use <span className="text-white underline decoration-eluru-teal/50 decoration-2 underline-offset-4">Cookies</span> to enhance your experience. By exploring <span className="text-white">efour-eluru.com</span>, you consent to our
+                                    <button onClick={onOpenPrivacy} className="mx-1 text-eluru-teal hover:text-white transition-colors border-b-2 border-eluru-teal/20 hover:border-eluru-teal">Privacy Policy</button>
                                     and
-                                    <button onClick={onOpenTerms} className="mx-1 text-riverside-teal hover:text-white transition-colors border-b-2 border-riverside-teal/20 hover:border-riverside-teal">User Agreement</button>.
+                                    <button onClick={onOpenTerms} className="mx-1 text-eluru-teal hover:text-white transition-colors border-b-2 border-eluru-teal/20 hover:border-eluru-teal">User Agreement</button>.
                                 </p>
 
                                 <div className="flex flex-col gap-4">
                                     <button
                                         onClick={handleAccept}
-                                        className="relative overflow-hidden group/btn w-full bg-white text-black py-5 rounded-[1.5rem] text-[12px] font-black uppercase tracking-[0.2em] transition-all hover:bg-riverside-teal hover:text-white active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
+                                        className="relative overflow-hidden group/btn w-full bg-white text-black py-5 rounded-[1.5rem] text-[12px] font-black uppercase tracking-[0.2em] transition-all hover:bg-eluru-teal hover:text-white active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
                                     >
                                         <div className="relative z-10 flex items-center gap-3">
                                             Accept & Explore
                                             <Zap size={16} className="fill-current" />
                                         </div>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-riverside-teal to-sunset-orange opacity-0 group-hover/btn:opacity-20 transition-opacity" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-eluru-teal to-sunset-orange opacity-0 group-hover/btn:opacity-20 transition-opacity" />
                                     </button>
 
                                     <div className="flex justify-center">

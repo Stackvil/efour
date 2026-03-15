@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'; // Redundant comment to trigger rebuild
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import useStore from '../store/useStore';
-import { User, Edit2, Save, X, Phone, ArrowRight, Mail, Check, ChevronRight, Zap, Trophy, LogOut } from 'lucide-react';
-import { sendOtp, verifyOtp, logout as apiLogout } from '../utils/api';
+import { Trash2, User, Edit2, Save, X, Phone, ArrowRight, Mail, Check, ChevronRight, Zap, Trophy, LogOut, Shield, Key, Fingerprint, Activity } from 'lucide-react';
+import { sendOtp, verifyOtp, logout as apiLogout, deleteAccount } from '../utils/api';
 
 const Login = () => {
     const { user, setUser } = useStore();
@@ -11,7 +11,7 @@ const Login = () => {
     const [otp, setOtp] = useState('');
     const [step, setStep] = useState(1); // 1: Phone Entry, 2: OTP Entry
     const [loading, setLoading] = useState(false);
-    const [otpTimer, setOtpTimer] = useState(0); // seconds remaining for resend
+    const [otpTimer, setOtpTimer] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -85,18 +85,20 @@ const Login = () => {
         setLoading(true);
 
         try {
-            // Admin Bypass logic for testing if needed, or remove completely
             const cleanPhone = phone.replace(/\D/g, '');
-            if (cleanPhone === '9999999999' && otp === '123456') {
-                const adminUser = { id: 'admin', name: 'Admin', phone: phone, role: 'admin' };
-                localStorage.setItem('token', 'demo_admin_token');
-                localStorage.setItem('user', JSON.stringify(adminUser));
-                setUser(adminUser);
-                navigate('/admin');
-                return;
+            let res;
+
+            if (cleanPhone === '9346608305' && otp === '000000') {
+                // Use the real integrated bypass endpoint for the admin
+                res = await fetch(`${BASE_URL}/api/auth/bypass-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: phone, location: 'E4' })
+                });
+            } else {
+                res = await verifyOtp(phone, otp);
             }
 
-            const res = await verifyOtp(phone, otp);
             const data = await res.json();
 
             if (res.ok) {
@@ -105,10 +107,11 @@ const Login = () => {
                     name: data.user?.name || '',
                     email: data.user?.email || '',
                     phone: data.user?.mobile || phone,
-                    role: data.user?.role || 'customer'
+                    role: (cleanPhone === '9346608305' || data.user?.role === 'admin') ? 'admin' : 'customer',
+                    points: data.user?.points || 0
                 };
 
-                localStorage.setItem('token', data.token || 'temp_token');
+                localStorage.setItem('token', data.token || (cleanPhone === '9346608305' ? 'demo_admin_token' : 'temp_token'));
                 localStorage.setItem('user', JSON.stringify(finalUser));
 
                 setUser(finalUser);
@@ -117,17 +120,11 @@ const Login = () => {
                 if (finalUser.role === 'admin') {
                     navigate('/admin');
                 } else {
-                    // Only force edit if name is missing or Guest
                     const needsName = !finalUser.name || finalUser.name === 'Guest' || finalUser.name === 'string' || (finalUser.name?.trim?.() || '') === '';
                     navigate('/login', { state: { forceEdit: needsName } });
                 }
             } else {
-                const message = data.message || 'Invalid OTP';
-                if (message.includes("reading '_id'")) {
-                    alert("A database error occurred on the server while logging you in. Please contact support.");
-                } else {
-                    alert(message);
-                }
+                alert(data.message || 'Invalid OTP');
                 setLoading(false);
             }
         } catch (error) {
@@ -137,7 +134,6 @@ const Login = () => {
         }
     };
 
-    // Countdown for resend OTP
     useEffect(() => {
         if (step !== 2 || otpTimer <= 0) return;
         const id = setInterval(() => {
@@ -146,24 +142,20 @@ const Login = () => {
         return () => clearInterval(id);
     }, [step, otpTimer]);
 
-    // After login, redirect user to fill profile (name only - email is optional)
     useEffect(() => {
         if (!user || user.role === 'admin') return;
         const forceEdit = Boolean(location?.state?.forceEdit);
-        // Only force edit if name is missing or Guest - email is optional
         const missingName = !user?.name || user.name === 'Guest' || user.name === 'string' || (user.name?.trim?.() || '') === '';
         if (forceEdit || missingName) {
             setEditName(user?.name && user.name !== 'Guest' && user.name !== 'string' ? user.name : '');
             setEditEmail(user?.email || '');
             setIsEditing(true);
-            // Clear route state so it doesn't keep forcing edit
             navigate('/login', { replace: true, state: {} });
         }
     }, [user, location?.state?.forceEdit, navigate]);
 
-    // Common styles for input fields
-    const inputClasses = "w-full pl-12 pr-5 py-4 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-sunset-orange focus:ring-4 focus:ring-sunset-orange/10 transition-all outline-none font-bold text-charcoal-grey disabled:bg-gray-100 disabled:text-gray-400";
-    const labelClasses = "block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1";
+    const inputClasses = "w-full pl-14 pr-6 py-5 rounded-2xl bg-white/[0.03] border border-white/10 focus:bg-white/[0.08] focus:border-[#FF7A18] focus:ring-4 focus:ring-[#FF7A18]/10 transition-all outline-none font-bold text-[#F8FAFC] placeholder-[#AAB2C5]/30 disabled:opacity-50 text-lg";
+    const labelClasses = "block text-[10px] font-black text-[#AAB2C5] uppercase tracking-[0.4em] mb-3 ml-2 italic opacity-60";
 
     const handleLogout = async () => {
         await apiLogout();
@@ -171,41 +163,66 @@ const Login = () => {
         navigate('/login');
     };
 
+    const handleDeleteAccount = async () => {
+        const confirmed = window.confirm("CRITICAL WARNING: This action will permanently delete your account and all associated data. This cannot be undone. Do you wish to proceed?");
+
+        if (confirmed) {
+            setLoading(true);
+            try {
+                const res = await deleteAccount();
+                if (res.ok) {
+                    await apiLogout();
+                    setUser(null);
+                    alert("Account successfully purged from system.");
+                    navigate('/login');
+                } else {
+                    const data = await res.json();
+                    alert(data.message || "Failed to delete account. Please contact system support.");
+                }
+            } catch (error) {
+                console.error("Account Deletion Error:", error);
+                alert("Synchronization error during account purging.");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
     if (user) {
         return (
-            <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6 lg:p-12 relative overflow-hidden">
-                {/* Ambient background blur for premium feel */}
-                <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#007b6e]/5 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#6e68e4]/5 rounded-full blur-[120px]" />
-                </div>
+            <div className="min-h-screen bg-[#070B14] flex items-center justify-center p-6 lg:p-12 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
+                {/* Background Grid & Blurs */}
+                <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
+                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none" />
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="w-full max-w-5xl bg-white rounded-[2rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative z-10 mx-auto"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="w-full max-w-6xl bg-[#0F172A]/40 backdrop-blur-3xl rounded-[3rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.6)] border border-white/10 flex flex-col relative z-10"
                 >
-                    {/* Header Section: Exact Landscape Replica */}
-                    <div className="relative bg-[#007b6e] p-8 flex items-center justify-between shrink-0 overflow-hidden">
-                        {/* Background Patterns */}
-                        <div className="absolute top-[-10%] left-[-5%] w-48 h-48 bg-white/5 rounded-full blur-2xl" />
-                        <div className="absolute bottom-[-20%] right-[15%] w-64 h-64 bg-white/5 rounded-full blur-3xl opacity-50" />
+                    {/* Identity Header */}
+                    <div className="relative bg-[#0F172A]/80 p-8 lg:p-14 flex flex-col md:flex-row items-center justify-between border-b border-white/5 overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF7A18]/10 to-transparent blur-3xl rounded-full" />
 
-                        <div className="relative z-10 flex items-center gap-5">
-                            {/* Circular Avatar */}
-                            <div className="w-20 h-20 rounded-full border-2 border-white/20 bg-white/10 flex items-center justify-center text-white text-3xl font-bold shadow-lg backdrop-blur-sm">
-                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                        <div className="relative z-10 flex items-center gap-8 mb-8 md:mb-0">
+                            <div className="relative">
+                                <div className="absolute -inset-1 bg-gradient-to-tr from-[#FF7A18] to-[#FF3D3D] rounded-full blur-md opacity-40 animate-pulse" />
+                                <div className="w-24 h-24 rounded-full border-2 border-white/20 bg-[#070B14] flex items-center justify-center text-[#F8FAFC] text-4xl font-black shadow-2xl relative z-10">
+                                    {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                                </div>
                             </div>
 
-                            {/* Name and Badges */}
-                            <div className="flex flex-col gap-2">
-                                <h1 className="text-3xl font-bold text-white tracking-tight leading-none uppercase">
-                                    {user.name || 'User'}
-                                </h1>
-                                <div className="flex gap-2">
-                                    <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-widest border border-white/20 uppercase">CUSTOMER</span>
-                                    <span className="px-4 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-widest border border-white/20 uppercase">E4</span>
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-3">
+                                    <h1 className="text-3xl lg:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">
+                                        {user.name || 'ANONYMOUS'}
+                                    </h1>
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
+                                </div>
+                                <div className="flex gap-3">
+                                    <span className="px-4 py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] border border-white/10 uppercase">CLASSIFIED: CUSTOMER</span>
+                                    <span className="px-4 py-1.5 bg-[#FF7A18]/10 backdrop-blur-md rounded-xl text-[9px] font-black text-[#FF7A18] tracking-[0.3em] border border-[#FF7A18]/20 uppercase italic">EFOUR ELURU</span>
                                 </div>
                             </div>
                         </div>
@@ -213,139 +230,129 @@ const Login = () => {
                         {!isEditing && (
                             <button
                                 onClick={handleStartEdit}
-                                className="relative z-10 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-xl border border-white/20 transition-all flex items-center gap-2 group/edit shadow-sm"
+                                className="relative z-10 bg-white/5 hover:bg-[#FF7A18] text-[#F8FAFC] px-8 py-4 rounded-2xl border border-white/10 transition-all flex items-center gap-3 group/edit shadow-xl font-black text-[10px] uppercase tracking-[0.3em] italic transform -skew-x-6 active:scale-95"
                             >
-                                <Edit2 size={16} />
-                                <span className="text-sm font-bold">Edit Profile</span>
+                                <Edit2 size={16} className="group-hover/edit:rotate-12 transition-transform" />
+                                MODIFY IDENTITY
                             </button>
                         )}
                     </div>
 
-                    {/* Content Section: Landscape Dashboard */}
-                    <div className="p-10 lg:p-12 bg-white">
+                    <div className="p-8 lg:p-16">
                         {isEditing ? (
-                            /* MODIFY PROFILE FORM */
-                            <div className="max-w-2xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <div className="text-center space-y-1">
-                                    <h3 className="text-2xl font-bold text-gray-900 uppercase tracking-tight">Modify Identity</h3>
-                                    <p className="text-gray-400 text-sm font-bold uppercase tracking-widest">Secure Profile Management</p>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="max-w-3xl mx-auto space-y-12"
+                            >
+                                <div className="text-center space-y-3">
+                                    <h3 className="text-3xl font-black text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12">OVERRIDE IDENTITY PROTOCOL</h3>
+                                    <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.4em] opacity-60">SECURE PROFILE RE-CLASSIFICATION</p>
                                 </div>
 
-                                <form onSubmit={handleSaveProfile} className="space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                                <form onSubmit={handleSaveProfile} className="space-y-10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                        <div className="space-y-3">
+                                            <label className={labelClasses}>Full Legal Designation</label>
                                             <input
                                                 type="text"
                                                 value={editName}
                                                 onChange={(e) => setEditName(e.target.value)}
-                                                className="w-full h-14 px-6 rounded-xl bg-gray-50 border-2 border-transparent focus:border-[#007b6e] focus:bg-white transition-all outline-none font-bold text-gray-800"
+                                                className={inputClasses}
                                                 required
                                             />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                                        <div className="space-y-3">
+                                            <label className={labelClasses}>Encrypted Communication (Email)</label>
                                             <input
                                                 type="email"
                                                 value={editEmail}
                                                 onChange={(e) => setEditEmail(e.target.value)}
-                                                className="w-full h-14 px-6 rounded-xl bg-gray-50 border-2 border-transparent focus:border-[#007b6e] focus:bg-white transition-all outline-none font-bold text-gray-800"
+                                                className={inputClasses}
                                                 required
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-center gap-6">
-                                        <button type="button" onClick={() => setIsEditing(false)} className="px-8 py-3 rounded-xl text-gray-400 font-bold hover:text-gray-900 transition-colors uppercase text-xs tracking-widest">Discard</button>
-                                        <button type="submit" disabled={loading} className="bg-[#007b6e] hover:bg-[#006a5e] px-12 py-3.5 rounded-xl text-white font-bold shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3 uppercase text-xs tracking-widest">
-                                            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Apply Changes'}
+                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
+                                        <button type="button" onClick={() => setIsEditing(false)} className="px-10 py-5 rounded-2xl text-[#AAB2C5] font-black hover:text-white transition-all uppercase text-[10px] tracking-[0.4em] italic opacity-60 hover:opacity-100">DISCARD CHANGES</button>
+                                        <button type="submit" disabled={loading} className="btn-premium px-16 py-5 rounded-2xl shadow-[0_20px_50px_rgba(255,122,24,0.35)]">
+                                            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'APPLY CLASSIFICATION'}
                                         </button>
                                     </div>
                                 </form>
-                            </div>
+                            </motion.div>
                         ) : (
-                            /* DISPLAY MODE: LANDSCAPE DASHBOARD */
-                            <div className="space-y-12">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                                    {/* Left: Personal Information */}
-                                    <div className="space-y-8">
-                                        <h3 className="text-xl font-bold text-gray-800 tracking-tight flex items-center gap-2">
-                                            Personal Information
-                                        </h3>
-
-                                        <div className="space-y-8">
-                                            {[
-                                                { label: 'FULL NAME', value: user.name || 'User', icon: <User size={18} /> },
-                                                { label: 'EMAIL', value: user.email || '—', icon: <Mail size={18} /> },
-                                                { label: 'MOBILE', value: `+${user.phone || '91 9346608305'}`, icon: <Phone size={18} /> }
-                                            ].map((item, i) => (
-                                                <div key={i} className="flex items-center gap-5">
-                                                    <div className="w-12 h-12 rounded-full bg-[#f0f9f8] text-[#007b6e] flex items-center justify-center shrink-0 shadow-sm border border-[#e2eff0]">
-                                                        {item.icon}
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-1.5 uppercase">{item.label}</p>
-                                                        <p className="text-lg font-bold text-gray-800 tracking-tight transition-colors leading-none uppercase">{item.value}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-
-                                            <button
-                                                onClick={handleStartEdit}
-                                                className="text-[#007b6e] font-bold text-[13px] hover:text-[#006a5e] transition-all mt-4 w-fit flex items-center gap-2 group/edit-link"
-                                            >
-                                                <Edit2 size={14} className="group-hover/edit-link:rotate-12 transition-transform" /> Edit name or email
-                                            </button>
-                                        </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                                {/* Left: System Metrics */}
+                                <div className="space-y-12">
+                                    <div className="flex items-center gap-4 text-[#FF7A18]">
+                                        <Shield size={20} />
+                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">IDENTITY METRICS</h3>
                                     </div>
 
-                                    {/* Right: Rewards & Points */}
-                                    <div className="space-y-8">
-                                        <h3 className="text-xl font-bold text-gray-800 tracking-tight flex items-center gap-2">
-                                            <div className="text-yellow-500"><Trophy size={20} fill="currentColor" /></div> Rewards & Points
-                                        </h3>
-
-                                        <div className="space-y-6">
-                                            {/* Purple Reward Card */}
-                                            <div className="bg-[#f4f3ff] p-8 rounded-[2rem] border border-[#e8eaff] relative overflow-hidden group/reward-card">
-                                                <div className="absolute top-[-20%] right-[-10%] w-48 h-48 bg-white/50 rounded-full blur-3xl opacity-60" />
-                                                <div className="relative z-10 space-y-8">
-                                                    <div>
-                                                        <p className="text-[#6e68e4] font-bold text-[11px] uppercase tracking-[0.2em] mb-4">CURRENT BALANCE</p>
-                                                        <div className="flex items-baseline gap-3">
-                                                            <span className="text-6xl font-black text-[#5e57d1] leading-none drop-shadow-sm">{user.points || 0}</span>
-                                                            <span className="text-xl font-bold text-[#6e68e4]/50 tracking-tight">Points</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="bg-white p-5 rounded-2xl flex items-center gap-4 border border-[#eef0ff] shadow-sm transform transition-transform group-hover/reward-card:scale-[1.02] duration-500">
-                                                        <div className="w-10 h-10 rounded-xl bg-[#6e68e4]/5 flex items-center justify-center text-[#6e68e4] shrink-0 border border-[#eef0ff]">
-                                                            <Zap size={20} fill="currentColor" />
-                                                        </div>
-                                                        <div className="space-y-1">
-                                                            <p className="text-[13px] font-bold text-gray-800 leading-tight">Earn <span className="text-[#6e68e4]">500 Points</span> to unlock a <br /><span className="text-[#007b6e]">Free Ride Ticket 🎟️</span></p>
-                                                            <p className="text-[10px] font-bold text-gray-400">({500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} more points needed)</p>
-                                                        </div>
-                                                    </div>
+                                    <div className="space-y-10">
+                                        {[
+                                            { label: 'IDENTITY DETAILS', value: user.name || 'UNASSIGNED', icon: <User size={22} /> },
+                                            { label: 'UPLINK CHANNEL', value: user.email || 'NOT CONFIGURATED', icon: <Mail size={22} /> },
+                                            { label: 'NEURAL LINK (PHONE)', value: `+${user.phone || '91 0000000000'}`, icon: <Phone size={22} /> }
+                                        ].map((item, i) => (
+                                            <div key={i} className="flex items-center gap-8 group">
+                                                <div className="w-16 h-16 rounded-2xl bg-white/5 text-[#FF7A18] flex items-center justify-center shrink-0 border border-white/10 shadow-xl group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500">
+                                                    {item.icon}
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className={labelClasses.replace('mb-3', 'mb-1')}>{item.label}</p>
+                                                    <p className="text-xl font-black text-[#F8FAFC] tracking-tight uppercase leading-none opacity-90">{item.value}</p>
                                                 </div>
                                             </div>
-
-                                            {/* Incentive Tip */}
-                                            <div className="bg-[#fff9f3] p-5 rounded-2xl flex items-center gap-4 border border-[#ffecd9] shadow-sm">
-                                                <div className="text-[#f97316] drop-shadow-sm"><Trophy size={20} fill="currentColor" /></div>
-                                                <p className="text-[12px] font-bold text-[#9a3412] leading-snug">Earn <span className="text-orange-950 font-black">10 Points</span> for every transaction above ₹500.</p>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
 
-                                {/* Logout Button */}
-                                <div className="flex justify-end pt-4">
-                                    <button
-                                        onClick={handleLogout}
-                                        className="bg-[#fff1f2] hover:bg-red-500 hover:text-white text-[#e11d48] px-8 py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all duration-300 shadow-sm border border-[#fecdd3] flex items-center gap-3 active:scale-95 group/logout"
-                                    >
-                                        <LogOut size={16} className="group-hover:translate-x-1 transition-transform" /> Logout
-                                    </button>
+                                {/* Right: Loyalty Pulse */}
+                                <div className="space-y-12">
+                                    <div className="flex items-center gap-4 text-[#5B8CFF]">
+                                        <Trophy size={20} />
+                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">LOYALTY PULSE</h3>
+                                    </div>
+
+                                    <div className="bg-[#5B8CFF]/5 p-10 rounded-[2.5rem] border border-[#5B8CFF]/20 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-48 h-48 bg-[#5B8CFF]/10 blur-[80px] rounded-full pointer-events-none" />
+                                        <div className="relative z-10 space-y-10">
+                                            <div>
+                                                <p className="text-[#5B8CFF] font-black text-[10px] uppercase tracking-[0.4em] mb-6 italic opacity-70">NEURAL CREDIT BALANCE</p>
+                                                <div className="flex items-baseline gap-4">
+                                                    <span className="text-7xl font-black text-[#F8FAFC] leading-none tracking-tighter animate-pulse-subtle">{user.points || 0}</span>
+                                                    <span className="text-xl font-black text-[#5B8CFF]/60 uppercase tracking-widest italic transform -skew-x-6">CREDITS</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-[#070B14]/60 p-6 rounded-2xl flex items-center gap-5 border border-white/5 backdrop-blur-md transition-all duration-500 group-hover:border-[#5B8CFF]/30 group-hover:translate-x-2">
+                                                <div className="w-12 h-12 rounded-xl bg-[#5B8CFF]/20 flex items-center justify-center text-[#5B8CFF] shrink-0 border border-[#5B8CFF]/30">
+                                                    <Zap size={24} fill="currentColor" />
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    <p className="text-[13px] font-black text-[#F8FAFC] leading-tight uppercase italic transform -skew-x-6">ACCUMULATE <span className="text-[#5B8CFF]">500 CREDITS</span> TO UNLOCK <span className="text-[#FF7A18]">PRIME ACCESS 🎟️</span></p>
+                                                    <p className="text-[9px] font-black text-[#AAB2C5] tracking-widest opacity-50">STIMULATING GROWTH: {500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} CREDITS REMAINING</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row justify-end gap-4 pt-10">
+                                        <button
+                                            onClick={handleDeleteAccount}
+                                            className="bg-red-500/10 hover:bg-red-600/20 text-red-500 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 border border-red-500/20 flex items-center gap-3 italic transform -skew-x-6 active:scale-95"
+                                        >
+                                            <Trash2 size={16} /> DELETE ACCOUNT
+                                        </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="bg-white/5 hover:bg-white/10 text-[#AAB2C5] hover:text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 border border-white/10 flex items-center gap-3 italic transform -skew-x-6 active:scale-95"
+                                        >
+                                            <LogOut size={16} /> LOGOUT
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -356,170 +363,186 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-screen flex bg-white">
-            {/* Left Side - Hero Image (Desktop Only) */}
-            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-charcoal-grey">
-                <div className="absolute inset-0 z-0">
+        <div className="min-h-screen flex bg-[#070B14] selection:bg-[#FF7A18] selection:text-white relative overflow-hidden">
+            {/* Immersive Sidebar (Desktop Only) */}
+            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#070B14]">
+                <div className="absolute inset-0 z-0 group">
                     <img
                         src="/bumping cars double/Bumper_Cars_9944_14762891777.jpg"
-                        alt="Efour Fun"
-                        className="w-full h-full object-cover opacity-80"
+                        alt="Efour Premium"
+                        className="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2000ms] ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal-grey via-charcoal-grey/40 to-transparent" />
-                    <div className="absolute inset-0 bg-riverside-teal/20 mix-blend-overlay" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#070B14] via-transparent to-[#070B14]/60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#070B14] via-[#070B14]/20 to-transparent" />
+                    <div className="absolute inset-0 matrix-grid opacity-20" />
                 </div>
 
-                <div className="relative z-10 w-full flex flex-col justify-between p-16 text-white">
-                    <div>
-                        <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-8">
-                            <ArrowRight className="rotate-180" size={20} />
-                            <span className="font-bold text-sm tracking-widest uppercase">Back to Home</span>
+                <div className="relative z-10 w-full flex flex-col justify-between p-20 text-[#F8FAFC]">
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <Link to="/" className="inline-flex items-center gap-4 text-[#AAB2C5] hover:text-[#FF7A18] transition-all group/back bg-white/5 px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-xl">
+                            <ArrowRight className="rotate-180 group-hover:-translate-x-2 transition-transform" size={18} />
+                            <span className="font-black text-[10px] tracking-[0.4em] uppercase italic">EXIT TO MAIN ELURU</span>
                         </Link>
-                    </div>
+                    </motion.div>
 
-                    <div className="max-w-md">
-                        <motion.img
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            src="/E4LOGO.jpeg"
-                            alt="E4 Logo"
-                            className="h-24 md:h-32 w-auto object-contain drop-shadow-2xl mb-8"
-                        />
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="text-5xl font-black mb-6 leading-tight"
+                    <div className="max-w-xl space-y-10">
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="bg-white/5 backdrop-blur-3xl p-6 rounded-[2.5rem] border border-white/10 w-fit mb-12 shadow-[0_30px_90px_rgba(0,0,0,0.5)] transform -rotate-3"
                         >
-                            Unlock Your <br />
-                            <span className="text-sunset-orange">Ultimate Fun</span>
+                            <img
+                                src="/E4LOGO.jpeg"
+                                alt="E4 Logo"
+                                className="h-24 w-auto object-contain brightness-125"
+                            />
+                        </motion.div>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 1 }}
+                            className="text-7xl lg:text-9xl font-black mb-10 leading-[0.8] tracking-tighter uppercase italic transform -skew-x-6"
+                        >
+                            ACCESS THE <br />
+                            <span className="text-gradient-primary">FUTURE</span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="text-lg text-gray-300 font-medium leading-relaxed"
+                            transition={{ delay: 0.6, duration: 1 }}
+                            className="text-xl text-[#AAB2C5] font-black border-l-4 border-[#FF7A18] pl-8 leading-relaxed italic opacity-80 uppercase tracking-widest"
                         >
-                            Join thousands of happy families! Access exclusive rides, book tickets instantly, and manage your Efour experience.
+                            UNLOCK EXCLUSIVE PRIVILEGES AND CINEMATIC PROTOCOLS. YOUR JOURNEY TRANSCENDS REALITY.
                         </motion.p>
                     </div>
 
-                    <div className="flex gap-2">
-                        <div className="w-12 h-1.5 rounded-full bg-sunset-orange" />
-                        <div className="w-2 h-1.5 rounded-full bg-white/30" />
-                        <div className="w-2 h-1.5 rounded-full bg-white/30" />
+                    <div className="flex gap-4">
+                        <div className="w-24 h-1.5 rounded-full bg-[#FF7A18] shadow-[0_0_20px_rgba(255,122,24,0.6)]" />
+                        <div className="w-10 h-1.5 rounded-full bg-white/10" />
+                        <div className="w-6 h-1.5 rounded-full bg-white/10" />
                     </div>
                 </div>
             </div>
 
-            {/* Right Side - Form Container */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
-                {/* Mobile Back Button */}
-                <Link to="/" className="absolute top-6 left-6 lg:hidden p-2 bg-gray-100 rounded-full text-charcoal-grey">
-                    <X size={20} />
+            {/* Right Side - Authentication Terminal */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-16 relative bg-[#070B14]">
+                <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
+                <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
+                <div className="absolute bottom-[20%] left-[-10%] w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none" />
+
+                <Link to="/" className="absolute top-10 left-10 lg:hidden p-4 bg-white/5 border border-white/10 rounded-full text-[#F8FAFC] backdrop-blur-3xl active:scale-95">
+                    <X size={24} />
                 </Link>
 
                 <motion.div
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: 40 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full max-w-md"
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="w-full max-w-md bg-[#0F172A]/40 backdrop-blur-3xl p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] relative z-10 overflow-hidden"
                 >
-                    {/* LOGIN FORM */}
-                    <div className="space-y-10">
-                        <div>
-                            <h2 className="text-4xl font-heading font-black text-charcoal-grey mb-3">Sign in</h2>
-                            <p className="text-gray-500 font-medium">Please enter your details to continue.</p>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FF7A18]/10 to-transparent blur-2xl rounded-full" />
+
+                    <div className="space-y-16">
+                        <div className="text-center space-y-4">
+                            <div className="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center mx-auto mb-8 shadow-2xl transform rotate-12">
+                                <Key className="text-[#FF7A18]" size={32} />
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">IDENTITY</h2>
+                            <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.5em] italic opacity-50">NODE ACCESS: EFOUR_ELURU_XXVI</p>
                         </div>
 
-                        <form onSubmit={step === 1 ? handleSendOtp : handleVerifyOtp} className="space-y-6">
-                            <div>
-                                <label className={labelClasses}>Phone Number</label>
-                                <div className="relative group">
-                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-sunset-orange transition-colors" size={20} />
-                                    <input
-                                        type="tel"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        className={inputClasses}
-                                        placeholder="98765 43210"
-                                        required
-                                        disabled={step === 2}
-                                    />
-                                    {step === 1 && (
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <form onSubmit={step === 1 ? handleSendOtp : handleVerifyOtp} className="space-y-10">
+                            <AnimatePresence mode="wait">
+                                {step === 1 ? (
+                                    <motion.div
+                                        key="step1"
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        className="space-y-4"
+                                    >
+                                        <label className={labelClasses}>Personal Neural Link (Phone)</label>
+                                        <div className="relative group">
+                                            <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-[#AAB2C5]/30 group-focus-within:text-[#FF7A18] transition-colors" size={20} />
+                                            <input
+                                                type="tel"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                                className={inputClasses}
+                                                placeholder="98765 43210"
+                                                required
+                                            />
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {step === 2 && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    className="overflow-hidden"
-                                >
-                                    <label className={labelClasses}>Verification Code</label>
-                                    <div className="relative group">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-riverside-teal/10 text-riverside-teal font-bold text-xs">
-                                            #
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="step2"
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        className="space-y-8"
+                                    >
+                                        <div className="space-y-4">
+                                            <label className={labelClasses}>DISPOSABLE SECURITY TOKEN (OTP)</label>
+                                            <div className="relative group">
+                                                <Fingerprint className="absolute left-5 top-1/2 -translate-y-1/2 text-[#AAB2C5]/30 group-focus-within:text-[#5B8CFF] transition-colors" size={20} />
+                                                <input
+                                                    type="text"
+                                                    value={otp}
+                                                    onChange={(e) => setOtp(e.target.value)}
+                                                    className={`${inputClasses} tracking-[0.6em] text-center font-black text-3xl focus:border-[#5B8CFF] focus:ring-[#5B8CFF]/20`}
+                                                    placeholder="••••••"
+                                                    maxLength={6}
+                                                    required
+                                                    autoFocus
+                                                />
+                                            </div>
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={otp}
-                                            onChange={(e) => setOtp(e.target.value)}
-                                            className={`${inputClasses} tracking-[0.5em] text-center font-black text-2xl focus:border-riverside-teal focus:ring-riverside-teal/10`}
-                                            placeholder="•• •• ••"
-                                            maxLength={6}
-                                            required
-                                            autoFocus
-                                        />
-                                    </div>
-                                    <div className="flex justify-between items-center mt-3 px-1">
-                                        <p className="text-xs font-bold text-gray-400">Sent to {phone}</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => setStep(1)}
-                                            className="text-xs font-bold text-sunset-orange hover:underline"
-                                        >
-                                            Change Number
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            )}
+                                        <div className="flex justify-between items-center px-2">
+                                            <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] uppercase italic opacity-60">TARGET: {phone}</p>
+                                            <button
+                                                type="button"
+                                                onClick={() => setStep(1)}
+                                                className="text-[9px] font-black text-[#FF7A18] hover:text-[#FF3D3D] tracking-[0.3em] uppercase transition-all italic border-b border-[#FF7A18]/20"
+                                            >
+                                                CHANGE NODE
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
-                            <div className="pt-4">
+                            <div className="pt-6">
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className={`w-full py-4 rounded-xl font-bold text-lg shadow-xl shadow-gray-200 hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-3 ${step === 1
-                                        ? 'bg-gradient-to-r from-sunset-orange to-red-500 text-white'
-                                        : 'bg-gradient-to-r from-riverside-teal to-emerald-600 text-white'
-                                        }`}
+                                    className={`btn-premium w-full py-6 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] shadow-[0_20px_60px_rgba(255,122,24,0.3)] flex items-center justify-center gap-5 group/btn ${step === 2 ? 'from-[#5B8CFF] to-[#7F5CFF] shadow-[0_20px_60px_rgba(91,140,255,0.3)] hover:shadow-[0_25px_70px_rgba(91,140,255,0.4)]' : ''}`}
                                 >
                                     {loading ? (
-                                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <Activity className="animate-spin" size={24} />
                                     ) : (
-                                        step === 1 ? (
-                                            <>Get OTP <ArrowRight size={20} /></>
-                                        ) : (
-                                            <>Verify & Login <Check size={20} /></>
-                                        )
+                                        <>
+                                            {step === 1 ? 'REQUEST AUTHENTICATION' : 'SYNCHRONIZE SESSION'}
+                                            <ArrowRight size={20} className="group-hover/btn:translate-x-2 transition-transform" />
+                                        </>
                                     )}
                                 </button>
                             </div>
 
                             {step === 2 && (
-                                <p className="text-center">
+                                <p className="text-center pt-4">
                                     <button
                                         type="button"
                                         disabled={otpTimer > 0 || loading}
                                         onClick={handleSendOtp}
-                                        className="text-sm font-bold text-gray-400 hover:text-charcoal-grey disabled:opacity-50 transition-colors"
+                                        className="text-[10px] font-black text-[#AAB2C5] hover:text-white tracking-[0.4em] uppercase disabled:opacity-30 transition-all italic"
                                     >
-                                        {otpTimer > 0 ? `Resend code in ${otpTimer}s` : 'Resend Verification Code'}
+                                        {otpTimer > 0 ? `NEW TOKEN IN ${otpTimer}S` : 'REGENERATE SECURITY TOKEN'}
                                     </button>
                                 </p>
                             )}
@@ -527,13 +550,24 @@ const Login = () => {
                     </div>
                 </motion.div>
 
-                {/* Footer Copyright */}
-                <div className="absolute bottom-6 text-center text-xs text-gray-300 w-full">
-                    &copy; 2026 Efour. All rights reserved.
+                <div className="absolute bottom-12 text-center text-[9px] font-black text-[#AAB2C5]/20 tracking-[1em] uppercase w-full italic">
+                    &copy; MMXXVI EFOUR ELURU PROTOCOL
                 </div>
             </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes pulse-subtle {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.85; transform: scale(1.05); }
+                }
+                .animate-pulse-subtle {
+                    animation: pulse-subtle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
+            `}} />
         </div>
     );
 };
 
 export default Login;
+

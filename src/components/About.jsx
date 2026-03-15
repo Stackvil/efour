@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
-import { Star, Waves, ShieldCheck, Map, ArrowRight } from 'lucide-react'
+import { Star, Wind, ShieldCheck, Map, ArrowRight, Zap, Target, Globe } from 'lucide-react'
 import OptimizedImage from './common/OptimizedImage'
 
 const About = () => {
@@ -14,39 +14,50 @@ const About = () => {
     const y2 = useTransform(scrollYProgress, [0, 1], [0, 100])
 
     return (
-        <section id="philosophy" ref={containerRef} className="section-spacing container overflow-hidden">
-            <div className="elite-grid">
+        <section id="philosophy" ref={containerRef} className="py-20 md:py-40 container mx-auto px-6 overflow-hidden bg-[#070B14] relative">
+            {/* Background Decor */}
+            <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
+
+            <div className="grid grid-cols-12 gap-12 xl:gap-24">
                 {/* Typographic Column */}
-                <div className="col-span-12 lg:col-span-5 flex flex-col justify-center mb-16 lg:mb-0">
+                <div className="col-span-12 lg:col-span-12 xl:col-span-5 flex flex-col justify-center mb-16 xl:mb-0 relative z-10">
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 1, ease: "easeOut" }}
                     >
-                        <span className="text-primary font-black tracking-[0.5em] uppercase text-[10px] mb-8 block">
-                            The Riverfront Philosophy
-                        </span>
-                        <h2 className="text-6xl md:text-8xl font-black mb-10 leading-[0.85] tracking-tighter">
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="w-8 h-8 rounded-lg bg-[#FF7A18]/10 flex items-center justify-center text-[#FF7A18] border border-[#FF7A18]/20">
+                                <Globe size={16} />
+                            </div>
+                            <span className="text-[#FF7A18] font-bold tracking-[0.6em] uppercase text-[12px] italic">
+                                THE EFOUR PHILOSOPHY
+                            </span>
+                        </div>
+
+                        <h2 className="text-4xl md:text-8xl font-black mb-8 md:mb-12 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
                             BEYOND THE <br />
-                            <span className="serif text-primary">Horizon.</span>
+                            <span className="text-gradient-primary">HORIZON.</span>
                         </h2>
-                        <p className="text-text-secondary text-xl font-light leading-relaxed mb-12 max-w-md">
-                            Situated OPP TO RTC Main bustand NR Peta, Efour is where the urban energy of Eluru harmoniously blends with the joy of food and entertainment.
+
+                        <p className="text-[#AAB2C5] text-base md:text-xl font-black uppercase tracking-widest leading-relaxed mb-10 md:mb-16 max-w-md italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
+                            Situated at NR Peta, Efour is where the urban energy of Eluru harmoniously blends with the joy of food and entertainment.
                         </p>
 
-                        <div className="space-y-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-10">
                             {[
-                                { title: 'GASTRONOMY', icon: <Star />, desc: 'Elite stalls representing global culinary standards.' },
-                                { title: 'SERENITY', icon: <Waves />, desc: 'Open-air theater with refreshing river breezes.' },
-                                { title: 'EXCITEMENT', icon: <ShieldCheck />, desc: 'State-of-the-art recreation for every generation.' }
+                                { title: 'GASTRONOMY', icon: <Zap size={20} />, desc: 'Elite stalls representing global culinary standards.', color: 'text-[#FF7A18]' },
+                                { title: 'SERENITY', icon: <Wind size={20} />, desc: 'Open-air theater with premium architectural vibes.', color: 'text-[#5B8CFF]' },
+                                { title: 'EXCITEMENT', icon: <Target size={20} />, desc: 'State-of-the-art recreation for every generation.', color: 'text-[#FF3D3D]' }
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-8 group">
-                                    <div className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full group-hover:border-primary transition-all duration-500">
-                                        {item.icon}
+                                    <div className={`w-16 h-16 flex items-center justify-center bg-white/[0.03] border border-white/10 rounded-2xl group-hover:border-[#FF7A18]/40 transition-all duration-500 shadow-2xl relative overflow-hidden`}>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className={`${item.color} relative z-10 group-hover:scale-110 transition-transform`}>{item.icon}</div>
                                     </div>
-                                    <div>
-                                        <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 mb-1">{item.title}</h4>
-                                        <p className="text-sm font-medium">{item.desc}</p>
+                                    <div className="space-y-1">
+                                        <h4 className="text-[12px] font-bold tracking-[0.4em] text-[#F8FAFC] uppercase italic opacity-40 mb-1 group-hover:opacity-100 transition-opacity">{item.title}</h4>
+                                        <p className="text-base font-medium text-[#AAB2C5] uppercase tracking-widest italic leading-snug">{item.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -54,34 +65,45 @@ const About = () => {
                     </motion.div>
                 </div>
 
-                {/* Visual Column - Refined Alignment */}
-                <div className="col-span-12 lg:col-span-7 flex items-center justify-center">
-                    <div className="relative w-full max-w-2xl px-6">
+                {/* Visual Column */}
+                <div className="col-span-12 lg:col-span-12 xl:col-span-7 flex items-center justify-center relative">
+                    <div className="relative w-full max-w-3xl">
+                        {/* Matrix Grid Decoration */}
+                        <div className="absolute -inset-12 matrix-grid opacity-10 pointer-events-none" />
+
                         <motion.div
                             style={{ y: y1 }}
-                            className="aspect-[3/4] rounded-[3rem] overflow-hidden premium-glass p-3 relative z-20"
+                            className="aspect-[16/9] md:aspect-[3/4] rounded-[4rem] overflow-hidden bg-[#0F172A] border border-white/10 p-3 relative z-20 shadow-[0_50px_100px_rgba(0,0,0,0.8)]"
                         >
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#070B14] to-transparent z-10 opacity-40" />
                             <OptimizedImage
-                                src="https://images.unsplash.com/photo-1544648151-50e50257077e?auto=format&fit=crop&w=1000&q=80"
-                                alt="Architecture"
-                                className="w-full h-full rounded-[2.5rem] grayscale hover:grayscale-0 transition-all duration-1000"
+                                src="/horizon picture.png"
+                                alt="Beyond the Horizon"
+                                className="w-full h-full rounded-[3.5rem] object-cover transition-all duration-1000"
                             />
+                            {/* Visual HUD */}
+                            <div className="absolute bottom-12 left-12 z-20 space-y-2">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-2 h-2 rounded-full bg-[#FF7A18] animate-pulse" />
+                                    <span className="text-[12px] font-bold text-[#F8FAFC] tracking-[0.4em] uppercase italic bg-black/40 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">CORE_STRUCTURE.LOG</span>
+                                </div>
+                            </div>
                         </motion.div>
 
                         <motion.div
                             style={{ y: y2 }}
-                            className="absolute -bottom-20 -right-4 w-2/3 aspect-square rounded-full overflow-hidden premium-glass p-3 z-10 hidden md:block"
+                            className="absolute -bottom-24 -right-8 w-2/3 aspect-square rounded-[5rem] overflow-hidden bg-[#0F172A] border border-white/10 p-3 z-10 hidden xl:block shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
                         >
                             <OptimizedImage
-                                src="https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?auto=format&fit=crop&w=800&q=80"
-                                alt="Atmosphere"
-                                className="w-full h-full rounded-full opacity-40"
+                                src="/horizon picture.png"
+                                alt="Efour Vibe"
+                                className="w-full h-full rounded-[4.5rem] object-cover opacity-60 hover:opacity-100 transition-all duration-1000"
                             />
                         </motion.div>
 
-                        <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
-                            <h3 className="text-[12vw] font-black text-white/5 whitespace-nowrap leading-none rotate-90">
-                                SCENE 01
+                        <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none select-none">
+                            <h3 className="text-[15vw] font-black text-white/[0.02] whitespace-nowrap leading-none rotate-90 uppercase italic tracking-tighter">
+                                SCENE_01
                             </h3>
                         </div>
                     </div>
