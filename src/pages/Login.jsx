@@ -287,14 +287,14 @@ const Login = () => {
                                 <div className="space-y-12">
                                     <div className="flex items-center gap-4 text-[#FF7A18]">
                                         <Shield size={20} />
-                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">IDENTITY METRICS</h3>
+                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">ACCOUNT DETAILS</h3>
                                     </div>
 
                                     <div className="space-y-10">
                                         {[
-                                            { label: 'IDENTITY DETAILS', value: user.name || 'UNASSIGNED', icon: <User size={22} /> },
-                                            { label: 'UPLINK CHANNEL', value: user.email || 'NOT CONFIGURATED', icon: <Mail size={22} /> },
-                                            { label: 'NEURAL LINK (PHONE)', value: `+${user.phone || '91 0000000000'}`, icon: <Phone size={22} /> }
+                                            { label: 'USER NAME', value: user.name || 'UNASSIGNED', icon: <User size={22} /> },
+                                            { label: 'EMAIL ADDRESS', value: user.email || 'NOT CONFIGURATED', icon: <Mail size={22} /> },
+                                            { label: 'PHONE NUMBER', value: `+${user.phone || '91 0000000000'}`, icon: <Phone size={22} /> }
                                         ].map((item, i) => (
                                             <div key={i} className="flex items-center gap-8 group">
                                                 <div className="w-16 h-16 rounded-2xl bg-white/5 text-[#FF7A18] flex items-center justify-center shrink-0 border border-white/10 shadow-xl group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500">
@@ -320,7 +320,7 @@ const Login = () => {
                                         <div className="absolute top-0 right-0 w-48 h-48 bg-[#5B8CFF]/10 blur-[80px] rounded-full pointer-events-none" />
                                         <div className="relative z-10 space-y-10">
                                             <div>
-                                                <p className="text-[#5B8CFF] font-black text-[10px] uppercase tracking-[0.4em] mb-6 italic opacity-70">NEURAL CREDIT BALANCE</p>
+                                                <p className="text-[#5B8CFF] font-black text-[10px] uppercase tracking-[0.4em] mb-6 italic opacity-70">CREDIT BALANCE</p>
                                                 <div className="flex items-baseline gap-4">
                                                     <span className="text-7xl font-black text-[#F8FAFC] leading-none tracking-tighter animate-pulse-subtle">{user.points || 0}</span>
                                                     <span className="text-xl font-black text-[#5B8CFF]/60 uppercase tracking-widest italic transform -skew-x-6">CREDITS</span>
@@ -332,8 +332,8 @@ const Login = () => {
                                                     <Zap size={24} fill="currentColor" />
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <p className="text-[13px] font-black text-[#F8FAFC] leading-tight uppercase italic transform -skew-x-6">ACCUMULATE <span className="text-[#5B8CFF]">500 CREDITS</span> TO UNLOCK <span className="text-[#FF7A18]">PRIME ACCESS 🎟️</span></p>
-                                                    <p className="text-[9px] font-black text-[#AAB2C5] tracking-widest opacity-50">STIMULATING GROWTH: {500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} CREDITS REMAINING</p>
+                                                    <p className="text-[13px] font-black text-[#F8FAFC] leading-tight uppercase italic transform -skew-x-6">EARN <span className="text-[#5B8CFF]">500 CREDITS</span> TO GET <span className="text-[#FF7A18]">ONE FREE TICKET 🎟️</span></p>
+                                                    <p className="text-[9px] font-black text-[#AAB2C5] tracking-widest opacity-50">REMAINING: {500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} CREDITS FOR FREE TICKET</p>
                                                 </div>
                                             </div>
                                         </div>

@@ -15,7 +15,7 @@ const Entertainment = () => {
         {
             title: "ELITE GAMING",
             tag: "ADRENALINE",
-            desc: "A competitive theater for digital athletes, equipped with the latest virtual reality ecosystems and pro-grade cricket simulators.",
+            desc: "A gaming area for players, equipped with the latest virtual reality and pro-grade cricket simulators.",
             icon: <Trophy size={32} />,
             image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
         }
@@ -73,31 +73,6 @@ const Entertainment = () => {
                     ))}
                 </div>
 
-                {/* Cultural Stage - Distinct Highlight */}
-                <div className="mt-40 elite-grid items-center">
-                    <div className="col-span-12 lg:col-span-6 order-2 lg:order-1">
-                        <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px] mb-8 block">PLATFORM 01</span>
-                        <h3 className="text-5xl font-black mb-8 italic serif tracking-tight">The Efour Matrix Stage</h3>
-                        <p className="text-text-secondary text-lg mb-12 font-light leading-relaxed">
-                            A panoramic cultural hub where local talent orchestrates the city's pulse. From weekend unplugged sessions to grand scale performances under the moonlight.
-                        </p>
-                        <button className="flex items-center gap-6 group">
-                            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500">
-                                <PlayCircle size={24} className="group-hover:text-bg-deep" />
-                            </div>
-                            <span className="text-sm font-bold tracking-[0.3em] uppercase">Season Schedule</span>
-                        </button>
-                    </div>
-                    <div className="col-span-12 lg:col-span-6 mb-16 lg:mb-0 order-1 lg:order-2">
-                        <div className="aspect-[4/3] rounded-[3rem] overflow-hidden premium-glass p-3">
-                            <OptimizedImage
-                                src="https://images.unsplash.com/photo-1549333353-c20bfb159779?auto=format&fit=crop&w=1000&q=80"
-                                alt="Cultural Stage"
-                                className="w-full h-full rounded-[2.5rem]"
-                            />
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     )

@@ -10,8 +10,8 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
-    const navLinkClasses = "text-[#AAB2C5] hover:text-[#FF7A18] transition-all text-[16px] uppercase tracking-[0.3em] font-bold italic transform -skew-x-12 hover:translate-x-2 inline-block cursor-pointer text-left";
-    const sectionTitleClasses = "font-bold text-[16px] uppercase tracking-[0.4em] text-[#FF7A18] mb-12 italic opacity-80 flex items-center gap-4";
+    const navLinkClasses = "text-[#AAB2C5] hover:text-[#FF7A18] transition-all text-[16px] uppercase tracking-[0.3em] font-bold hover:translate-x-2 inline-block cursor-pointer text-left";
+    const sectionTitleClasses = "font-bold text-[16px] uppercase tracking-[0.4em] text-[#FF7A18] mb-12 opacity-80 flex items-center gap-4";
 
     return (
         <footer className="bg-[#070B14] pt-20 md:pt-40 pb-16 md:pb-20 border-t border-white/5 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
@@ -42,7 +42,7 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                         </motion.div>
 
                         <p className="text-[#AAB2C5] text-base md:text-lg font-black uppercase tracking-widest leading-relaxed max-w-lg italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
-                            Strategically positioned coordinates at NR Peta. We are the sovereign entity for luxury gastronomy and cinematic entertainment in the Eluru biosphere.
+                            Located at NR Peta, we are the top destination for premium food and entertainment in Eluru.
                         </p>
 
                         <div className="flex gap-8 pt-6">

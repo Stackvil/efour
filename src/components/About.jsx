@@ -46,9 +46,8 @@ const About = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-10">
                             {[
-                                { title: 'GASTRONOMY', icon: <Zap size={20} />, desc: 'Elite stalls representing global culinary standards.', color: 'text-[#FF7A18]' },
-                                { title: 'SERENITY', icon: <Wind size={20} />, desc: 'Open-air theater with premium architectural vibes.', color: 'text-[#5B8CFF]' },
-                                { title: 'EXCITEMENT', icon: <Target size={20} />, desc: 'State-of-the-art recreation for every generation.', color: 'text-[#FF3D3D]' }
+                                { title: 'FOOD', icon: <Zap size={20} />, desc: 'Great food from the best stalls.', color: 'text-[#FF7A18]' },
+                                { title: 'FUN ACTIVITIES', icon: <Target size={20} />, desc: 'Exciting games for everyone.', color: 'text-[#FF3D3D]' }
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-8 group">
                                     <div className={`w-16 h-16 flex items-center justify-center bg-white/[0.03] border border-white/10 rounded-2xl group-hover:border-[#FF7A18]/40 transition-all duration-500 shadow-2xl relative overflow-hidden`}>

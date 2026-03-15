@@ -35,12 +35,6 @@ const Home = () => {
             .filter(r => (term ? (r?.title || '').toLowerCase().includes(term) : true));
     }, [rides, search]);
 
-    const philosophy = [
-        { title: 'Eat', icon: <Sparkles className="text-white" size={32} />, color: 'bg-sunset-orange', desc: 'A premium gastronomic journey through the finest culinary rides in Eluru.' },
-        { title: 'Enjoy', icon: <Sparkles className="text-white" size={32} />, color: 'bg-eluru-teal', desc: 'Immerse yourself in a vibrant, open-air architectural masterwork.' },
-        { title: 'Entertain', icon: <Sparkles className="text-white" size={32} />, color: 'bg-charcoal-grey', desc: 'High-octane thriller zones and futuristic gaming for the next generation.' },
-        { title: 'Eluru', icon: <Sparkles className="text-white" size={32} />, color: 'bg-blue-600', desc: 'The heartbeat of the city, redefined through luxury entertainment.' },
-    ];
 
     return (
         <div className="flex flex-col bg-[#070B14]">
@@ -63,7 +57,7 @@ const Home = () => {
                                 All <span className="text-gradient-primary">Rides</span>
                             </h2>
                             <p className="text-[#AAB2C5] text-sm font-medium italic max-w-lg opacity-60">
-                                Deploy your entertainment sequence. Select premium attractions and synchronize your booking.
+                                Choose your favorite rides and book your tickets easily.
                             </p>
                         </div>
 

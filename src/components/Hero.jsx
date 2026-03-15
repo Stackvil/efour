@@ -314,31 +314,35 @@ const Sculpture = () => {
     })
 
     return (
-        <PresentationControls
-            global
-            config={{ mass: 2, tension: 500 }}
-            snap={{ mass: 4, tension: 1500 }}
-            rotation={[0, 0.3, 0]}
-            polar={[-Math.PI / 3, Math.PI / 3]}
-            azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
-        >
-            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-                <mesh ref={meshRef}>
-                    <torusKnotGeometry args={[1.5, 0.4, 64, 16]} />
-                    <MeshDistortMaterial
-                        color="#FF7A18"
-                        speed={3}
-                        distort={0.5}
-                        radius={1}
-                        roughness={0.1}
-                        metalness={1}
-                        emissive="#FF3D3D"
-                        emissiveIntensity={0.2}
-                    />
-                </mesh>
-            </Float>
-            <ContactShadows resolution={1024} scale={20} blur={2.5} opacity={0.2} far={6} color="#000000" />
-        </PresentationControls>
+        <group position={[0, 0, -3]}>
+            <PresentationControls
+                global
+                config={{ mass: 2, tension: 500 }}
+                snap={{ mass: 4, tension: 1500 }}
+                rotation={[0, 0.3, 0]}
+                polar={[-Math.PI / 3, Math.PI / 3]}
+                azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
+            >
+                <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+                    <mesh ref={meshRef}>
+                        <torusKnotGeometry args={[1.6, 0.5, 128, 32]} />
+                        <MeshDistortMaterial
+                            color="#C41E3A"
+                            speed={3}
+                            distort={0.4}
+                            radius={1}
+                            roughness={0}
+                            metalness={0.6}
+                            emissive="#7B0000"
+                            emissiveIntensity={0.5}
+                            clearcoat={1}
+                            clearcoatRoughness={0}
+                        />
+                    </mesh>
+                </Float>
+                <ContactShadows resolution={1024} scale={20} blur={2.5} opacity={0.2} far={6} color="#000000" />
+            </PresentationControls>
+        </group>
     )
 }
 
@@ -367,6 +371,7 @@ const Hero = () => {
                         <ambientLight intensity={0.4} />
                         <spotLight position={[10, 15, 10]} angle={0.25} penumbra={1} intensity={3} color="#FF7A18" />
                         <pointLight position={[-10, -10, -10]} intensity={1.5} color="#5B8CFF" />
+                        <Sculpture />
                         <ShootingGame />
                         <Environment preset="night" />
                     </Canvas>
@@ -379,26 +384,14 @@ const Hero = () => {
                     style={{ y: y1, opacity }}
                     className="flex flex-col items-center"
                 >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                        className="flex items-center gap-4 text-[#FF7A18] mb-6 md:mb-10"
-                    >
-                        <div className="w-8 md:w-12 h-[1px] bg-[#FF7A18]/30" />
-                        <span className="text-[10px] md:text-[14px] font-bold uppercase tracking-[0.4em] md:tracking-[0.8em] italic opacity-80 text-center">
-                            ELURU INITIALIZATION COMPLETE
-                        </span>
-                        <div className="w-8 md:w-12 h-[1px] bg-[#FF7A18]/30" />
-                    </motion.div>
 
                     <h1 className="text-5xl md:text-[12rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
                         EAT. ENJOY.<br />
                         <span className="text-gradient-primary">ENTERTAIN.</span>
                     </h1>
 
-                    <p className="max-w-2xl text-[#AAB2C5] text-xs md:text-base font-medium uppercase tracking-[0.3em] md:tracking-[0.5em] mb-10 md:mb-16 leading-relaxed italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
-                        Experience the scenic beauty of Eluru combined with <br className="hidden md:block" /> 2026 culinary standards and futuristic recreation zones.
+                    <p className="max-w-2xl text-[#AAB2C5] text-xs md:text-sm font-bold uppercase tracking-[0.4em] mb-12 leading-relaxed italic opacity-70 border-l-2 border-[#FF7A18]/30 pl-6">
+                        Experience the scenic beauty of Eluru with premium culinary standards and recreation.
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center gap-8">
@@ -408,7 +401,7 @@ const Hero = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            INITIATE CULINARY SYNC <ArrowRight size={18} className="ml-2" />
+                            BOOK YOUR RIDE <ArrowRight size={18} className="ml-2" />
                         </motion.a>
 
                     </div>
@@ -424,9 +417,9 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5 }}
             >
-                <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_10px_#FF7A18]" />
-                    <span className="text-[11px] font-bold text-[#FF7A18] tracking-[0.4em] uppercase italic opacity-50">Current Directive</span>
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse" />
+                    <span className="text-[10px] font-bold text-[#FF7A18] tracking-[0.3em] uppercase italic opacity-40">Scroll</span>
                 </div>
 
                 <div className="flex flex-col items-center">
@@ -434,16 +427,9 @@ const Hero = () => {
                         <motion.span
                             animate={{ opacity: [0.4, 1, 0.4] }}
                             transition={{ duration: 3, repeat: Infinity }}
-                            className="text-[15px] font-black text-white tracking-[0.3em] uppercase italic"
+                            className="text-[14px] font-black text-white tracking-[0.4em] uppercase italic"
                         >
-                            INITIATE SCROLL: BOOK RIDES
-                        </motion.span>
-                        <motion.span
-                            animate={{ opacity: [0, 0.6, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                            className="text-[10px] font-bold text-[#FF7A18] tracking-[0.4em] uppercase italic"
-                        >
-                            & ENJOY THE FUN
+                            EXPLORE RIDES
                         </motion.span>
                     </div>
 

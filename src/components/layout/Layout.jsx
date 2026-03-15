@@ -34,6 +34,16 @@ const Header = () => {
         { name: 'CONTACT', path: '/contact' },
     ];
 
+    const isMainPage = ['/', '/login'].includes(location.pathname);
+    
+    // Function to handle navigating to rides section from other pages
+    const handleBookRide = (e) => {
+        if (location.pathname === '/') {
+            e.preventDefault();
+            document.getElementById('rides')?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <header className="sticky top-0 z-50 py-2 md:py-4 px-3 md:px-6">
             <div className="container mx-auto px-4 py-2 md:py-3 bg-[#080C14]/80 backdrop-blur-md border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex justify-between items-center group/header hover:border-white/20 transition-all duration-700">
@@ -95,6 +105,16 @@ const Header = () => {
                         </Link>
                     )}
 
+                    {!isMainPage && (
+                        <Link 
+                            to="/#rides" 
+                            onClick={handleBookRide}
+                            className="px-8 py-4 rounded-2xl bg-[#FF7A18] text-white font-black text-[10px] uppercase tracking-[0.3em] italic hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,122,24,0.3)] flex items-center gap-2"
+                        >
+                            BOOK A RIDE <Zap size={14} className="fill-current" />
+                        </Link>
+                    )}
+
                     {user && (
                         <button
                             onClick={handleLogout}
@@ -105,55 +125,35 @@ const Header = () => {
                     )}
                 </div>
 
-                <div className="flex md:hidden items-center gap-1.5 flex-1 justify-end ml-2">
-                    {/* Compact Mobile Nav - Scrollable Chips */}
-                    <nav className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth px-1 flex-1 justify-end">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`text-[9px] font-black uppercase tracking-widest px-3 py-2 rounded-xl transition-all duration-300 whitespace-nowrap ${location.pathname === link.path ? 'bg-[#FF7A18]/10 text-[#FF7A18] border border-[#FF7A18]/20' : 'text-[#AAB2C5]/30 hover:text-white'}`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </nav>
+                <div className="flex md:hidden items-center gap-4 ml-2">
+                    <button
+                        onClick={toggleCart}
+                        className="relative w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F8FAFC]"
+                    >
+                        <ShoppingCart size={18} />
+                        {cart.length > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 bg-[#FF7A18] text-white text-[7px] w-5 h-5 rounded-full flex items-center justify-center font-black border-2 border-[#070B14]">
+                                {cart.length}
+                            </span>
+                        )}
+                    </button>
 
-                    <div className="flex items-center gap-1.5 pl-2 border-l border-white/5">
-                        <button
-                            onClick={toggleCart}
-                            className="relative w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F8FAFC] active:scale-90 transition-transform"
-                        >
-                            <ShoppingCart size={18} />
-                            {cart.length > 0 && (
-                                <span className="absolute -top-1.5 -right-1.5 bg-[#FF7A18] text-white text-[7px] w-5 h-5 rounded-full flex items-center justify-center font-black border-2 border-[#070B14] shadow-xl">
-                                    {cart.length}
-                                </span>
-                            )}
-                        </button>
-
+                    {!isMainPage && (
                         <Link
-                            to="/login"
-                            className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all active:scale-90 ${location.pathname === '/login' ? 'text-[#FF7A18] border-[#FF7A18]/20 bg-[#FF7A18]/5' : 'text-[#F8FAFC]'}`}
+                            to="/#rides"
+                            onClick={handleBookRide}
+                            className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-[#FF7A18] text-white shadow-lg active:scale-95 transition-all"
                         >
-                            <User size={18} />
+                            BOOK A RIDE
                         </Link>
+                    )}
 
-                        {user?.role === 'admin' && (
-                            <Link to="/admin" className="w-10 h-10 rounded-xl bg-[#FF7A18]/20 border border-[#FF7A18]/30 flex items-center justify-center text-[#FF7A18] active:scale-90 transition-transform">
-                                <LayoutDashboard size={18} />
-                            </Link>
-                        )}
-
-                        {user && (
-                            <button
-                                onClick={handleLogout}
-                                className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center active:scale-90 transition-transform"
-                            >
-                                <LogOut size={18} />
-                            </button>
-                        )}
-                    </div>
+                    <Link
+                        to="/login"
+                        className={`text-[9px] font-black uppercase tracking-widest px-3 py-2 rounded-xl transition-all duration-300 whitespace-nowrap bg-[#FF7A18]/10 text-[#FF7A18] border border-[#FF7A18]/20`}
+                    >
+                        {user ? 'YOUR TICKETS' : 'LOGIN'}
+                    </Link>
                 </div>
             </div>
 

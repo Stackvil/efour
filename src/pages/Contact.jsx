@@ -29,7 +29,7 @@ const Contact = () => {
 
                     <div className="flex flex-col items-center gap-6">
                         <p className="max-w-2xl text-[#AAB2C5] text-xs font-black uppercase tracking-[0.4em] italic opacity-60 leading-relaxed">
-                            Strategically positioned at the core of Eluru, Efour serves as the primary node for futuristic entertainment and luxury gastronomy.
+                            Located in the heart of Eluru, Efour is your main spot for world-class entertainment and great food.
                         </p>
                         <div className="flex gap-4">
                             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
@@ -125,7 +125,7 @@ const Contact = () => {
                                     <div className="relative z-10 text-center md:text-left space-y-6">
                                         <div>
                                             <h4 className="font-bold text-4xl text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 mb-2">Efour Eluru</h4>
-                                            <p className="text-[13px] text-[#AAB2C5] font-bold tracking-[0.4em] uppercase opacity-40 italic">CENTRAL OPERATIONS HUB Alpha-01</p>
+                                            <p className="text-[13px] text-[#AAB2C5] font-bold tracking-[0.4em] uppercase opacity-40 italic">OFFICE LOCATION</p>
                                         </div>
                                         <a
                                             href="https://www.google.com/maps/place/EFOUR/@16.7089355,81.0863275,17z/data=!3m1!4b1!4m6!3m5!1s0x3a36131a0e74054d:0x366c34d3c0b4589c!8m2!3d16.7089304!4d81.0889024!16s%2Fg%2F11wnjn71fc?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D"
@@ -142,7 +142,7 @@ const Contact = () => {
 
                         <div className="flex justify-center">
                             {[
-                                { icon: <Bus size={32} />, title: 'TRANSPORT LINK', desc: 'ELURU ADJACENT: RTC TERMINAL', glow: 'group-hover:text-[#5B8CFF]' }
+                                { icon: <Bus size={32} />, title: 'TRANSPORT LINK', desc: 'New RTC Main Bus Stand, NR Peta, ELURU - 534 006', glow: 'group-hover:text-[#5B8CFF]' }
                             ].map((item, i) => (
                                 <div key={i} className="glass-card p-10 rounded-[3rem] border border-white/10 flex items-center gap-8 group hover:border-white/20 transition-all duration-500 w-full max-w-md">
                                     <div className={`w-20 h-20 bg-white/5 border border-white/10 rounded-[2rem] flex items-center justify-center transition-all duration-500 ${item.glow} group-hover:scale-110 shadow-2xl`}>
@@ -173,15 +173,15 @@ const Contact = () => {
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4 text-[#FF7A18]">
                                     <Shield size={20} className="animate-pulse" />
-                                    <span className="text-[14px] font-bold uppercase tracking-[0.6em] italic opacity-80">ENCRYPTED UPLINK</span>
+                                    <span className="text-[14px] font-bold uppercase tracking-[0.6em] italic opacity-80">SECURE CONTACT</span>
                                 </div>
                                 <h2 className="text-4xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.85] transform -skew-x-6 text-[#F8FAFC]">
-                                    TRANSMIT <br /><span className="text-gradient-primary">QUERY</span>
+                                    GET IN <br /><span className="text-gradient-primary">TOUCH</span>
                                 </h2>
                             </div>
 
                             <p className="text-lg text-[#AAB2C5] font-black uppercase tracking-[0.3em] text-xs italic opacity-60 leading-relaxed border-l-2 border-[#FF7A18]/20 pl-8">
-                                Dedicated support channels are monitored 24/7. Transmit your data packets for immediate tactical response.
+                                Our support team is here to help 24/7. Send us your message and we will get back to you as soon as possible.
                             </p>
 
                             <div className="pt-8">
@@ -201,7 +201,7 @@ const Contact = () => {
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF7A18]/40 to-transparent" />
 
                             <div className="space-y-1 w-full text-center mb-6">
-                                <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.5em] uppercase opacity-40 italic">INPUT TERMINAL Alpha-01</p>
+                                <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.5em] uppercase opacity-40 italic">CONTACT FORM</p>
                             </div>
 
                             <div className="space-y-8">

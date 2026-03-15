@@ -24,7 +24,7 @@ const FoodCourt = () => {
             <div className="container">
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12">
                     <div className="max-w-2xl">
-                        <span className="text-primary font-black tracking-[0.5em] uppercase text-[10px] mb-8 block">GASTRONOMIC THEATER</span>
+                        <span className="text-primary font-black tracking-[0.5em] uppercase text-[10px] mb-8 block">FOOD SELECTION</span>
                         <h2 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-none">THE <span className="serif text-primary">Table.</span></h2>
                         <p className="text-text-secondary text-lg font-light max-w-lg">
                             Discover a symphony of flavors curated from the most prestigious stalls in the region.
@@ -51,7 +51,7 @@ const FoodCourt = () => {
                     <AnimatePresence mode="popLayout">
                         <div className="col-span-12 flex flex-col items-center justify-center py-20 text-center">
                             <h2 className="text-4xl font-heading font-bold text-white/20 mb-4 uppercase tracking-widest">Coming Soon</h2>
-                            <p className="text-white/40 max-w-md">Our culinary theater is preparing something special. The table will be set soon.</p>
+                            <p className="text-white/40 max-w-md">Our food selection is preparing something special. The table will be set soon.</p>
                         </div>
                     </AnimatePresence>
                 </div>
