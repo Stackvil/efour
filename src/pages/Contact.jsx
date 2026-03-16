@@ -197,33 +197,33 @@ const Contact = () => {
                             </div>
                         </div>
 
-                        <form className="bg-[#0F172A]/60 backdrop-blur-3xl p-12 md:p-16 rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] space-y-10 relative">
+                        <form className="bg-[#0F172A]/60 backdrop-blur-3xl p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] space-y-8 md:space-y-10 relative">
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF7A18]/40 to-transparent" />
 
-                            <div className="space-y-1 w-full text-center mb-6">
+                            <div className="space-y-1 w-full text-center mb-4 md:mb-6">
                                 <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.5em] uppercase opacity-40 italic">CONTACT FORM</p>
                             </div>
 
-                            <div className="space-y-8">
+                            <div className="space-y-6 md:space-y-8">
                                 {[
                                     { label: 'FULL NAME', type: 'text', placeholder: 'ENTER YOUR FULL NAME' },
                                     { label: 'EMAIL ADDRESS', type: 'email', placeholder: 'USERNAME@EMAIL.COM' }
                                 ].map((field, i) => (
-                                    <div key={i} className="space-y-3">
-                                        <label className="text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">{field.label}</label>
+                                    <div key={i} className="space-y-2 md:space-y-3">
+                                        <label className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">{field.label}</label>
                                         <input
                                             type={field.type}
                                             placeholder={field.placeholder}
-                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[15px] font-bold tracking-[0.2em] italic"
+                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 md:px-8 py-5 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[14px] md:text-[15px] font-bold tracking-[0.1em] md:tracking-[0.2em] italic"
                                         />
                                     </div>
                                 ))}
-                                <div className="space-y-3">
-                                    <label className="text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">YOUR MESSAGE</label>
+                                <div className="space-y-2 md:space-y-3">
+                                    <label className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">YOUR MESSAGE</label>
                                     <textarea
                                         placeholder="TYPE YOUR MESSAGE HERE..."
                                         rows="4"
-                                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[15px] font-bold tracking-[0.2em] italic resize-none"
+                                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 md:px-8 py-5 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[14px] md:text-[15px] font-bold tracking-[0.1em] md:tracking-[0.2em] italic resize-none"
                                     />
                                 </div>
                             </div>
@@ -232,9 +232,9 @@ const Contact = () => {
                                 href="https://wa.me/917036923456"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-premium w-full py-6 rounded-3xl font-bold uppercase tracking-[0.4em] text-[14px] flex items-center justify-center gap-6 group/btn shadow-[0_20px_60px_rgba(255,122,24,0.3)]"
+                                className="btn-premium w-full py-5 md:py-6 rounded-2xl md:rounded-3xl font-bold uppercase tracking-[0.4em] text-[12px] md:text-[14px] flex items-center justify-center gap-4 md:gap-6 group/btn shadow-[0_20px_60px_rgba(255,122,24,0.3)]"
                             >
-                                SEND MESSAGE <Send size={22} className="group-hover/btn:translate-x-2 group-hover/btn:-translate-y-2 transition-transform" />
+                                SEND MESSAGE <Send size={20} className="group-hover/btn:translate-x-2 group-hover/btn:-translate-y-2 transition-transform" />
                             </a>
                         </form>
                     </div>

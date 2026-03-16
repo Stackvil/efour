@@ -363,16 +363,21 @@ const Hero = () => {
             <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100">
                 {isInView && (
                     <Canvas
-                        dpr={window.innerWidth < 768 ? 0.75 : 1}
-                        camera={{ position: [0, 0, 8], fov: 40 }}
+                        dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1}
+                        camera={{
+                            position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 18 : 8],
+                            fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 45 : 40
+                        }}
                         performance={{ min: 0.5 }}
                         gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: true }}
                     >
                         <ambientLight intensity={0.4} />
                         <spotLight position={[10, 15, 10]} angle={0.25} penumbra={1} intensity={3} color="#FF7A18" />
                         <pointLight position={[-10, -10, -10]} intensity={1.5} color="#5B8CFF" />
-                        <Sculpture />
-                        <ShootingGame />
+                        <group scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1}>
+                            <Sculpture />
+                            <ShootingGame />
+                        </group>
                         <Environment preset="night" />
                     </Canvas>
                 )}
@@ -385,19 +390,19 @@ const Hero = () => {
                     className="flex flex-col items-center"
                 >
 
-                    <h1 className="text-5xl md:text-[12rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
+                    <h1 className="text-4xl xs:text-5xl md:text-[12rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
                         EAT. ENJOY.<br />
                         <span className="text-gradient-primary">ENTERTAIN.</span>
                     </h1>
 
-                    <p className="max-w-2xl text-[#AAB2C5] text-xs md:text-sm font-bold uppercase tracking-[0.4em] mb-12 leading-relaxed italic opacity-70 border-l-2 border-[#FF7A18]/30 pl-6">
+                    <p className="max-w-2xl text-[#AAB2C5] text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] mb-12 leading-relaxed italic opacity-70 border-l-2 border-[#FF7A18]/30 pl-4 md:pl-6">
                         Experience the scenic beauty of Eluru with premium culinary standards and recreation.
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center gap-8">
                         <motion.a
                             href="/dine"
-                            className="btn-premium px-16 py-6"
+                            className="btn-premium px-10 md:px-16 py-4 md:py-6"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -411,7 +416,7 @@ const Hero = () => {
 
             {/* Professional Directive HUD (Scroll Indicator) */}
             <motion.div
-                className="absolute bottom-24 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:gap-4 z-20 cursor-pointer group lg:flex"
+                className="absolute bottom-12 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:gap-4 z-20 cursor-pointer group lg:flex"
                 onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

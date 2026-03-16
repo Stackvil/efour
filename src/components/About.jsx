@@ -35,12 +35,12 @@ const About = () => {
                             </span>
                         </div>
 
-                        <h2 className="text-4xl md:text-8xl font-black mb-8 md:mb-12 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
+                        <h2 className="text-3xl xs:text-4xl md:text-8xl font-black mb-8 md:mb-12 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
                             BEYOND THE <br />
                             <span className="text-gradient-primary">HORIZON.</span>
                         </h2>
 
-                        <p className="text-[#AAB2C5] text-base md:text-xl font-black uppercase tracking-widest leading-relaxed mb-10 md:mb-16 max-w-md italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
+                        <p className="text-[#AAB2C5] text-sm md:text-xl font-black uppercase tracking-widest leading-relaxed mb-10 md:mb-16 max-w-md italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
                             Situated at NR Peta, Efour is where the urban energy of Eluru harmoniously blends with the joy of food and entertainment.
                         </p>
 
@@ -49,14 +49,14 @@ const About = () => {
                                 { title: 'FOOD', icon: <Zap size={20} />, desc: 'Great food from the best stalls.', color: 'text-[#FF7A18]' },
                                 { title: 'FUN ACTIVITIES', icon: <Target size={20} />, desc: 'Exciting games for everyone.', color: 'text-[#FF3D3D]' }
                             ].map((item, i) => (
-                                <div key={i} className="flex items-center gap-8 group">
-                                    <div className={`w-16 h-16 flex items-center justify-center bg-white/[0.03] border border-white/10 rounded-2xl group-hover:border-[#FF7A18]/40 transition-all duration-500 shadow-2xl relative overflow-hidden`}>
+                                <div key={i} className="flex items-center gap-6 md:gap-8 group">
+                                    <div className={`w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/[0.03] border border-white/10 rounded-2xl group-hover:border-[#FF7A18]/40 transition-all duration-500 shadow-2xl relative overflow-hidden`}>
                                         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <div className={`${item.color} relative z-10 group-hover:scale-110 transition-transform`}>{item.icon}</div>
                                     </div>
                                     <div className="space-y-1">
-                                        <h4 className="text-[12px] font-bold tracking-[0.4em] text-[#F8FAFC] uppercase italic opacity-40 mb-1 group-hover:opacity-100 transition-opacity">{item.title}</h4>
-                                        <p className="text-base font-medium text-[#AAB2C5] uppercase tracking-widest italic leading-snug">{item.desc}</p>
+                                        <h4 className="text-[10px] md:text-[12px] font-bold tracking-[0.4em] text-[#F8FAFC] uppercase italic opacity-40 mb-1 group-hover:opacity-100 transition-opacity">{item.title}</h4>
+                                        <p className="text-sm md:text-base font-medium text-[#AAB2C5] uppercase tracking-widest italic leading-snug">{item.desc}</p>
                                     </div>
                                 </div>
                             ))}

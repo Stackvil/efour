@@ -131,14 +131,14 @@ const Dine = () => {
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.5 + (i * 0.1), duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                                    className="group bg-white/5 backdrop-blur-3xl p-12 rounded-[3.5rem] border border-white/5 shadow-2xl hover:border-white/20 hover:-translate-y-4 transition-all duration-700 relative overflow-hidden"
+                                    className="group bg-white/5 backdrop-blur-3xl p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/5 shadow-2xl hover:border-white/20 hover:-translate-y-4 transition-all duration-700 relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 right-0 p-8 text-8xl font-black italic text-white/5 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-x-4 -translate-y-4">
                                         {feature.icon}
                                     </div>
                                     <h4 className="font-black text-[#F8FAFC] uppercase tracking-[0.4em] mb-6 text-[10px] relative z-10 italic">{feature.title}</h4>
                                     <div className="w-12 h-1 bg-[#FF7A18] mb-8 transform origin-left group-hover:scale-x-150 transition-transform duration-700 shadow-[0_0_10px_#FF7A18]" />
-                                    <p className="text-[#AAB2C5] text-sm font-medium italic leading-relaxed relative z-10 opacity-50 group-hover:opacity-100 transition-opacity duration-700">{feature.desc}</p>
+                                    <p className="text-[#AAB2C5] text-xs md:text-sm font-medium italic leading-relaxed relative z-10 opacity-50 group-hover:opacity-100 transition-opacity duration-700">{feature.desc}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -279,13 +279,13 @@ const Dine = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="py-48 text-center"
+                        className="py-24 md:py-48 text-center"
                     >
-                        <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 text-white/20 shadow-4xl backdrop-blur-3xl">
+                        <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 border border-white/10 rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 text-white/20 shadow-4xl backdrop-blur-3xl">
                             <ShoppingBag size={40} />
                         </div>
-                        <h3 className="text-3xl font-black text-[#F8FAFC] mb-4 uppercase tracking-tight italic">Zero Stalls Detected</h3>
-                        <p className="text-[#AAB2C5] font-medium italic opacity-50">System scan returned no culinary data matching your search.</p>
+                        <h3 className="text-2xl md:text-3xl font-black text-[#F8FAFC] mb-4 uppercase tracking-tight italic">Zero Stalls Detected</h3>
+                        <p className="text-[12px] md:text-base font-medium italic opacity-50">System scan returned no culinary data matching your search.</p>
                     </motion.div>
                 )}
             </div>

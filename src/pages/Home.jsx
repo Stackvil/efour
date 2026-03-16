@@ -85,7 +85,7 @@ const Home = () => {
                                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#AAB2C5] animate-pulse">Initializing System...</p>
                             </div>
                         ) : visibleRides.length === 0 ? (
-                            <div className="glass-card rounded-[3rem] border border-white/10 p-24 text-center">
+                            <div className="glass-card rounded-[3rem] border border-white/10 p-12 md:p-24 text-center">
                                 <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 text-white/20">
                                     <Search size={40} />
                                 </div>
