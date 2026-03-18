@@ -35,7 +35,7 @@ const Header = () => {
     ];
 
     const isMainPage = ['/', '/login'].includes(location.pathname);
-    
+
     // Function to handle navigating to rides section from other pages
     const handleBookRide = (e) => {
         if (location.pathname === '/') {
@@ -45,7 +45,7 @@ const Header = () => {
     };
 
     return (
-        <header className="sticky top-0 z-50 py-2 md:py-4 px-3 md:px-6">
+        <header className="absolute top-0 left-0 w-full z-50 py-2 md:py-4 px-3 md:px-6">
             <div className="container mx-auto px-4 py-2 md:py-3 bg-[#080C14]/80 backdrop-blur-md border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex justify-between items-center group/header hover:border-white/20 transition-all duration-700">
                 <Link to="/" className="flex items-center group">
                     <div className="relative">
@@ -106,8 +106,8 @@ const Header = () => {
                     )}
 
                     {!isMainPage && (
-                        <Link 
-                            to="/#rides" 
+                        <Link
+                            to="/#rides"
                             onClick={handleBookRide}
                             className="px-8 py-4 rounded-2xl bg-[#FF7A18] text-white font-black text-[10px] uppercase tracking-[0.3em] italic hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,122,24,0.3)] flex items-center gap-2"
                         >
