@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import useStore from '../store/useStore';
 import { Trash2, User, Edit2, Save, X, Phone, ArrowRight, Mail, Check, ChevronRight, Zap, Trophy, LogOut, Shield, Key, Fingerprint, Activity } from 'lucide-react';
-import { sendOtp, verifyOtp, logout as apiLogout, deleteAccount } from '../utils/api';
+import { sendOtp, verifyOtp, logout as apiLogout, deleteAccount, fetchWithAuth, BASE_URL } from '../utils/api';
 
 const Login = () => {
     const { user, setUser } = useStore();
@@ -30,12 +30,10 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const res = await fetch('/api/profile', {
+            const res = await fetchWithAuth('/api/profile', {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name: editName, email: editEmail })
             });
@@ -102,12 +100,16 @@ const Login = () => {
             const data = await res.json();
 
             if (res.ok) {
+                let userRole = 'customer';
+                if (cleanPhone === '9346608305' || data.user?.role === 'admin') userRole = 'admin';
+                else if (data.user?.role === 'employee') userRole = 'employee';
+
                 const finalUser = {
                     id: data.user?.id || data.user?._id || data.userId || 'user_id',
                     name: data.user?.name || '',
                     email: data.user?.email || '',
                     phone: data.user?.mobile || phone,
-                    role: (cleanPhone === '9346608305' || data.user?.role === 'admin') ? 'admin' : 'customer',
+                    role: userRole,
                     points: data.user?.points || 0
                 };
 
@@ -119,6 +121,8 @@ const Login = () => {
 
                 if (finalUser.role === 'admin') {
                     navigate('/admin');
+                } else if (finalUser.role === 'employee') {
+                    navigate('/scanner');
                 } else {
                     const needsName = !finalUser.name || finalUser.name === 'Guest' || finalUser.name === 'string' || (finalUser.name?.trim?.() || '') === '';
                     navigate('/login', { state: { forceEdit: needsName } });
@@ -143,7 +147,7 @@ const Login = () => {
     }, [step, otpTimer]);
 
     useEffect(() => {
-        if (!user || user.role === 'admin') return;
+        if (!user || user.role === 'admin' || user.role === 'employee') return;
         const forceEdit = Boolean(location?.state?.forceEdit);
         const missingName = !user?.name || user.name === 'Guest' || user.name === 'string' || (user.name?.trim?.() || '') === '';
         if (forceEdit || missingName) {

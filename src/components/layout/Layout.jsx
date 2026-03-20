@@ -4,9 +4,6 @@ import { ShoppingCart, MapPin, Clock, Info, User, LogOut, LayoutDashboard, Globe
 import { motion, AnimatePresence } from 'framer-motion';
 import Cart from '../Cart';
 import useStore from '../../store/useStore';
-import TermsModal from '../common/TermsModal';
-import AboutModal from '../common/AboutModal';
-import PrivacyModal from '../common/PrivacyModal';
 import PolicyConsent from '../common/PolicyConsent';
 import Footer from '../Footer';
 import BumperCar from '../common/BumperCar';
@@ -181,9 +178,6 @@ const FooterInfoBar = () => {
 };
 
 const Layout = ({ children }) => {
-    const [isTermsOpen, setIsTermsOpen] = useState(false);
-    const [isAboutOpen, setIsAboutOpen] = useState(false);
-    const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
     return (
         <div className="flex flex-col min-h-screen bg-[#070B14] selection:bg-[#FF7A18] selection:text-white font-sans">
@@ -192,22 +186,12 @@ const Layout = ({ children }) => {
                 {children}
             </main>
 
-            <Footer
-                onOpenTerms={() => setIsTermsOpen(true)}
-                onOpenAbout={() => setIsAboutOpen(true)}
-                onOpenPrivacy={() => setIsPrivacyOpen(true)}
-            />
+            <Footer />
 
             <Cart />
             <BumperCar />
             <Toast />
-            <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
-            <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
-            <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
-            <PolicyConsent
-                onOpenTerms={() => setIsTermsOpen(true)}
-                onOpenPrivacy={() => setIsPrivacyOpen(true)}
-            />
+            <PolicyConsent />
             <div className="hidden xl:block">
                 <FooterInfoBar />
             </div>

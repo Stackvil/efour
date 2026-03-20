@@ -6,6 +6,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
+        headers['x-auth-token'] = token;
     }
 
     // Ensure the URL is absolute if it's a relative path starting with /api
@@ -30,6 +31,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 
                     // Update headers and retry the original request
                     headers['Authorization'] = `Bearer ${token}`;
+                    headers['x-auth-token'] = token;
                     res = await fetch(fullUrl, { ...options, headers });
                 }
             } else {
@@ -68,8 +70,11 @@ export const verifyOtp = async (mobile, otp, additionalData = {}) => {
 
 export const logout = async () => {
     try {
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}`, 'x-auth-token': token } : {};
         const res = await fetch(`${BASE_URL}/api/auth/logout`, {
             method: 'POST',
+            headers,
             credentials: 'include'
         });
         localStorage.removeItem('token');

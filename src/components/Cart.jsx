@@ -60,7 +60,7 @@ const Cart = () => {
                 details: item.details || {}
             }));
 
-            const res = await fetchWithAuth('/api/orders/e4/checkout', {
+            const res = await fetchWithAuth('https://e3-e4-backend.ethree.in/api/orders/e3/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

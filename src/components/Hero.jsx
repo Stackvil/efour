@@ -354,13 +354,13 @@ const Hero = () => {
     const opacity = useTransform(scrollY, [0, 400], [1, 0])
 
     return (
-        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#070B14]">
+        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#070B14] pt-24 md:pt-[120px]">
             {/* Ambient Background */}
             <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
             <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-[#FF7A18]/5 via-transparent to-transparent pointer-events-none" />
 
             {/* 3D Scene - Enhanced abstract sculpture */}
-            <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100">
+            <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100 top-12 md:top-24">
                 {isInView && (
                     <Canvas
                         dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1}
@@ -390,7 +390,7 @@ const Hero = () => {
                     className="flex flex-col items-center"
                 >
 
-                    <h1 className="text-4xl xs:text-5xl md:text-[12rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
+                    <h1 className="text-4xl xs:text-5xl md:text-[10rem] lg:text-[11rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
                         EAT. ENJOY.<br />
                         <span className="text-gradient-primary">ENTERTAIN.</span>
                     </h1>

@@ -94,19 +94,19 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                         </h4>
                         <ul className="space-y-6 flex flex-col items-start">
                             <li>
-                                <button onClick={onOpenAbout} className={navLinkClasses}>
+                                <Link to="/about" className={navLinkClasses}>
                                     About Us
-                                </button>
+                                </Link>
                             </li>
                             <li>
-                                <button onClick={onOpenPrivacy} className={navLinkClasses}>
+                                <Link to="/privacy" className={navLinkClasses}>
                                     Privacy Protocol
-                                </button>
+                                </Link>
                             </li>
                             <li>
-                                <button onClick={onOpenTerms} className={navLinkClasses}>
+                                <Link to="/terms" className={navLinkClasses}>
                                     Terms of Engagement
-                                </button>
+                                </Link>
                             </li>
                         </ul>
                     </div>

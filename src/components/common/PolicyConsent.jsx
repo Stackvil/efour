@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, X, ArrowRight, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const PolicyConsent = ({ onOpenTerms, onOpenPrivacy }) => {
+const PolicyConsent = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -60,9 +61,9 @@ const PolicyConsent = ({ onOpenTerms, onOpenPrivacy }) => {
 
                                 <p className="text-gray-400 text-[13px] font-bold leading-relaxed mb-10">
                                     We use cookies to make your visit better. By using our site, you agree to our
-                                    <button onClick={onOpenPrivacy} className="mx-1 text-[#FF7A18] hover:text-white transition-colors border-b border-[#FF7A18]/20">Privacy Policy</button>
+                                    <Link to="/privacy" className="mx-1 text-[#FF7A18] hover:text-white transition-colors border-b border-[#FF7A18]/20">Privacy Policy</Link>
                                     and
-                                    <button onClick={onOpenTerms} className="mx-1 text-[#FF7A18] hover:text-white transition-colors border-b border-[#FF7A18]/20">Terms of Use</button>.
+                                    <Link to="/terms" className="mx-1 text-[#FF7A18] hover:text-white transition-colors border-b border-[#FF7A18]/20">Terms of Use</Link>.
                                 </p>
 
                                 <div className="flex flex-col gap-4">
