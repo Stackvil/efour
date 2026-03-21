@@ -1,15 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, Maximize, Scan } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Html5Qrcode } from 'html5-qrcode';
 
 const Scanner = () => {
     const navigate = useNavigate();
     const [result, setResult] = useState('');
+    const [isScanning, setIsScanning] = useState(false);
+    const [hasCameraError, setHasCameraError] = useState(false);
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');
     };
+
+    useEffect(() => {
+        const html5QrCode = new Html5Qrcode("qr-camera-element");
+
+        const startScanner = () => {
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                },
+                (decodedText) => {
+                    setResult(decodedText);
+                    // html5QrCode.stop(); // Optional: stop scanning after read
+                },
+                (errorMessage) => {
+                    // Ignore regular frame errors
+                }
+            ).then(() => {
+                setIsScanning(true);
+            }).catch((err) => {
+                console.error(err);
+                setHasCameraError(true);
+            });
+        };
+
+        // Delay starting slightly to ensure DOM is ready
+        setTimeout(startScanner, 300);
+
+        return () => {
+            if (html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                }).catch(console.error);
+            }
+        };
+    }, []);
 
     return (
         <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-center font-sans text-white p-6 relative overflow-hidden">
@@ -32,16 +72,35 @@ const Scanner = () => {
                 <h2 className="text-2xl font-black uppercase tracking-[0.2em] italic mb-6">Ticket Scanner</h2>
                 
                 <div className="relative w-full aspect-square border-4 border-dashed border-[#AAB2C5]/30 rounded-3xl flex items-center justify-center bg-black/40 overflow-hidden group hover:border-[#FF7A18]/50 transition-colors">
-                    <Maximize className="absolute text-[#AAB2C5]/20 group-hover:text-[#FF7A18]/40 transition-colors" size={64} />
-                    <p className="text-[#AAB2C5]/50 text-sm font-bold tracking-widest uppercase mt-24">Camera Access Required</p>
-                    {/* Real scanner logic would mount here */}
+                    {!isScanning && !hasCameraError && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                            <Maximize className="text-[#AAB2C5]/20 group-hover:text-[#FF7A18]/40 transition-colors mb-4" size={48} />
+                            <p className="text-[#AAB2C5]/50 text-[10px] font-bold tracking-widest uppercase">Initializing Camera...</p>
+                        </div>
+                    )}
+                    
+                    {hasCameraError && (
+                        <div className="text-center p-4 absolute z-10">
+                            <p className="text-red-400 text-[10px] font-bold tracking-widest uppercase mb-2">Camera Access Denied</p>
+                            <p className="text-[#AAB2C5]/50 text-[8px] uppercase">Please allow permissions.</p>
+                        </div>
+                    )}
+
+                    {/* The element where the camera feed will be rendered */}
+                    <div id="qr-camera-element" className={`absolute inset-0 z-0 [&>video]:object-cover [&>video]:w-full [&>video]:h-full [&>video]:rounded-3xl ${hasCameraError ? 'hidden' : ''}`}></div>
                 </div>
 
                 <p className="mt-6 text-xs text-[#AAB2C5]/60 text-center font-bold tracking-widest uppercase">Align the QR code within the frame to scan seamlessly.</p>
                 
                 {result && (
-                    <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl w-full text-center text-emerald-400 font-bold uppercase tracking-widest text-xs">
+                    <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl w-full text-center text-emerald-400 font-bold uppercase tracking-widest text-[10px] break-all">
                         {result}
+                        <button 
+                            onClick={() => setResult('')} 
+                            className="mt-3 w-full py-3 bg-emerald-500/20 rounded-lg text-emerald-400 hover:bg-emerald-500/30 transition-colors font-black tracking-[0.2em]"
+                        >
+                            CLEAR RESULT
+                        </button>
                     </div>
                 )}
             </div>

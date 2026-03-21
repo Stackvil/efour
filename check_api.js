@@ -2,9 +2,9 @@
 import https from 'https';
 
 const urls = [
-    'https://e3-e4-backend.vercel.app/api/products',
-    'https://e3-e4-backend.vercel.app/api/e4/products',
-    'https://e3-e4-backend.vercel.app/api/e4/bookings',
+    'https://e3-e4-backend.ethree.in/api/products',
+    'https://e3-e4-backend.ethree.in/api/e4/products',
+    'https://e3-e4-backend.ethree.in/api/e4/bookings',
 ];
 
 urls.forEach(url => {

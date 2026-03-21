@@ -1,6 +1,6 @@
 import https from 'https';
 
-const base = 'https://e3-e4-backend.vercel.app/api';
+const base = 'https://e3-e4-backend.ethree.in/api';
 // List of potential endpoints to check
 const relativeGroups = [
     '/e4/dine',

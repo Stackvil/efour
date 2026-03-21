@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.vercel.app';
+export const BASE_URL = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.ethree.in';
 
 export const fetchWithAuth = async (url, options = {}) => {
     let token = localStorage.getItem('token');
@@ -88,7 +88,7 @@ export const logout = async () => {
 };
 
 export const deleteAccount = async () => {
-    return fetchWithAuth('/api/auth/delete-account', {
+    return fetchWithAuth('/api/profile', {
         method: 'DELETE'
     });
 };

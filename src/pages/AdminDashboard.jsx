@@ -36,8 +36,9 @@ const AdminDashboard = () => {
     const [liveOrdersPage, setLiveOrdersPage] = useState(1);
     const [analyticsBookingTab, setAnalyticsBookingTab] = useState('all'); // 'all' | 'rides' | 'events'
 
-    // Analytics dedicated state (from /analytics/e4/dashboard)
     const [analyticsData, setAnalyticsData] = useState(null);
+    const [platformStats, setPlatformStats] = useState({ web: null, mobile: null });
+    const [trendsData, setTrendsData] = useState(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(false);
     const [analyticsError, setAnalyticsError] = useState(null);
 
@@ -57,7 +58,7 @@ const AdminDashboard = () => {
             const [ridesRes, dineRes, empRes] = await Promise.all([
                 fetch(`https://e3-e4-backend.ethree.in/api/e4/rides?all=true`, { headers }),
                 fetch(`https://e3-e4-backend.ethree.in/api/e4/dine?all=true`, { headers }),
-                fetch(`${apiUrl}/admin/employees`, { headers }).catch(() => ({ ok: false }))
+                fetch(`${apiUrl}/employees/e4`, { headers }).catch(() => ({ ok: false }))
             ]);
 
             // Process Rides
@@ -132,15 +133,33 @@ const AdminDashboard = () => {
         setAnalyticsError(null);
         try {
             const currentToken = localStorage.getItem('token');
-            const res = await fetch(ANALYTICS_URL, {
-                headers: {
-                    'Authorization': `Bearer ${currentToken}`,
-                    'x-auth-token': currentToken,
-                }
-            });
+            const headers = {
+                'Authorization': `Bearer ${currentToken}`,
+                'x-auth-token': currentToken,
+            };
+
+            const [res, statsRes, trendsRes] = await Promise.all([
+                fetch(ANALYTICS_URL, { headers }),
+                fetch(`${BASE_URL}/api/analytics/e4/stats`, { headers }).catch(() => null),
+                fetch(`${BASE_URL}/api/analytics/trends`, { headers }).catch(() => null)
+            ]);
+
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const json = await res.json();
             setAnalyticsData(json);
+
+            if (statsRes && statsRes.ok) {
+                const statsJson = await statsRes.json();
+                setPlatformStats({
+                    web: typeof statsJson.web === 'number' ? statsJson.web : null,
+                    mobile: typeof statsJson.mobile === 'number' ? statsJson.mobile : null
+                });
+            }
+
+            if (trendsRes && trendsRes.ok) {
+                const trendsJson = await trendsRes.json();
+                setTrendsData(trendsJson);
+            }
         } catch (err) {
             console.error('Analytics fetch error:', err);
             setAnalyticsError(err.message);
@@ -273,7 +292,7 @@ const AdminDashboard = () => {
                     try {
                         const errData = JSON.parse(text);
                         if (isRide && errData.message && errData.message.includes('column') && errData.message.includes('does not exist')) {
-                            alert(`CRITICAL BACKEND ERROR:\nThe backend code running on Vercel is trying to update a column named "id" which doesn't exist in Supabase (it uses "_id").\n\nPlease ask your backend developer to edit the Node.js API code, changing ".eq('id', req.params.id)" to ".eq('_id', req.params.id)" inside the PUT route.`);
+                            alert(`CRITICAL BACKEND ERROR:\nThe backend code running on Local Server is trying to update a column named "id" which doesn't exist in Supabase (it uses "_id").\n\nPlease ask your backend developer to edit the Node.js API code, changing ".eq('id', req.params.id)" to ".eq('_id', req.params.id)" inside the PUT route.`);
                         } else {
                             alert(`Failed to save. (${res.status}): ${errData.message || 'Unknown error'}`);
                         }
@@ -389,14 +408,20 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const currentToken = localStorage.getItem('token');
-            const res = await fetch(`${BASE_URL}/api/admin/employees`, {
-                method: 'POST',
+            const isEditing = editingItem != null;
+            const empId = isEditing ? (editingItem._id || editingItem.id) : null;
+            const endpoint = isEditing 
+                ? `${BASE_URL}/api/employees/e4/${empId}` 
+                : `${BASE_URL}/api/employees/e4`;
+
+            const res = await fetch(endpoint, {
+                method: isEditing ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-auth-token': currentToken,
                     'Authorization': `Bearer ${currentToken}`
                 },
-                body: JSON.stringify({ name: formData.name, mobile: formData.category, role: 'employee' })
+                body: JSON.stringify({ name: formData.name, mobile: formData.category })
             });
 
             if (!res.ok) throw new Error(await res.text());
@@ -412,7 +437,7 @@ const AdminDashboard = () => {
         if (!window.confirm("Delete this employee?")) return;
         try {
             const currentToken = localStorage.getItem('token');
-            const res = await fetch(`${BASE_URL}/api/admin/employees/${id}`, {
+            const res = await fetch(`${BASE_URL}/api/employees/e4/${id}`, {
                 method: 'DELETE',
                 headers: { 'x-auth-token': currentToken, 'Authorization': `Bearer ${currentToken}` }
             });
@@ -736,10 +761,10 @@ const AdminDashboard = () => {
                                 /* ── 14-DAY CHART ──
                                    Try API-provided array first; fall back to computing from local orders */
                                 let last14 = [];
-                                const rawChart = ad?.last14Days ?? ad?.salesChart ?? ad?.chart14Days ?? ad?.revenueByDay ?? null;
+                                const rawChart = trendsData ?? ad?.last14Days ?? ad?.salesChart ?? ad?.chart14Days ?? ad?.revenueByDay ?? null;
                                 if (Array.isArray(rawChart) && rawChart.length > 0) {
                                     last14 = rawChart.map((d, i) => ({
-                                        label: i === rawChart.length - 1 ? 'Today' : (d.date ? new Date(d.date).getDate().toString().padStart(2, '0') : String(i + 1)),
+                                        label: d.label || (i === rawChart.length - 1 ? 'Today' : (d.date ? new Date(d.date).getDate().toString().padStart(2, '0') : String(i + 1))),
                                         val: d.revenue ?? d.amount ?? d.total ?? d.value ?? 0,
                                     }));
                                 } else {
@@ -763,10 +788,10 @@ const AdminDashboard = () => {
                                 const dineCount = ad?.stats?.dineItems ?? products.filter(p => p.category !== 'play').length;
                                 const e4Revenue = ad?.stats?.totalRevenue ?? ad?.totalRevenue ?? totalRevenue;
 
-                                /* ── PLATFORM USAGE ── */
-                                const webSessions = ad?.platform?.web ?? ad?.sessions?.web ?? 0;
-                                const mobileSessions = ad?.platform?.mobile ?? ad?.sessions?.mobile ?? 0;
-                                const totalSessions = ad?.platform?.total ?? ad?.sessions?.total ?? (webSessions + mobileSessions);
+                                /* ── PLATFORM ── */
+                                const webSessions = platformStats.web !== null ? platformStats.web : (ad?.platform?.web ?? ad?.sessions?.web ?? 0);
+                                const mobileSessions = platformStats.mobile !== null ? platformStats.mobile : (ad?.platform?.mobile ?? ad?.sessions?.mobile ?? 0);
+                                const totalSessions = webSessions + mobileSessions || ad?.platform?.total || ad?.sessions?.total || 0;
                                 const webPct = totalSessions > 0 ? Math.round((webSessions / totalSessions) * 100) : 0;
                                 const mobilePct = totalSessions > 0 ? 100 - webPct : 0;
 
@@ -959,7 +984,7 @@ const AdminDashboard = () => {
                                                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                                                 <div className="flex items-center justify-between mb-5">
                                                     <h3 className="font-black text-base text-white">E4 Platform Usage</h3>
-                                                    <span className="text-[9px] text-white/25 font-medium">via /analytics/e4/dashboard</span>
+                                                    <span className="text-[9px] text-white/25 font-medium">via /api/analytics/e4/stats</span>
                                                 </div>
                                                 <div className="grid grid-cols-3 gap-3 mb-5">
                                                     {[
@@ -1202,7 +1227,7 @@ const AdminDashboard = () => {
                                                                 </div>
                                                             </td>
                                                             <td className="px-8 py-6 text-sm font-mono font-bold text-[#AAB2C5]">
-                                                                {emp.mobile || emp.phone || 'N/A'}
+                                                                {emp.mobilenumber || emp.mobile || emp.phone || 'N/A'}
                                                             </td>
                                                             <td className="px-8 py-6">
                                                                 <span className="px-4 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-[9px] font-black uppercase tracking-[0.3em] inline-flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.1)]">
@@ -1210,9 +1235,18 @@ const AdminDashboard = () => {
                                                                 </span>
                                                             </td>
                                                             <td className="px-8 py-6 text-right">
-                                                                <button onClick={() => handleDeleteEmployee(emp._id || emp.id)} className="w-10 h-10 inline-flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white hover:border-transparent transition-all shadow-[0_0_15px_rgba(239,68,68,0.1)]">
-                                                                    <Trash2 size={16} />
-                                                                </button>
+                                                                <div className="flex justify-end gap-2">
+                                                                    <button onClick={() => {
+                                                                        setEditingItem(emp);
+                                                                        setFormData({ name: emp.name || '', category: emp.mobilenumber || emp.mobile || emp.phone || '', price: '', description: '', image: '', stall: '', type: '', status: 'on' });
+                                                                        setIsModalOpen('employee');
+                                                                    }} className="w-10 h-10 inline-flex items-center justify-center rounded-xl bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20 hover:bg-[#5B8CFF] hover:text-white hover:border-transparent transition-all shadow-[0_0_15px_rgba(91,140,255,0.1)]">
+                                                                        <Edit2 size={16} />
+                                                                    </button>
+                                                                    <button onClick={() => handleDeleteEmployee(emp._id || emp.id)} className="w-10 h-10 inline-flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white hover:border-transparent transition-all shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                                                                        <Trash2 size={16} />
+                                                                    </button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
@@ -1336,7 +1370,7 @@ const AdminDashboard = () => {
                                 <div>
                                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#FF7A18] italic block mb-2">Protocol Override</span>
                                     <h3 className="text-3xl font-black italic tracking-tighter uppercase transform -skew-x-6">
-                                        {isModalOpen === 'employee' ? 'Add Employee' : editingItem ? 'Edit Metadata' : 'Add New Ride'}
+                                        {isModalOpen === 'employee' ? (editingItem ? 'Edit Employee' : 'Add Employee') : editingItem ? 'Edit Metadata' : 'Add New Ride'}
                                     </h3>
                                 </div>
                                 <button onClick={() => setIsModalOpen(false)} className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-[#AAB2C5] hover:text-white hover:bg-white/10 transition-all border border-white/10"><X size={24} /></button>
@@ -1428,7 +1462,7 @@ const AdminDashboard = () => {
                                     </>
                                 )}
                                 <button type="submit" className="btn-premium w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-[10px] shadow-3xl italic mt-6 group flex items-center justify-center gap-4">
-                                    {isModalOpen === 'employee' ? 'Authorize Employee' : editingItem ? 'Update Parameters' : 'Deploy Ride'}
+                                    {isModalOpen === 'employee' ? (editingItem ? 'Update Employee' : 'Authorize Employee') : editingItem ? 'Update Parameters' : 'Deploy Ride'}
                                     <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </button>
                             </form>

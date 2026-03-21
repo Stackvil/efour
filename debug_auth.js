@@ -7,7 +7,7 @@ const data = JSON.stringify({
 });
 
 const options = {
-    hostname: 'e3-e4-backend.vercel.app',
+    hostname: 'e3-e4-backend.ethree.in',
     path: '/api/auth/send-otp',
     method: 'POST',
     headers: {
