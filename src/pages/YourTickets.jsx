@@ -390,13 +390,13 @@ const YourTickets = () => {
                     </div>
                 </div>
 
-                {/* Stats Section */}
+                {/* Stats Section
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
                     <StatsCard icon={Receipt} label="Issuance Total" value={stats.total} color="bg-slate-700" gradient="from-slate-700 to-slate-900" />
                     <StatsCard icon={ShieldCheck} label="Operational" value={stats.active} color="bg-emerald-500" gradient="from-emerald-500 to-teal-600" />
                     <StatsCard icon={AlertCircle} label="Critical Uplink" value={stats.expiring} color="bg-orange-500" gradient="from-orange-500 to-red-600" />
                     <StatsCard icon={History} label="Deactivated" value={stats.expired} color="bg-red-500" gradient="from-red-600 to-rose-700" />
-                </div>
+                </div> */}
 
                 {/* Tickets Grid */}
                 {loading ? (
