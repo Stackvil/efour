@@ -42,36 +42,31 @@ const Header = () => {
     };
 
     return (
-        <header className="absolute top-0 left-0 w-full z-50 py-2 md:py-4 px-3 md:px-6">
-            <div className="container mx-auto px-4 py-2 md:py-3 bg-[#080C14]/80 backdrop-blur-md border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex justify-between items-center group/header hover:border-white/20 transition-all duration-700">
-                <Link to="/" className="flex items-center group">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-[#FF7A18]/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                        <img
-                            src="/E4LOGO.jpeg"
-                            alt="E4 Logo"
-                            className="h-10 md:h-28 w-auto object-contain brightness-110 relative z-10 transition-transform duration-500 group-hover:scale-105"
-                            loading="eager"
-                            fetchpriority="high"
-                            width="200"
-                            height="100"
-                        />
-                    </div>
+        <header className="floating-navbar mt-2 md:mt-4">
+            <div className="flex justify-between items-center group/header px-4">
+                <Link to="/" className="flex items-center group shrink-0">
+                    <img
+                        src="/E4LOGO.jpeg"
+                        alt="E4 Logo"
+                        className="h-14 md:h-24 w-auto object-contain brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-105"
+                        loading="eager"
+                        fetchpriority="high"
+                    />
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex gap-1 items-center bg-white/[0.03] p-1.5 rounded-full border border-white/5">
+                {/* Desktop Nav Matrix */}
+                <nav className="hidden lg:flex gap-1 items-center bg-white/[0.03] p-1 rounded-full border border-white/5">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             to={link.path}
-                            className={`relative px-8 py-3 rounded-full text-[12px] font-bold uppercase tracking-[0.4em] transition-all duration-500 italic transform -skew-x-12 ${location.pathname === link.path ? 'text-white' : 'text-[#AAB2C5] hover:text-white'}`}
+                            className={`nav-link-premium ${location.pathname === link.path ? 'text-white' : 'text-slate-400 hover:text-white'}`}
                         >
                             {location.pathname === link.path && (
                                 <motion.div
-                                    layoutId="nav-pill"
-                                    className="absolute inset-0 bg-[#FF7A18]/10 border border-[#FF7A18]/20 rounded-full z-0"
-                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                    layoutId="nav-pill-dark"
+                                    className="active-pill"
+                                    transition={{ type: "spring", bounce: 0.1, duration: 0.6 }}
                                 />
                             )}
                             <span className="relative z-10">{link.name}</span>
@@ -79,26 +74,26 @@ const Header = () => {
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-2">
                     <button
                         onClick={toggleCart}
-                        className="relative w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F8FAFC] hover:bg-white/10 hover:border-[#FF7A18]/30 transition-all shadow-2xl group/cart"
+                        className="relative w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/cart"
                     >
-                        <ShoppingCart size={20} className="group-hover:scale-110 transition-transform" />
+                        <ShoppingCart size={17} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-[#FF7A18] text-white text-[9px] w-6 h-6 rounded-full flex items-center justify-center font-black border-4 border-[#070B14] shadow-xl animate-pulse">
+                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border-2 border-[#07080C] shadow-md">
                                 {cart.length}
                             </span>
                         )}
                     </button>
 
-                    <Link to="/login" className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F8FAFC] hover:bg-white/10 hover:border-[#5B8CFF]/30 transition-all shadow-2xl group/user">
-                        <User size={20} className="group-hover:scale-110 transition-transform" />
+                    <Link to="/login" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/user">
+                        <User size={17} className="group-hover:scale-110 transition-transform" />
                     </Link>
 
                     {user?.role === 'admin' && (
-                        <Link to="/admin" className="px-8 py-4 rounded-2xl bg-[#FF7A18]/10 text-[#FF7A18] border border-[#FF7A18]/20 font-black text-[10px] uppercase tracking-[0.3em] italic hover:bg-[#FF7A18] hover:text-white transition-all shadow-xl">
-                            ADMIN DASHBOARD
+                        <Link to="/admin" className="px-5 py-2 rounded-full border border-white/10 text-slate-400 font-bold text-[10px] uppercase tracking-wider hover:bg-white/5 hover:text-white transition-all">
+                            ADMIN
                         </Link>
                     )}
 
@@ -106,56 +101,43 @@ const Header = () => {
                         <Link
                             to="/#rides"
                             onClick={handleBookRide}
-                            className="px-8 py-4 rounded-2xl bg-[#FF7A18] text-white font-black text-[10px] uppercase tracking-[0.3em] italic hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,122,24,0.3)] flex items-center gap-2"
+                            className="px-5 py-2 rounded-full bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 flex items-center gap-2"
                         >
-                            BOOK A RIDE <Zap size={14} className="fill-current" />
+                            BOOK A RIDE <Zap size={10} className="fill-current" />
                         </Link>
                     )}
 
                     {user && (
                         <button
                             onClick={handleLogout}
-                            className="w-14 h-14 rounded-2xl bg-white/5 border border-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-2xl flex items-center justify-center"
+                            className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/10 text-red-500/50 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center"
                         >
-                            <LogOut size={20} />
+                            <LogOut size={17} />
                         </button>
                     )}
                 </div>
 
-                <div className="flex md:hidden items-center gap-4 ml-2">
+                {/* Mobile Identity */}
+                <div className="flex md:hidden items-center gap-3">
                     <button
                         onClick={toggleCart}
-                        className="relative w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F8FAFC]"
+                        className="relative w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white shadow-sm"
                     >
-                        <ShoppingCart size={18} />
+                        <ShoppingCart size={16} />
                         {cart.length > 0 && (
-                            <span className="absolute -top-1.5 -right-1.5 bg-[#FF7A18] text-white text-[7px] w-5 h-5 rounded-full flex items-center justify-center font-black border-2 border-[#070B14]">
+                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-black border border-[#07080C]">
                                 {cart.length}
                             </span>
                         )}
                     </button>
-
-                    {!isMainPage && (
-                        <Link
-                            to="/#rides"
-                            onClick={handleBookRide}
-                            className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-[#FF7A18] text-white shadow-lg active:scale-95 transition-all"
-                        >
-                            BOOK A RIDE
-                        </Link>
-                    )}
-
                     <Link
                         to="/login"
-                        className={`text-[9px] font-black uppercase tracking-widest px-3 py-2 rounded-xl transition-all duration-300 whitespace-nowrap bg-[#FF7A18]/10 text-[#FF7A18] border border-[#FF7A18]/20`}
+                        className="text-[9px] font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-white text-black shadow-xl"
                     >
-                        {user ? 'YOUR TICKETS' : 'LOGIN'}
+                        LOGIN
                     </Link>
                 </div>
             </div>
-
-            {/* Remove Mobile Menu - navigation links are now in the header chips and BottomNav */}
-
         </header>
     );
 };
@@ -178,9 +160,14 @@ const FooterInfoBar = () => {
 };
 
 const Layout = ({ children }) => {
-
     return (
-        <div className="flex flex-col min-h-screen bg-[#070B14] selection:bg-[#FF7A18] selection:text-white font-sans">
+        <div className="flex flex-col min-h-screen bg-[#07080C] selection:bg-indigo-500/30 selection:text-white font-sans overflow-x-hidden antialiased scroll-smooth">
+            {/* Global Dark Depth */}
+            <div className="noise-overlay" />
+            <div className="premium-blur-bg">
+                <div className="ambient-light w-[40%] h-[40%] bg-indigo-500/10 top-[-10%] left-[-5%]" />
+                <div className="ambient-light w-[30%] h-[30%] bg-orange-500/5 bottom-[-5%] right-[-5%]" />
+            </div>
             <Header />
             <main className="flex-grow relative">
                 {children}

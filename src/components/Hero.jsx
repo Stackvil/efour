@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Environment, MeshWobbleMaterial, ContactShadows, PresentationControls } from '@react-three/drei'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
-import { ArrowRight, Zap, Activity, Shield, Target } from 'lucide-react'
+import { ArrowDown, Zap, Activity, Shield, Target } from 'lucide-react'
 import * as THREE from 'three'
 
 const Balloon = ({ position, color, popped }) => {
@@ -314,33 +314,119 @@ const Sculpture = () => {
     })
 
     return (
-        <group position={[0, 0, -3]}>
+        <group position={[0, 0, -5]}>
             <PresentationControls
                 global
-                config={{ mass: 2, tension: 500 }}
-                snap={{ mass: 4, tension: 1500 }}
-                rotation={[0, 0.3, 0]}
-                polar={[-Math.PI / 3, Math.PI / 3]}
-                azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
+                config={{ mass: 4, tension: 300 }}
+                snap={{ mass: 6, tension: 1200 }}
+                rotation={[0, 0.4, 0]}
+                polar={[-Math.PI / 6, Math.PI / 6]}
+                azimuth={[-Math.PI / 1.2, Math.PI / 1.2]}
             >
-                <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-                    <mesh ref={meshRef}>
-                        <torusKnotGeometry args={[1.6, 0.5, 128, 32]} />
-                        <MeshDistortMaterial
-                            color="#C41E3A"
-                            speed={3}
-                            distort={0.4}
-                            radius={1}
-                            roughness={0}
-                            metalness={0.6}
-                            emissive="#7B0000"
-                            emissiveIntensity={0.5}
-                            clearcoat={1}
-                            clearcoatRoughness={0}
+                <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+                    {/* --- Layer 1: Cinematic Fluid Blobs (The "Neural Nebula") --- */}
+                    <group>
+                        {/* Primary Brand Orange Blob */}
+                        <mesh position={[-4, 2, -4]} scale={2.5}>
+                            <sphereGeometry args={[1, 64, 64]} />
+                            <MeshDistortMaterial
+                                color="#FF7A18"
+                                speed={2}
+                                distort={0.4}
+                                radius={1}
+                                metalness={0.2}
+                                roughness={0.4}
+                                emissive="#FF3D00"
+                                emissiveIntensity={0.2}
+                                transparent
+                                opacity={0.6}
+                            />
+                        </mesh>
+
+                        {/* Secondary Electric Purple/Indigo Blob */}
+                        <mesh position={[4, -2, -6]} scale={3}>
+                            <sphereGeometry args={[1, 64, 64]} />
+                            <MeshDistortMaterial
+                                color="#6366F1"
+                                speed={1.5}
+                                distort={0.5}
+                                radius={1}
+                                emissive="#4338CA"
+                                emissiveIntensity={0.3}
+                                transparent
+                                opacity={0.5}
+                            />
+                        </mesh>
+
+                        {/* Highlight Cyan/Neon Blue Blob */}
+                        <mesh position={[0, 4, -8]} scale={4}>
+                            <sphereGeometry args={[1, 64, 64]} />
+                            <MeshDistortMaterial
+                                color="#0EA5E9"
+                                speed={1}
+                                distort={0.6}
+                                radius={1}
+                                emissive="#0284C7"
+                                emissiveIntensity={0.1}
+                                transparent
+                                opacity={0.4}
+                            />
+                        </mesh>
+                    </group>
+
+                    {/* --- Layer 2: Floating Glassmorphism Geometric Elements --- */}
+                    <group>
+                        <mesh position={[2, 1, 2]} rotation={[Math.PI / 4, Math.PI / 4, 0]} scale={0.8}>
+                            <torusGeometry args={[1.5, 0.05, 16, 100]} />
+                            <meshPhysicalMaterial
+                                transmission={1}
+                                thickness={0.5}
+                                roughness={0.05}
+                                ior={1.5}
+                                color="white"
+                                transparent
+                                opacity={0.3}
+                            />
+                        </mesh>
+                        <mesh position={[-3, -3, 0]} rotation={[-Math.PI / 4, 0, Math.PI / 6]} scale={0.6}>
+                            <torusGeometry args={[2, 0.04, 16, 100]} />
+                            <meshPhysicalMaterial
+                                transmission={1}
+                                thickness={0.2}
+                                roughness={0}
+                                ior={1.2}
+                                color="#FFFFFF"
+                                transparent
+                                opacity={0.2}
+                            />
+                        </mesh>
+                    </group>
+
+                    {/* --- Layer 3: Dynamic Orbital Light Nodes --- */}
+                    {[
+                        { color: "#FF7A18", pos: [8, 5, 2], intensity: 20 },
+                        { color: "#6366F1", pos: [-8, -5, 2], intensity: 15 },
+                        { color: "#FFFFFF", pos: [0, 10, -5], intensity: 10 }
+                    ].map((light, i) => (
+                        <pointLight
+                            key={i}
+                            position={light.pos}
+                            intensity={light.intensity}
+                            color={light.color}
                         />
-                    </mesh>
+                    ))}
+
+                    {/* Global Volumetric Highlight */}
+                    <spotLight
+                        position={[0, 20, 10]}
+                        angle={0.5}
+                        penumbra={1}
+                        intensity={40}
+                        color="#FBBF24"
+                    />
+
                 </Float>
-                <ContactShadows resolution={1024} scale={20} blur={2.5} opacity={0.2} far={6} color="#000000" />
+                <ContactShadows resolution={1024} scale={40} blur={3} opacity={0.3} far={15} color="#000000" />
             </PresentationControls>
         </group>
     )
@@ -354,10 +440,14 @@ const Hero = () => {
     const opacity = useTransform(scrollY, [0, 400], [1, 0])
 
     return (
-        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#070B14] pt-24 md:pt-[120px]">
-            {/* Ambient Background */}
-            <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
-            <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-[#FF7A18]/5 via-transparent to-transparent pointer-events-none" />
+        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#07080C] pt-24 md:pt-[120px]">
+            {/* Ambient Background - Dark Luxury with Orange Accents */}
+            <div className="absolute inset-x-0 inset-y-0 bg-[#07080C]" />
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-20%] left-[-10%] w-[60rem] h-[60rem] bg-[#FF7A18]/5 rounded-full blur-[160px]" />
+                <div className="absolute bottom-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/5 rounded-full blur-[140px]" />
+            </div>
+            <div className="absolute inset-0 noise-overlay opacity-20 pointer-events-none" />
 
             {/* 3D Scene - Enhanced abstract sculpture */}
             <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100 top-12 md:top-24">
@@ -371,14 +461,26 @@ const Hero = () => {
                         performance={{ min: 0.5 }}
                         gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: true }}
                     >
-                        <ambientLight intensity={0.4} />
-                        <spotLight position={[10, 15, 10]} angle={0.25} penumbra={1} intensity={3} color="#FF7A18" />
-                        <pointLight position={[-10, -10, -10]} intensity={1.5} color="#5B8CFF" />
+                        <ambientLight intensity={0.5} />
+                        <spotLight position={[10, 20, 10]} angle={0.15} penumbra={1} intensity={12} color="#FFFFFF" castShadow />
+                        <pointLight position={[-10, -10, -10]} intensity={8} color="#FF3D3D" />
+                        <pointLight position={[0, 10, 0]} intensity={3} color="#FFFFFF" />
                         <group scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1}>
                             <Sculpture />
                             <ShootingGame />
                         </group>
-                        <Environment preset="night" />
+                        <Environment frames={Infinity} resolution={256}>
+                            <group rotation={[1, 1, 1]}>
+                                <mesh position={[0, 0, -10]} scale={[25, 25, 1]}>
+                                    <planeGeometry />
+                                    <meshBasicMaterial color="#FF7A18" />
+                                </mesh>
+                                <mesh position={[0, 0, 10]} scale={[25, 25, 1]}>
+                                    <planeGeometry />
+                                    <meshBasicMaterial color="#5B8CFF" />
+                                </mesh>
+                            </group>
+                        </Environment>
                     </Canvas>
                 )}
             </div>
@@ -387,29 +489,36 @@ const Hero = () => {
             <div className="container relative z-10 text-center px-6">
                 <motion.div
                     style={{ y: y1, opacity }}
-                    className="flex flex-col items-center"
+                    className="flex flex-col items-center relative"
                 >
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        className="flex flex-col items-center"
+                    >
+                        <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-400 mb-8 antialiased">
+                            PREMIUM ENTERTAINMENT
+                        </span>
 
-                    <h1 className="text-4xl xs:text-5xl md:text-[10rem] lg:text-[11rem] font-black mb-6 leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-[#F8FAFC]">
-                        EAT. ENJOY.<br />
-                        <span className="text-gradient-primary">ENTERTAIN.</span>
-                    </h1>
+                        <h1 className="text-6xl md:text-[9.5rem] lg:text-[11.5rem] font-black mb-12 leading-[0.8] tracking-tighter text-white text-center antialiased italic">
+                            EAT. ENJOY.<br />
+                            <span className="text-gradient-hero-orange drop-shadow-[0_0_40px_rgba(255,122,24,0.3)]">ENTERTAIN.</span>
+                        </h1>
 
-                    <p className="max-w-2xl text-[#AAB2C5] text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] mb-12 leading-relaxed italic opacity-70 border-l-2 border-[#FF7A18]/30 pl-4 md:pl-6">
-                        Experience the scenic beauty of Eluru with premium culinary standards and recreation.
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-center gap-8">
-                        <motion.a
-                            href="/dine"
-                            className="btn-premium px-10 md:px-16 py-4 md:py-6"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            BOOK YOUR RIDE <ArrowRight size={18} className="ml-2" />
-                        </motion.a>
-
-                    </div>
+                        <div className="flex flex-wrap items-center justify-center gap-6 mt-2">
+                            <motion.button
+                                onClick={() => document.getElementById('rides')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="btn-premium px-12 py-5"
+                                whileHover={{ y: 2 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    BOOK YOUR RIDE <ArrowDown size={18} />
+                                </span>
+                            </motion.button>
+                        </div>
+                    </motion.div>
                 </motion.div>
             </div>
 
@@ -423,37 +532,37 @@ const Hero = () => {
                 transition={{ delay: 1.5 }}
             >
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse" />
-                    <span className="text-[10px] font-bold text-[#FF7A18] tracking-[0.3em] uppercase italic opacity-40">Scroll</span>
+                    <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
+                    <span className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-60">Scroll</span>
                 </div>
 
                 <div className="flex flex-col items-center">
                     <div className="relative h-12 flex flex-col items-center justify-center mb-2">
                         <motion.span
-                            animate={{ opacity: [0.4, 1, 0.4] }}
+                            animate={{ opacity: [0.4, 0.8, 0.4] }}
                             transition={{ duration: 3, repeat: Infinity }}
-                            className="text-[14px] font-black text-white tracking-[0.4em] uppercase italic"
+                            className="text-[11px] font-bold text-white/40 tracking-[0.3em] uppercase"
                         >
                             EXPLORE RIDES
                         </motion.span>
                     </div>
 
-                    {/* Futuristic Scanning Line */}
-                    <div className="relative w-48 h-[1px] bg-white/5 overflow-hidden">
+                    {/* Minimal Scanning Line */}
+                    <div className="relative w-40 h-[1px] bg-white/5 overflow-hidden">
                         <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FF7A18] to-transparent w-20"
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent w-20"
                             animate={{ x: [-100, 300] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                         />
                     </div>
                 </div>
 
                 <div className="relative mt-2">
-                    <div className="w-[1px] h-16 bg-gradient-to-b from-[#FF7A18] via-[#FF7A18]/20 to-transparent" />
+                    <div className="w-[1px] h-16 bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
                     <motion.div
-                        className="absolute top-0 left-[-2px] w-[5px] h-[5px] bg-[#FF7A18] rounded-full shadow-[0_0_15px_#FF7A18]"
+                        className="absolute top-0 left-[-1.5px] w-[4px] h-[4px] bg-[#FF7A18] rounded-full shadow-[0_0_15px_rgba(255,122,24,0.6)]"
                         animate={{ y: [0, 60, 0], opacity: [0, 1, 0] }}
-                        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                     />
                 </div>
             </motion.div>
@@ -464,7 +573,7 @@ const Hero = () => {
                     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
                 }
             `}} />
-        </section>
+        </section >
     )
 }
 

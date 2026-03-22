@@ -41,7 +41,7 @@ const About = () => {
                         </h2>
 
                         <p className="text-[#AAB2C5] text-sm md:text-xl font-black uppercase tracking-widest leading-relaxed mb-10 md:mb-16 max-w-md italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
-                            Situated at NR Peta, Efour is where the urban energy of Eluru harmoniously blends with the joy of food and entertainment.
+                            Located at NR Peta, Efour brings together great food and fun for everyone in Eluru.
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-10">
@@ -84,7 +84,7 @@ const About = () => {
                             <div className="absolute bottom-12 left-12 z-20 space-y-2">
                                 <div className="flex items-center gap-3">
                                     <div className="w-2 h-2 rounded-full bg-[#FF7A18] animate-pulse" />
-                                    <span className="text-[12px] font-bold text-[#F8FAFC] tracking-[0.4em] uppercase italic bg-black/40 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">CORE_STRUCTURE.LOG</span>
+                                    <span className="text-[12px] font-bold text-[#F8FAFC] tracking-[0.4em] uppercase italic bg-black/40 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">SYSTEM READY</span>
                                 </div>
                             </div>
                         </motion.div>

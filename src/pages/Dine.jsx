@@ -36,7 +36,7 @@ const Dine = () => {
         return (
             <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-center gap-6">
                 <div className="w-16 h-16 border-4 border-[#FF7A18] border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(255,122,24,0.3)]" />
-                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Synchronizing Culinary Database...</p>
+                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Loading Food Menu...</p>
             </div>
         );
     }
@@ -88,8 +88,8 @@ const Dine = () => {
                             </h1>
 
                             <p className="text-[#AAB2C5] text-lg md:text-xl font-medium max-w-2xl mx-auto italic leading-relaxed mb-20 px-4 opacity-60">
-                                We are currently engineering a world-class gastronomic journey.
-                                Eluru's definitive premium open-air multi-ride experience is arriving soon to redefine your cultural standards.
+                                We are making a great food experience for you.
+                                The best place for food and fun in Eluru is opening soon.
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-32">
@@ -98,7 +98,7 @@ const Dine = () => {
                                         <Clock size={22} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#AAB2C5]/40 mb-1">Target Sequence</p>
+                                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#AAB2C5]/40 mb-1">Status</p>
                                         <p className="text-md font-black uppercase text-[#F8FAFC] italic tracking-widest">Opening Soon</p>
                                     </div>
                                 </div>
@@ -110,18 +110,18 @@ const Dine = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
                             {[
                                 {
-                                    title: "Culinary Selection",
-                                    desc: "Hand-picked stalls serving the finest global cuisines from high-street to refined fine dining.",
+                                    title: "Great Food",
+                                    desc: "Choose from a wide variety of the best foods from our selected stalls.",
                                     icon: "01"
                                 },
                                 {
-                                    title: "Architectural Vibe",
-                                    desc: "Boutique, modern spaces integrated with nature for the definitive luxury social ambiance.",
+                                    title: "Great Place",
+                                    desc: "Enjoy your food in a beautiful, modern outdoor space designed for comfort.",
                                     icon: "02"
                                 },
                                 {
-                                    title: "Digital Integration",
-                                    desc: "Seamless Eluru ordering from any stall, allowing you to synchronize your favorites instantly.",
+                                    title: "Easy Ordering",
+                                    desc: "Order fast from any stall using our simple system. No more long waits.",
                                     icon: "03"
                                 }
                             ].map((feature, i) => (
@@ -171,7 +171,7 @@ const Dine = () => {
                                 Eluru
                             </h1>
                             <p className="text-[#AAB2C5] text-lg font-medium italic opacity-60 max-w-md border-l-2 border-white/10 pl-8">
-                                Explore a curated Eluru of global flavors from our premium architectural food stalls.
+                                Explore a collection of global flavors from our food stalls.
                             </p>
                         </motion.div>
                     </div>
@@ -206,7 +206,7 @@ const Dine = () => {
                 </div>
 
                 {/* --- Menu Matrix Architecture --- */}
-                <div className="matrix-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                <div className="matrix-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                     <AnimatePresence mode="popLayout">
                         {filteredMenu.map((item, idx) => (
                             <motion.div
@@ -216,10 +216,10 @@ const Dine = () => {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: Math.min(idx, 12) * 0.05 }}
-                                className="glass-card group rounded-[3.5rem] overflow-hidden flex flex-col h-full border border-white/10 hover:border-[#FF7A18]/40 hover:shadow-[0_45px_100px_rgba(255,122,24,0.15)] transition-all duration-700"
+                                className="glass-card group rounded-3xl overflow-hidden flex flex-col h-full border border-white/10 hover:border-[#FF7A18]/40 hover:shadow-[0_45px_100px_rgba(255,122,24,0.15)] transition-all duration-700"
                             >
                                 {/* Media Architecture */}
-                                <div className="relative h-72 overflow-hidden">
+                                <div className="relative h-40 overflow-hidden">
                                     <OptimizedImage
                                         src={item.image}
                                         alt={item.name}
@@ -228,14 +228,14 @@ const Dine = () => {
                                     />
 
                                     {/* Price Elevation */}
-                                    <div className="absolute top-6 right-6 bg-white/5 backdrop-blur-3xl px-5 py-2.5 rounded-2xl shadow-3xl border border-white/10 group-hover:border-white/20 transition-all">
-                                        <span className="text-gradient-price font-black text-lg tracking-tight italic font-heading">₹{item.price}</span>
+                                    <div className="absolute top-4 right-4 bg-white/5 backdrop-blur-3xl px-3 py-1.5 rounded-xl shadow-3xl border border-white/10 group-hover:border-white/20 transition-all">
+                                        <span className="text-gradient-price font-black text-sm tracking-tight italic font-heading">₹{item.price}</span>
                                     </div>
 
                                     {/* Stall Identity */}
-                                    <div className="absolute top-6 left-6 bg-white/5 backdrop-blur-3xl px-4 py-2 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_8px_#FF7A18]" />
-                                        <span className="text-white text-[11px] font-bold uppercase tracking-widest italic">{item.stall}</span>
+                                    <div className="absolute top-4 left-4 bg-white/5 backdrop-blur-3xl px-3 py-1 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_8px_#FF7A18]" />
+                                        <span className="text-white text-[9px] font-bold uppercase tracking-widest italic">{item.stall}</span>
                                     </div>
 
                                     {/* Depth Overlay */}
@@ -243,27 +243,25 @@ const Dine = () => {
                                 </div>
 
                                 {/* Content Architecture */}
-                                <div className="p-6 md:p-10 flex flex-col flex-grow">
+                                <div className="p-4 flex flex-col flex-grow">
                                     <div className="mb-4 md:mb-6 flex items-center justify-between">
-                                        <h3 className="text-xl md:text-2xl font-black text-[#F8FAFC] tracking-tighter uppercase group-hover:text-[#FF7A18] transition-colors leading-none transform -skew-x-6 duration-700">
+                                        <h3 className="text-sm md:text-md font-black text-[#F8FAFC] tracking-tighter uppercase group-hover:text-[#FF7A18] transition-colors leading-tight transform -skew-x-6 duration-700 line-clamp-1">
                                             {item.name}
                                         </h3>
                                         <Star size={18} className="text-[#FF7A18] fill-[#FF7A18] opacity-20 group-hover:opacity-100 transition-opacity" />
                                     </div>
 
-                                    <p className="text-[#AAB2C5] text-xs md:text-sm font-medium leading-relaxed mb-6 md:mb-10 flex-grow line-clamp-2 italic border-l border-white/10 pl-4 opacity-50 group-hover:opacity-100 transition-opacity duration-700">
-                                        {item.description || item.desc || 'Premium culinary creation engineered for the definitive dining experience.'}
+                                    <p className="text-[#AAB2C5] text-[9px] md:text-[10px] font-medium leading-relaxed mb-4 flex-grow line-clamp-1 italic border-l border-white/10 pl-3 opacity-50 group-hover:opacity-100 transition-opacity duration-700 uppercase tracking-wider">
+                                        {item.stall}
                                     </p>
 
                                     {/* Action Integration */}
                                     <button
                                         onClick={() => handleAddToCart(item)}
-                                        className="w-full bg-white/5 hover:bg-white text-white hover:text-black py-4 md:py-5 rounded-[1.5rem] md:rounded-[1.8rem] font-bold text-[11px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] transition-all duration-700 flex items-center justify-center gap-3 md:gap-4 group/btn border border-white/5 hover:border-white shadow-3xl transform active:scale-95"
+                                        className="w-full bg-white/5 hover:bg-white text-white hover:text-black py-2.5 rounded-xl font-bold text-[9px] uppercase tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-3 group/btn border border-white/5 hover:border-white shadow-3xl transform active:scale-95"
                                     >
-                                        <div className="p-1.5 md:p-2 bg-white/10 rounded-xl shadow-inner group-hover/btn:bg-black group-hover/btn:text-white transition-colors duration-500">
-                                            <ShoppingCart size={14} />
-                                        </div>
-                                        SYNC ORDER
+                                        <ShoppingCart size={12} />
+                                        ADD TO CART
                                     </button>
                                 </div>
 

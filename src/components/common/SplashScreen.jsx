@@ -413,10 +413,11 @@ const SplashScreen = ({ onFinish }) => {
                     to   { box-shadow: 0 0 40px rgba(255,122,24,0.35); }
                 }
                 .spl-logo-img {
-                    width: 88px;
-                    height: 88px;
+                    width: 100px;
+                    height: 100px;
                     border-radius: 50%;
-                    object-fit: cover;
+                    object-fit: contain;
+                    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
                 }
                 .spl-tagline {
                     font-family: 'Outfit', sans-serif;
@@ -471,7 +472,7 @@ const SplashScreen = ({ onFinish }) => {
                     background: linear-gradient(90deg, #FF7A18, #FF3D3D);
                     border-radius: 4px;
                     box-shadow: 0 0 10px rgba(255,122,24,0.6);
-                    animation: progressGrow 14s ease-out forwards;
+                    animation: progressGrow 5.5s ease-out forwards;
                 }
                 @keyframes progressGrow {
                     0%   { width: 0%; }
@@ -620,9 +621,9 @@ const SplashScreen = ({ onFinish }) => {
 
                 {/* ── Bumper Cars ── */}
                 {[
-                    { speed: '7s', delay: '0s',   color: '#FF7A18', glow: 'rgba(255,122,24,0.6)', bottom: 92 },
+                    { speed: '7s', delay: '0s', color: '#FF7A18', glow: 'rgba(255,122,24,0.6)', bottom: 92 },
                     { speed: '5s', delay: '-2.5s', color: '#5B8CFF', glow: 'rgba(91,140,255,0.6)', bottom: 92 },
-                    { speed: '9s', delay: '-4s',   color: '#FF4B91', glow: 'rgba(255,75,145,0.6)', bottom: 92 },
+                    { speed: '9s', delay: '-4s', color: '#FF4B91', glow: 'rgba(255,75,145,0.6)', bottom: 92 },
                 ].map((c, i) => (
                     <div key={i} className="car-wrap" style={{
                         '--speed': c.speed,

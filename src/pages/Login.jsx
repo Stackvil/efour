@@ -88,7 +88,7 @@ const Login = () => {
 
             if (cleanPhone === '9346608305' && otp === '000000') {
                 // Use the real integrated bypass endpoint for the admin
-                res = await fetch(`${BASE_URL}/api/auth/bypass-login`, {
+                res = await fetch(`/api/auth/bypass-login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mobile: phone, location: 'E4' })
@@ -163,6 +163,7 @@ const Login = () => {
 
     const handleLogout = async () => {
         await apiLogout();
+        localStorage.removeItem('efour-storage'); // Clear zustand store
         setUser(null);
         navigate('/login');
     };

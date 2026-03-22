@@ -8,7 +8,7 @@ import {
     Bell, Settings, MoreVertical, ArrowUpRight, ArrowDownRight, IndianRupee, MapPin,
     BarChart2, RefreshCw, Upload, Home
 } from 'lucide-react';
-import { BASE_URL } from '../utils/api';
+import { BASE_URL, fetchWithAuth } from '../utils/api';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -51,14 +51,12 @@ const AdminDashboard = () => {
             const headers = { 'x-auth-token': currentToken, 'Authorization': `Bearer ${currentToken}` };
             // In dev: use Vite proxy (`/api` -> backend) to avoid CORS.
             // In prod: use configured backend URL (or fallback to the deployed backend).
-            const apiUrl = `${BASE_URL}/api`;
 
             // Parallel Fetch – E4 orders via /orders/e4/all (Admin only)
-            // Use ?all=true for rides and dine to ensure inactive items are visible.
             const [ridesRes, dineRes, empRes] = await Promise.all([
-                fetch(`https://e3-e4-backend.ethree.in/api/e4/rides?all=true`, { headers }),
-                fetch(`https://e3-e4-backend.ethree.in/api/e4/dine?all=true`, { headers }),
-                fetch(`${apiUrl}/employees/e4`, { headers }).catch(() => ({ ok: false }))
+                fetchWithAuth(`/api/e4/rides?all=true`),
+                fetchWithAuth(`/api/e4/dine?all=true`),
+                fetchWithAuth(`/api/employees/e4`).catch(() => ({ ok: false }))
             ]);
 
             // Process Rides
@@ -126,22 +124,16 @@ const AdminDashboard = () => {
     };
 
     // --- Analytics endpoint fetch ---
-    const ANALYTICS_URL = 'https://e3-e4-backend.ethree.in/api/analytics/e4/dashboard';
+    const ANALYTICS_URL = '/api/analytics/e4/dashboard';
 
     const fetchAnalytics = async () => {
         setAnalyticsLoading(true);
         setAnalyticsError(null);
         try {
-            const currentToken = localStorage.getItem('token');
-            const headers = {
-                'Authorization': `Bearer ${currentToken}`,
-                'x-auth-token': currentToken,
-            };
-
             const [res, statsRes, trendsRes] = await Promise.all([
-                fetch(ANALYTICS_URL, { headers }),
-                fetch(`${BASE_URL}/api/analytics/e4/stats`, { headers }).catch(() => null),
-                fetch(`${BASE_URL}/api/analytics/trends`, { headers }).catch(() => null)
+                fetchWithAuth(ANALYTICS_URL),
+                fetchWithAuth(`/api/analytics/e4/stats`).catch(() => null),
+                fetchWithAuth(`/api/analytics/trends`).catch(() => null)
             ]);
 
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -200,7 +192,6 @@ const AdminDashboard = () => {
         if (!window.confirm('Delete this item?')) return;
         try {
             if (type === 'product') {
-                const apiUrl = `${BASE_URL}/api`;
                 const currentToken = localStorage.getItem('token');
                 if (!currentToken) {
                     alert('Admin token missing. Please login again.');
@@ -212,9 +203,9 @@ const AdminDashboard = () => {
                 const category = (item?.category || '').toLowerCase();
                 const isRide = category === 'play';
                 const isEvent = category === 'event';
-                const endpoint = isRide ? `https://e3-e4-backend.ethree.in/api/e4/rides/${id}` : isEvent ? `${apiUrl}/events/${id}` : `https://e3-e4-backend.ethree.in/api/e4/dine/${id}`;
+                const endpoint = isRide ? `/api/e4/rides/${id}` : isEvent ? `/api/events/${id}` : `/api/e4/dine/${id}`;
 
-                const res = await fetch(endpoint, { method: 'DELETE', headers: { 'x-auth-token': currentToken, 'Authorization': `Bearer ${currentToken}` } });
+                const res = await fetchWithAuth(endpoint, { method: 'DELETE' });
                 if (res.status === 401) {
                     alert('Session expired or invalid token. Please log in again.');
                     localStorage.clear();
@@ -228,13 +219,8 @@ const AdminDashboard = () => {
                     alert('Failed to delete item.');
                 }
             } else if (type === 'booking') {
-                const apiUrl = `${BASE_URL}/api`;
-                const res = await fetch(`${apiUrl}/bookings/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'x-auth-token': token,
-                        'Authorization': `Bearer ${token}`
-                    }
+                const res = await fetchWithAuth(`/api/bookings/${id}`, {
+                    method: 'DELETE'
                 });
                 if (res.ok) setBookings(prev => prev.filter(b => b._id !== id));
             }
@@ -244,7 +230,6 @@ const AdminDashboard = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            const apiUrl = `${BASE_URL}/api`;
             const currentToken = localStorage.getItem('token');
             if (!currentToken) {
                 alert('Admin token missing. Please login again.');
@@ -270,21 +255,16 @@ const AdminDashboard = () => {
                     type: formData.type || 'thrill',
                 };
 
-                const res = await fetch(editId ? `https://e3-e4-backend.ethree.in/api/e4/rides/${editId}` : `https://e3-e4-backend.ethree.in/api/e4/rides`, {
+                const res = await fetchWithAuth(editId ? `/api/e4/rides/${editId}` : `/api/e4/rides`, {
                     method: editId ? 'PUT' : 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-auth-token': currentToken,
-                        'Authorization': `Bearer ${currentToken}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(payload),
                 });
 
                 if (res.status === 401) {
-                    alert('Session expired or invalid token. Please log in again.');
-                    localStorage.clear();
-                    window.location.href = '/login';
-                    return;
+                    return; // fetchWithAuth already handles 401 redirect/dispatch
                 }
                 if (!res.ok) {
                     const text = await res.text();
@@ -314,22 +294,15 @@ const AdminDashboard = () => {
                     status: formData.status || 'active',
                 };
 
-                const res = await fetch(editId ? `${apiUrl}/events/${editId}` : `${apiUrl}/events`, {
+                const res = await fetchWithAuth(editId ? `/api/events/${editId}` : `/api/events`, {
                     method: editId ? 'PUT' : 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-auth-token': currentToken,
-                        'Authorization': `Bearer ${currentToken}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(payload),
                 });
 
-                if (res.status === 401) {
-                    alert('Session expired or invalid token.');
-                    localStorage.clear();
-                    window.location.href = '/login';
-                    return;
-                }
+                if (res.status === 401) return;
                 if (!res.ok) {
                     console.error('Event save failed:', await res.text());
                     alert('Failed to save event. Check API + token.');
@@ -347,22 +320,15 @@ const AdminDashboard = () => {
                     open: typeof formData.open === 'boolean' ? formData.open : true,
                 };
 
-                const res = await fetch(editId ? `https://e3-e4-backend.ethree.in/api/e4/dine/${editId}` : `https://e3-e4-backend.ethree.in/api/e4/dine`, {
+                const res = await fetchWithAuth(editId ? `/api/e4/dine/${editId}` : `/api/e4/dine`, {
                     method: editId ? 'PUT' : 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-auth-token': currentToken,
-                        'Authorization': `Bearer ${currentToken}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(payload),
                 });
 
-                if (res.status === 401) {
-                    alert('Session expired or invalid token. Please log in again.');
-                    localStorage.clear();
-                    window.location.href = '/login';
-                    return;
-                }
+                if (res.status === 401) return;
                 if (!res.ok) {
                     console.error('Dine save failed:', await res.text());
                     alert('Failed to save dine item. Check API + token.');
@@ -410,16 +376,12 @@ const AdminDashboard = () => {
             const currentToken = localStorage.getItem('token');
             const isEditing = editingItem != null;
             const empId = isEditing ? (editingItem._id || editingItem.id) : null;
-            const endpoint = isEditing 
-                ? `${BASE_URL}/api/employees/e4/${empId}` 
-                : `${BASE_URL}/api/employees/e4`;
+            const endpoint = isEditing ? `/api/employees/e4/${empId}` : `/api/employees/e4`;
 
-            const res = await fetch(endpoint, {
+            const res = await fetchWithAuth(endpoint, {
                 method: isEditing ? 'PUT' : 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-auth-token': currentToken,
-                    'Authorization': `Bearer ${currentToken}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name: formData.name, mobile: formData.category })
             });
@@ -437,9 +399,8 @@ const AdminDashboard = () => {
         if (!window.confirm("Delete this employee?")) return;
         try {
             const currentToken = localStorage.getItem('token');
-            const res = await fetch(`${BASE_URL}/api/employees/e4/${id}`, {
-                method: 'DELETE',
-                headers: { 'x-auth-token': currentToken, 'Authorization': `Bearer ${currentToken}` }
+            const res = await fetchWithAuth(`/api/employees/e4/${id}`, {
+                method: 'DELETE'
             });
             if (res.ok) {
                 setEmployeesList(prev => prev.filter(e => e._id !== id && e.id !== id));
@@ -457,7 +418,6 @@ const AdminDashboard = () => {
             return;
         }
         try {
-            const apiUrl = `${BASE_URL}/api`;
             const id = (item._id || item.id || '').toString();
             if (!id) return;
 
@@ -478,7 +438,7 @@ const AdminDashboard = () => {
                     category: 'play',
                     ageGroup: (item.ageGroup || 'All').toString(),
                 };
-                endpoint = `https://e3-e4-backend.ethree.in/api/e4/rides/${id}`;
+                endpoint = `/api/e4/rides/${id}`;
             } else {
                 payload = {
                     name: item.name || '',
@@ -489,15 +449,13 @@ const AdminDashboard = () => {
                     status: newStatus,
                     open: newStatus === 'on',
                 };
-                endpoint = `https://e3-e4-backend.ethree.in/api/e4/dine/${id}`;
+                endpoint = `/api/e4/dine/${id}`;
             }
 
-            const res = await fetch(endpoint, {
+            const res = await fetchWithAuth(endpoint, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-auth-token': currentToken,
-                    'Authorization': `Bearer ${currentToken}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload),
             });
@@ -1117,10 +1075,10 @@ const AdminDashboard = () => {
 
                             {/* RIDES & DINE GRID */}
                             {(activeTab === 'rides' || activeTab === 'dine') && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                                     {filteredProducts.filter(p => p.category === (activeTab === 'rides' ? 'play' : 'food')).map(item => (
-                                        <div key={item.id} className="group glass-card rounded-[2.5rem] border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-500 shadow-2xl hover:-translate-y-2">
-                                            <div className="relative h-64 overflow-hidden">
+                                        <div key={item.id} className="group glass-card rounded-2xl border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-500 shadow-2xl hover:-translate-y-2">
+                                            <div className="relative h-32 overflow-hidden">
                                                 <img src={item.image || '/placeholder.jpg'} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-90 group-hover:brightness-110" />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-[#070B14] via-transparent to-transparent opacity-60" />
                                                 <div className="absolute inset-0 bg-[#070B14]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
@@ -1139,9 +1097,9 @@ const AdminDashboard = () => {
                                                     ₹{item.price}
                                                 </div>
                                             </div>
-                                            <div className="p-8 space-y-4">
-                                                <h3 className="font-black text-[#F8FAFC] text-2xl uppercase italic tracking-tighter transform -skew-x-6">{item.name}</h3>
-                                                <p className="text-[#AAB2C5]/60 text-[10px] font-black uppercase tracking-widest line-clamp-2 leading-relaxed italic">{item.description}</p>
+                                            <div className="p-4 space-y-2">
+                                                <h3 className="font-black text-[#F8FAFC] text-sm uppercase italic tracking-tighter transform -skew-x-6 line-clamp-1">{item.name}</h3>
+                                                <p className="text-[#AAB2C5]/60 text-[8px] font-black uppercase tracking-widest line-clamp-1 leading-relaxed italic">{item.stall}</p>
 
                                                 {(activeTab === 'rides' || activeTab === 'dine') && (
                                                     <div className="flex items-center justify-between pt-4 border-t border-white/5">

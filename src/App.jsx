@@ -34,8 +34,8 @@ import ProtectedRoute from './components/common/ProtectedRoute';
    5. Hard cap of 15 s is enforced inside <SplashScreen> itself.
 ───────────────────────────────────────────────────────────────────────────── */
 
-const MIN_SPLASH_MS = 2500;   // Always show splash at least this long
-const READY_WAIT_MS = 6000;   // If page load event fires, wait up to this long total before triggering done
+const MIN_SPLASH_MS = 5000;   // Always show splash at least this long
+const READY_WAIT_MS = 8000;   // If page load event fires, wait up to this long total before triggering done
 
 function useSplashControl() {
     const [showSplash, setShowSplash] = useState(true);

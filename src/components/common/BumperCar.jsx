@@ -54,7 +54,18 @@ const RoamingScene = () => {
                 <SigmaCar3D ref={carRef} scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.25 : 0.4} />
             </Trail>
 
-            <Environment preset="night" />
+            <Environment frames={Infinity} resolution={256}>
+                <group rotation={[0, 0, 1]}>
+                    <mesh position={[0, 0, -10]} scale={[10, 10, 1]}>
+                        <planeGeometry />
+                        <meshBasicMaterial color="#FF7A18" />
+                    </mesh>
+                    <mesh position={[0, 0, 10]} scale={[10, 10, 1]}>
+                        <planeGeometry />
+                        <meshBasicMaterial color="#5B8CFF" />
+                    </mesh>
+                </group>
+            </Environment>
         </>
     );
 };

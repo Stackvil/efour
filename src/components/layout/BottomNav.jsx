@@ -1,58 +1,59 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Utensils, Play, Calendar, User, Ticket, Phone } from 'lucide-react';
+import { Home, Utensils, User, Ticket, Phone } from 'lucide-react';
 import useStore from '../../store/useStore';
 
 const BottomNav = () => {
     const { user } = useStore();
 
     return (
-        <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#080C14]/60 backdrop-blur-lg border-t border-white/10 z-50 pb-safe">
-            <div className="flex justify-around items-center h-16 px-4">
+        <nav className="lg:hidden fixed bottom-4 left-4 right-4 bg-[#0F172A]/70 backdrop-blur-xl border border-white/5 z-50 pb-safe rounded-[2rem] shadow-2xl">
+            <div className="flex justify-around items-center h-16 px-6">
                 <NavLink
                     to="/"
-                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[#FF7A18]' : 'text-[#AAB2C5]'}`}
+                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-white scale-110' : 'text-slate-500 hover:text-slate-400'}`}
                 >
-                    <Home size={22} />
-                    <span className="text-[10px] font-bold uppercase tracking-tight">Home</span>
+                    <Home size={20} strokeWidth={2.5} />
+                    <span className="text-[9px] font-bold uppercase tracking-wider">Home</span>
                 </NavLink>
 
                 <NavLink
                     to="/dine"
-                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[#FF7A18]' : 'text-[#AAB2C5]'}`}
+                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-white scale-110' : 'text-slate-500 hover:text-slate-400'}`}
                 >
                     <div className="relative">
-                        <Utensils size={22} />
+                        <Utensils size={20} strokeWidth={2.5} />
                         <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A18] opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A18]"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-500 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
                         </span>
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-tight">Dine</span>
+                    <span className="text-[9px] font-bold uppercase tracking-wider">Dine</span>
                 </NavLink>
 
                 <NavLink
                     to="/login"
-                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[#FF7A18]' : 'text-[#AAB2C5]'}`}
+                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-white scale-110' : 'text-slate-500 hover:text-slate-400'}`}
                 >
-                    <User size={22} />
-                    <span className="text-[10px] font-bold uppercase tracking-tight truncate max-w-[60px]">{user ? (user.name || 'User') : 'Profile'}</span>
+                    <User size={20} strokeWidth={2.5} />
+                    <span className="text-[9px] font-bold uppercase tracking-wider truncate max-w-[60px]">{user ? (user.name || 'User') : 'Profile'}</span>
                 </NavLink>
 
                 <NavLink
                     to="/contact"
-                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[#FF7A18]' : 'text-[#AAB2C5]'}`}
+                    className={({ isActive }) => `flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-white scale-110' : 'text-slate-500 hover:text-slate-400'}`}
                 >
-                    <Phone size={22} />
-                    <span className="text-[10px] font-bold uppercase tracking-tight">Contact</span>
+                    <Phone size={20} strokeWidth={2.5} />
+                    <span className="text-[9px] font-bold uppercase tracking-wider">Contact</span>
                 </NavLink>
+
                 {user && (
                     <NavLink
                         to="/tickets"
-                        className={({ isActive }) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[#FF7A18]' : 'text-[#AAB2C5]'}`}
+                        className={({ isActive }) => `flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-white scale-110' : 'text-slate-500 hover:text-slate-400'}`}
                     >
-                        <Ticket size={22} />
-                        <span className="text-[10px] font-bold uppercase tracking-tight">Your Tickets</span>
+                        <Ticket size={20} strokeWidth={2.5} />
+                        <span className="text-[9px] font-bold uppercase tracking-wider">Pass</span>
                     </NavLink>
                 )}
             </div>

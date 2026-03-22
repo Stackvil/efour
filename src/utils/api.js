@@ -9,15 +9,16 @@ export const fetchWithAuth = async (url, options = {}) => {
         headers['x-auth-token'] = token;
     }
 
-    // Ensure the URL is absolute if it's a relative path starting with /api
-    const fullUrl = url.startsWith('/') ? `${BASE_URL}${url}` : url;
+    // Ensure the URL is absolute ONLY if we explicitly want to bypass proxy/rewrite.
+    // Otherwise, let the browser/server handle it relative to the origin.
+    const fullUrl = url.startsWith('http') ? url : url;
 
     let res = await fetch(fullUrl, { ...options, headers });
 
     // If unauthorized, attempt to refresh the token using the HTTP-only cookie
     if (res.status === 401) {
         try {
-            const refreshRes = await fetch(`${BASE_URL}/api/auth/refresh-token`, {
+            const refreshRes = await fetch('/api/auth/refresh-token', {
                 method: 'POST',
                 // Important to ensure the browser sends the domain cookies
                 credentials: 'include'
@@ -33,18 +34,29 @@ export const fetchWithAuth = async (url, options = {}) => {
                     headers['Authorization'] = `Bearer ${token}`;
                     headers['x-auth-token'] = token;
                     res = await fetch(fullUrl, { ...options, headers });
+
+                    if (res.status === 401) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('efour-storage');
+                        window.dispatchEvent(new Event('auth_expired'));
+                        window.location.href = '/login';
+                    }
                 }
             } else {
-                // If refresh token is expired or unauthorized, clear local session
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
+                localStorage.removeItem('efour-storage'); // Clear persisted zustand store
                 window.dispatchEvent(new Event('auth_expired'));
+                window.location.href = '/login'; // Force redirect to login
             }
         } catch (error) {
             console.error('Failed to refresh token:', error);
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+            localStorage.removeItem('efour-storage');
             window.dispatchEvent(new Event('auth_expired'));
+            window.location.href = '/login';
         }
     }
 
@@ -52,7 +64,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 };
 
 export const sendOtp = async (mobile, additionalData = {}) => {
-    return fetch(`${BASE_URL}/api/auth/send-otp`, {
+    return fetch('/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile, location: 'E4', ...additionalData })
@@ -60,7 +72,7 @@ export const sendOtp = async (mobile, additionalData = {}) => {
 };
 
 export const verifyOtp = async (mobile, otp, additionalData = {}) => {
-    return fetch(`${BASE_URL}/api/auth/verify-otp`, {
+    return fetch('/api/auth/verify-otp', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -72,13 +84,14 @@ export const logout = async () => {
     try {
         const token = localStorage.getItem('token');
         const headers = token ? { 'Authorization': `Bearer ${token}`, 'x-auth-token': token } : {};
-        const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+        const res = await fetch('/api/auth/logout', {
             method: 'POST',
             headers,
             credentials: 'include'
         });
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('efour-storage');
         return res;
     } catch (error) {
         console.error('Logout error:', error);

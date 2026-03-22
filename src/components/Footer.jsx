@@ -100,12 +100,12 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                             </li>
                             <li>
                                 <Link to="/privacy" className={navLinkClasses}>
-                                    Privacy Protocol
+                                    Privacy Policy
                                 </Link>
                             </li>
                             <li>
                                 <Link to="/terms" className={navLinkClasses}>
-                                    Terms of Engagement
+                                    Terms of Use
                                 </Link>
                             </li>
                         </ul>
@@ -167,7 +167,7 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                         onClick={scrollToTop}
                         className="group flex items-center gap-6 text-[14px] uppercase tracking-[0.4em] font-bold text-[#FF7A18] hover:text-white transition-all italic"
                     >
-                        Return to Zenith <ArrowUp size={18} className="group-hover:-translate-y-2 transition-transform duration-500" />
+                        Back to Top <ArrowUp size={18} className="group-hover:-translate-y-2 transition-transform duration-500" />
                     </button>
                 </div>
             </div>

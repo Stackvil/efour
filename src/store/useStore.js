@@ -65,8 +65,7 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, rides: true } }));
                 try {
-                    const baseUrl = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.ethree.in';
-                    const res = await fetch(`https://e3-e4-backend.ethree.in/api/e4/rides`);
+                    const res = await fetch(`/api/e4/rides`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
                     let items = Array.isArray(data) ? data : (data.rides || data.data || []);
@@ -101,8 +100,7 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, menu: true } }));
                 try {
-                    const baseUrl = import.meta.env.VITE_API_URL || 'https://e3-e4-backend.ethree.in';
-                    const res = await fetch(`${baseUrl}/api/e4/dine`);
+                    const res = await fetch(`/api/e4/dine`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
 

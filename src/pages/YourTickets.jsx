@@ -106,7 +106,7 @@ const TicketCard = memo(({ ticket, item }) => {
             >
                 {/* Front Side */}
                 <div className="absolute inset-0 backface-hidden">
-                    <div className={`h-full w-full rounded-[3rem] bg-[#0F172A]/40 backdrop-blur-3xl border border-white/10 p-8 flex flex-col justify-between overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.6)] transition-all duration-700 hover:border-[#FF7A18]/40 group/card ${status === 'expiring' ? 'animate-pulse-subtle ring-2 ring-[#FF7A18]/20' : ''}`}>
+                    <div className={`h-full w-full rounded-[2.5rem] bg-[#0F172A]/40 backdrop-blur-3xl border border-white/10 p-8 pb-10 flex flex-col justify-between overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.6)] transition-all duration-700 hover:border-[#FF7A18]/40 group/card ${status === 'expiring' ? 'animate-pulse-subtle ring-2 ring-[#FF7A18]/20' : ''}`}>
                         {/* Background Ambient Glow */}
                         <div className={`absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-20 pointer-events-none rounded-full ${status === 'expired' ? 'bg-red-500' : (status === 'expiring' ? 'bg-[#FF7A18]' : 'bg-emerald-500')}`} />
 
@@ -128,12 +128,12 @@ const TicketCard = memo(({ ticket, item }) => {
                                     <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FF7A18]">
                                         <Cpu size={20} />
                                     </div>
-                                    <span className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-50">Ride Classification</span>
+                                    <span className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-50">Ride Type</span>
                                 </div>
                                 <h3 className="text-[#F8FAFC] font-black text-3xl tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-3">
                                     {item.name}
                                 </h3>
-                                <p className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-70">EFOUR ELURU ARCHITECTURE</p>
+                                <p className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-70">EFOUR ELURU</p>
                             </div>
 
                             <div className="flex items-center gap-8 bg-white/5 p-6 rounded-[2rem] border border-white/5 backdrop-blur-md">
@@ -144,7 +144,7 @@ const TicketCard = memo(({ ticket, item }) => {
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
-                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Temporal Stability</span>
+                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Ends In</span>
                                     <span className={`text-2xl font-mono font-black tabular-nums transition-colors duration-500 ${config.color} ${status !== 'expired' ? 'drop-shadow-[0_0_12px_rgba(255,255,255,0.1)]' : ''}`}>
                                         {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')}
                                     </span>
@@ -153,14 +153,14 @@ const TicketCard = memo(({ ticket, item }) => {
                         </div>
 
                         {/* Bottom Metadata */}
-                        <div className="mt-8 pt-8 border-t border-white/5 space-y-6 relative z-10">
+                        <div className="mt-4 pt-4 border-t border-white/5 space-y-4 relative z-10">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1.5">
-                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Transaction Value</span>
+                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Price</span>
                                     <span className="text-[#F8FAFC] font-black text-2xl tracking-tighter">₹{item.price * item.quantity}</span>
                                 </div>
                                 <div className="text-right space-y-1.5">
-                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Validation Date</span>
+                                    <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Date</span>
                                     <span className="text-[#F8FAFC] font-bold text-sm italic opacity-90">{safeDate(ticket.date || ticket.createdAt).toLocaleDateString()}</span>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@ const TicketCard = memo(({ ticket, item }) => {
                             <button
                                 className={`w-full py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-3 italic transform -skew-x-6 ${status === 'expired' ? 'bg-white/5 text-[#AAB2C5]/50 cursor-not-allowed border border-white/5' : 'bg-white/5 text-white border border-white/10 hover:border-[#FF7A18] hover:bg-[#FF7A18]/20 hover:text-[#FF7A18] hover:shadow-[0_0_30px_rgba(255,122,24,0.2)]'}`}
                             >
-                                {status === 'expired' ? 'PROTOCOL TERMINATED' : 'ACCESS SECURITY TOKEN'}
+                                {status === 'expired' ? 'EXPIRED' : 'VIEW TICKET'}
                                 {status !== 'expired' && <ArrowRight size={14} className="group-hover/card:translate-x-1 transition-transform" />}
                             </button>
                         </div>

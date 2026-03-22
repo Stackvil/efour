@@ -107,7 +107,7 @@ const Analytics = () => {
 
     const fetchAnalytics = async () => {
         try {
-            const res = await fetchWithAuth('https://e3-e4-backend.ethree.in/api/analytics/e4/dashboard');
+            const res = await fetchWithAuth('/api/analytics/e4/dashboard');
             if (res.ok) {
                 const result = await res.json();
                 // Merge real data with mock defaults to ensure fallback structure
@@ -162,10 +162,9 @@ const Analytics = () => {
 
             {/* ──── AMBIENT BACKGROUND ──── */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-10%] right-[-5%]  w-[500px] h-[500px] bg-[#FF7A18]/5  rounded-full blur-[120px]" />
-                <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-[#5B8CFF]/5  rounded-full blur-[100px]" />
-                <div className="absolute inset-0"
-                    style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[200px]" />
+                <div className="absolute bottom-[0%] left-[-10%] w-[50%] h-[50%] bg-[#3B82F6]/5 rounded-full blur-[180px]" />
+                <div className="absolute inset-0 matrix-grid opacity-20" />
             </div>
 
             {/* ──── TOPBAR ──── */}
