@@ -195,7 +195,7 @@ const Login = () => {
 
     if (user) {
         return (
-            <div className="min-h-screen bg-[#070B14] flex items-center justify-center p-6 lg:p-12 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
+            <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-start pt-56 pb-20 px-6 lg:p-12 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
                 {/* Background Grid & Blurs */}
                 <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
                 <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
@@ -210,24 +210,24 @@ const Login = () => {
                     <div className="relative bg-[#0F172A]/80 p-8 lg:p-14 flex flex-col md:flex-row items-center justify-between border-b border-white/5 overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF7A18]/10 to-transparent blur-3xl rounded-full" />
 
-                        <div className="relative z-10 flex items-center gap-8 mb-8 md:mb-0">
+                        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-8 mb-10 md:mb-0 text-center md:text-left">
                             <div className="relative">
                                 <div className="absolute -inset-1 bg-gradient-to-tr from-[#FF7A18] to-[#FF3D3D] rounded-full blur-md opacity-40 animate-pulse" />
-                                <div className="w-24 h-24 rounded-full border-2 border-white/20 bg-[#070B14] flex items-center justify-center text-[#F8FAFC] text-4xl font-black shadow-2xl relative z-10">
+                                <div className="w-20 md:w-24 h-20 md:h-24 rounded-full border-2 border-white/20 bg-[#070B14] flex items-center justify-center text-[#F8FAFC] text-3xl md:text-4xl font-black shadow-2xl relative z-10">
                                     {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-3">
-                                    <h1 className="text-3xl lg:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">
+                            <div className="space-y-3">
+                                <div className="flex flex-col md:flex-row items-center gap-3">
+                                    <h1 className="text-2xl lg:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 leading-tight">
                                         {user.name || 'ANONYMOUS'}
                                     </h1>
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
+                                    <div className="hidden md:block w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
                                 </div>
-                                <div className="flex gap-3">
-                                    <span className="px-4 py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] border border-white/10 uppercase">CLASSIFIED: CUSTOMER</span>
-                                    <span className="px-4 py-1.5 bg-[#FF7A18]/10 backdrop-blur-md rounded-xl text-[9px] font-black text-[#FF7A18] tracking-[0.3em] border border-[#FF7A18]/20 uppercase italic">EFOUR ELURU</span>
+                                <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
+                                    <span className="px-3 md:px-4 py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-[8px] md:text-[9px] font-black text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] border border-white/10 uppercase">CLASSIFIED: CUSTOMER</span>
+                                    <span className="px-3 md:px-4 py-1.5 bg-[#FF7A18]/10 backdrop-blur-md rounded-xl text-[8px] md:text-[9px] font-black text-[#FF7A18] tracking-[0.2em] md:tracking-[0.3em] border border-[#FF7A18]/20 uppercase italic">EFOUR ELURU</span>
                                 </div>
                             </div>
                         </div>
@@ -301,13 +301,13 @@ const Login = () => {
                                             { label: 'EMAIL ADDRESS', value: user.email || 'NOT CONFIGURATED', icon: <Mail size={22} /> },
                                             { label: 'PHONE NUMBER', value: `+${user.phone || '91 0000000000'}`, icon: <Phone size={22} /> }
                                         ].map((item, i) => (
-                                            <div key={i} className="flex items-center gap-8 group">
-                                                <div className="w-16 h-16 rounded-2xl bg-white/5 text-[#FF7A18] flex items-center justify-center shrink-0 border border-white/10 shadow-xl group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500">
+                                            <div key={i} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 md:gap-8 group">
+                                                <div className="w-14 md:w-16 h-14 md:h-16 rounded-2xl bg-white/5 text-[#FF7A18] flex items-center justify-center shrink-0 border border-white/10 shadow-xl group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500">
                                                     {item.icon}
                                                 </div>
                                                 <div className="space-y-1">
                                                     <p className={labelClasses.replace('mb-3', 'mb-1')}>{item.label}</p>
-                                                    <p className="text-xl font-black text-[#F8FAFC] tracking-tight uppercase leading-none opacity-90">{item.value}</p>
+                                                    <p className="text-lg md:text-xl font-black text-[#F8FAFC] tracking-tight uppercase leading-none opacity-90 break-all px-4 sm:px-0">{item.value}</p>
                                                 </div>
                                             </div>
                                         ))}

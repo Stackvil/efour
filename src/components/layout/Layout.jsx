@@ -42,8 +42,8 @@ const Header = () => {
     };
 
     return (
-        <header className="floating-navbar mt-2 md:mt-4">
-            <div className="flex justify-between items-center group/header px-4">
+        <header className="floating-navbar">
+            <div className="container mx-auto max-w-7xl flex justify-between items-center group/header px-4 md:px-8">
                 <Link to="/" className="flex items-center group shrink-0">
                     <img
                         src="/E4LOGO.jpeg"
@@ -74,25 +74,25 @@ const Header = () => {
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden md:flex items-center gap-4">
                     <button
                         onClick={toggleCart}
-                        className="relative w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/cart"
+                        className="relative w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/cart"
                     >
-                        <ShoppingCart size={17} className="group-hover:scale-110 transition-transform" />
+                        <ShoppingCart size={18} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border-2 border-[#07080C] shadow-md">
+                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-[#07080C] shadow-md">
                                 {cart.length}
                             </span>
                         )}
                     </button>
 
-                    <Link to="/login" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/user">
-                        <User size={17} className="group-hover:scale-110 transition-transform" />
+                    <Link to="/login" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 shadow-sm group/user">
+                        <User size={18} className="group-hover:scale-110 transition-transform" />
                     </Link>
 
                     {user?.role === 'admin' && (
-                        <Link to="/admin" className="px-5 py-2 rounded-full border border-white/10 text-slate-400 font-bold text-[10px] uppercase tracking-wider hover:bg-white/5 hover:text-white transition-all">
+                        <Link to="/admin" className="px-6 py-2.5 rounded-full border border-white/10 text-slate-400 font-bold text-[10px] uppercase tracking-wider hover:bg-white/5 hover:text-white transition-all">
                             ADMIN
                         </Link>
                     )}
@@ -101,7 +101,7 @@ const Header = () => {
                         <Link
                             to="/#rides"
                             onClick={handleBookRide}
-                            className="px-5 py-2 rounded-full bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 flex items-center gap-2"
+                            className="px-6 py-2.5 rounded-full bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 flex items-center gap-2"
                         >
                             BOOK A RIDE <Zap size={10} className="fill-current" />
                         </Link>
@@ -110,31 +110,31 @@ const Header = () => {
                     {user && (
                         <button
                             onClick={handleLogout}
-                            className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/10 text-red-500/50 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center"
+                            className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/10 text-red-500/50 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center"
                         >
-                            <LogOut size={17} />
+                            <LogOut size={18} />
                         </button>
                     )}
                 </div>
 
                 {/* Mobile Identity */}
-                <div className="flex md:hidden items-center gap-3">
+                <div className="flex md:hidden items-center gap-4">
                     <button
                         onClick={toggleCart}
-                        className="relative w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white shadow-sm"
+                        className="relative w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white shadow-sm"
                     >
-                        <ShoppingCart size={16} />
+                        <ShoppingCart size={18} />
                         {cart.length > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-black border border-[#07080C]">
+                            <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-black border border-[#07080C]">
                                 {cart.length}
                             </span>
                         )}
                     </button>
                     <Link
                         to="/login"
-                        className="text-[9px] font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-white text-black shadow-xl"
+                        className={`font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-full shadow-2xl border border-white/20 active:scale-95 transition-all flex items-center justify-center ${user ? 'bg-white/5 text-white w-10 h-10 px-0' : 'bg-white text-black text-[10px]'}`}
                     >
-                        LOGIN
+                        {user ? <User size={18} /> : 'LOGIN'}
                     </Link>
                 </div>
             </div>
@@ -161,12 +161,12 @@ const FooterInfoBar = () => {
 
 const Layout = ({ children }) => {
     return (
-        <div className="flex flex-col min-h-screen bg-[#07080C] selection:bg-indigo-500/30 selection:text-white font-sans overflow-x-hidden antialiased scroll-smooth">
+        <div className="flex flex-col min-h-screen bg-[#000000] selection:bg-indigo-500/30 selection:text-white font-sans overflow-x-hidden antialiased scroll-smooth">
             {/* Global Dark Depth */}
             <div className="noise-overlay" />
             <div className="premium-blur-bg">
-                <div className="ambient-light w-[40%] h-[40%] bg-indigo-500/10 top-[-10%] left-[-5%]" />
-                <div className="ambient-light w-[30%] h-[30%] bg-orange-500/5 bottom-[-5%] right-[-5%]" />
+                <div className="ambient-light w-[40%] h-[40%] bg-indigo-500/5 top-[-10%] left-[-5%]" />
+                <div className="ambient-light w-[30%] h-[30%] bg-orange-500/2 bottom-[-5%] right-[-5%]" />
             </div>
             <Header />
             <main className="flex-grow relative">

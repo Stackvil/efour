@@ -20,7 +20,7 @@ const Balloon = ({ position, color, popped }) => {
             <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
                 {/* Glossy Pink Balloon Body */}
                 <mesh visible={!popped}>
-                    <sphereGeometry args={[0.45, 32, 32]} />
+                    <sphereGeometry args={[0.55, 32, 32]} />
                     <meshStandardMaterial
                         color="#FF4B91"
                         metalness={0.2}
@@ -30,13 +30,13 @@ const Balloon = ({ position, color, popped }) => {
                     />
                 </mesh>
                 {/* Balloon Tie */}
-                <mesh visible={!popped} position={[0, -0.45, 0]}>
-                    <coneGeometry args={[0.08, 0.1, 16]} />
+                <mesh visible={!popped} position={[0, -0.55, 0]}>
+                    <coneGeometry args={[0.1, 0.12, 16]} />
                     <meshStandardMaterial color="#FF4B91" />
                 </mesh>
                 {/* White Curved String */}
-                <mesh visible={!popped} position={[0, -0.85, 0]}>
-                    <cylinderGeometry args={[0.01, 0.01, 0.8]} />
+                <mesh visible={!popped} position={[0, -1.05, 0]}>
+                    <cylinderGeometry args={[0.011, 0.011, 1]} />
                     <meshBasicMaterial color="white" transparent opacity={0.6} />
                 </mesh>
             </Float>
@@ -164,7 +164,7 @@ const Basketball = ({ isShooting }) => {
     return (
         <group ref={mesh}>
             <mesh castShadow>
-                <sphereGeometry args={[0.35, 32, 32]} />
+                <sphereGeometry args={[0.45, 32, 32]} />
                 <meshStandardMaterial
                     color="#FF7A18"
                     roughness={0.6}
@@ -176,7 +176,7 @@ const Basketball = ({ isShooting }) => {
             {/* Real Basketball Lines */}
             {[0, Math.PI / 2].map((rot, i) => (
                 <mesh key={i} rotation={[rot, 0, 0]}>
-                    <torusGeometry args={[0.352, 0.01, 16, 64]} />
+                    <torusGeometry args={[0.452, 0.012, 16, 64]} />
                     <meshBasicMaterial color="#111" />
                 </mesh>
             ))}
@@ -202,7 +202,7 @@ const Hoop = () => {
             <group position={[0, 1.5, -0.2]}>
                 {/* Glass Backboard */}
                 <mesh>
-                    <boxGeometry args={[2.8, 2, 0.1]} />
+                    <boxGeometry args={[3.4, 2.4, 0.12]} />
                     <meshPhysicalMaterial
                         transparent
                         opacity={0.4}
@@ -215,12 +215,12 @@ const Hoop = () => {
                 </mesh>
                 {/* White Outer Frame */}
                 <mesh>
-                    <boxGeometry args={[2.85, 2.05, 0.05]} />
+                    <boxGeometry args={[3.45, 2.45, 0.05]} />
                     <meshBasicMaterial color="white" wireframe />
                 </mesh>
                 {/* Orange Inner Shot Box */}
-                <mesh position={[0, -0.3, 0.06]}>
-                    <boxGeometry args={[0.8, 0.6, 0.01]} />
+                <mesh position={[0, -0.4, 0.07]}>
+                    <boxGeometry args={[1.0, 0.75, 0.01]} />
                     <meshBasicMaterial color="#FF3D3D" wireframe />
                 </mesh>
             </group>
@@ -229,12 +229,12 @@ const Hoop = () => {
             <group position={[0, 0.75, 0.5]}>
                 {/* Orange Rim */}
                 <mesh rotation={[Math.PI / 2, 0, 0]}>
-                    <torusGeometry args={[0.5, 0.04, 16, 100]} />
+                    <torusGeometry args={[0.62, 0.05, 16, 100]} />
                     <meshStandardMaterial color="#FF3D3D" emissive="#FF3D3D" emissiveIntensity={3} />
                 </mesh>
                 {/* Net - Tapered mesh */}
-                <mesh position={[0, -0.4, 0]} rotation={[0, 0, 0]}>
-                    <cylinderGeometry args={[0.5, 0.3, 0.9, 16, 1, true]} />
+                <mesh position={[0, -0.5, 0]} rotation={[0, 0, 0]}>
+                    <cylinderGeometry args={[0.62, 0.4, 1.1]} />
                     <meshBasicMaterial color="white" wireframe transparent opacity={0.3} />
                 </mesh>
             </group>
@@ -250,9 +250,9 @@ const ShootingGame = () => {
 
     const initGame = () => {
         setBalloons([
-            { id: Date.now() + 1, pos: [-4, 3, -2], color: '#FF7A18', popped: false },
-            { id: Date.now() + 2, pos: [4, 2, -3], color: '#5B8CFF', popped: false },
-            { id: Date.now() + 3, pos: [-2, 5, -5], color: '#FF3D3D', popped: false },
+            { id: Date.now() + 1, pos: [-4, 1.5, -2], color: '#FF7A18', popped: false },
+            { id: Date.now() + 2, pos: [4, 0.5, -3], color: '#5B8CFF', popped: false },
+            { id: Date.now() + 3, pos: [-2, 2.8, -5], color: '#FF3D3D', popped: false },
         ])
         setActiveTargetIndex(0)
     }
@@ -440,23 +440,23 @@ const Hero = () => {
     const opacity = useTransform(scrollY, [0, 400], [1, 0])
 
     return (
-        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#07080C] pt-24 md:pt-[120px]">
-            {/* Ambient Background - Dark Luxury with Orange Accents */}
-            <div className="absolute inset-x-0 inset-y-0 bg-[#07080C]" />
+        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#000000] pt-24 md:pt-[120px]">
+            {/* Ambient Background - Pure Dark Luxury */}
+            <div className="absolute inset-x-0 inset-y-0 bg-[#000000]" />
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[60rem] h-[60rem] bg-[#FF7A18]/5 rounded-full blur-[160px]" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/5 rounded-full blur-[140px]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[60rem] h-[60rem] bg-[#FF7A18]/2 rounded-full blur-[160px]" />
+                <div className="absolute bottom-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/2 rounded-full blur-[140px]" />
             </div>
-            <div className="absolute inset-0 noise-overlay opacity-20 pointer-events-none" />
+            <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
 
             {/* 3D Scene - Enhanced abstract sculpture */}
-            <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100 top-12 md:top-24">
+            <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100 top-24 md:top-36">
                 {isInView && (
                     <Canvas
                         dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1}
                         camera={{
-                            position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 18 : 8],
-                            fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 45 : 40
+                            position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 14 : 8],
+                            fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 48 : 40
                         }}
                         performance={{ min: 0.5 }}
                         gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: true }}
@@ -465,7 +465,7 @@ const Hero = () => {
                         <spotLight position={[10, 20, 10]} angle={0.15} penumbra={1} intensity={12} color="#FFFFFF" castShadow />
                         <pointLight position={[-10, -10, -10]} intensity={8} color="#FF3D3D" />
                         <pointLight position={[0, 10, 0]} intensity={3} color="#FFFFFF" />
-                        <group scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1}>
+                        <group scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1.2}>
                             <Sculpture />
                             <ShootingGame />
                         </group>

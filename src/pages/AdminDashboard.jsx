@@ -550,7 +550,7 @@ const AdminDashboard = () => {
             <main className="flex-1 flex flex-col min-w-0">
 
                 {/* TOP BAR */}
-                <header className="h-24 px-8 flex items-center justify-between z-20 sticky top-0 bg-[#070B14]/80 backdrop-blur-xl border-b border-white/5 mx-6 mt-6 rounded-3xl">
+                <header className="h-24 px-8 flex items-center justify-between z-20 sticky top-0 bg-[#070B14]/90 backdrop-blur-xl border-b border-white/5 w-full">
                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden p-3 text-[#AAB2C5] hover:bg-white/5 rounded-2xl transition-all">
                         <Menu size={24} />
                     </button>

@@ -21,24 +21,24 @@ const Contact = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="mb-32 text-center max-w-5xl mx-auto space-y-10"
+                    className="mb-20 md:mb-32 text-center max-w-5xl mx-auto space-y-6 md:space-y-10"
                 >
-                    <h1 className="text-5xl md:text-9xl font-black mb-8 text-[#F8FAFC] italic tracking-tighter uppercase leading-[0.85] transform -skew-x-6">
+                    <h1 className="text-4xl xs:text-5xl md:text-9xl font-black mb-6 md:mb-8 text-[#F8FAFC] italic tracking-tighter uppercase leading-[0.85] transform -skew-x-6">
                         CONTACT <br /><span className="text-gradient-primary">US</span>
                     </h1>
 
                     <div className="flex flex-col items-center gap-6">
-                        <p className="max-w-2xl text-[#AAB2C5] text-xs font-black uppercase tracking-[0.4em] italic opacity-60 leading-relaxed">
+                        <p className="max-w-2xl text-[#AAB2C5] text-[10px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] italic opacity-60 leading-relaxed px-4">
                             Located in the heart of Eluru, Efour is your main spot for world-class entertainment and great food.
                         </p>
                         <div className="flex gap-4">
                             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
-                            <span className="text-[12px] font-bold text-[#AAB2C5] tracking-[0.3em] uppercase opacity-40">UPLINK STATUS: OPTIMAL</span>
+                            <span className="text-[10px] md:text-[12px] font-bold text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] uppercase opacity-40">UPLINK STATUS: OPTIMAL</span>
                         </div>
                     </div>
                 </motion.div>
 
-                <div className="grid lg:grid-cols-3 gap-12 mb-32">
+                <div className="grid lg:grid-cols-3 gap-8 md:gap-12 mb-20 md:mb-32">
                     {/* Primary Telemetry Card */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -46,48 +46,48 @@ const Contact = () => {
                         viewport={{ once: true }}
                         className="lg:col-span-1"
                     >
-                        <div className={detailClasses}>
+                        <div className="glass-card p-8 md:p-10 rounded-3xl md:rounded-[3rem] border border-white/10 h-full relative group hover:border-[#FF7A18]/30 transition-all duration-700 hover:shadow-[0_40px_100px_rgba(255,122,24,0.15)] overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FF7A18]/10 to-transparent blur-3xl opacity-50" />
 
-                            <h3 className="text-2xl font-black mb-16 flex items-center gap-5 text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12">
-                                <Activity className="text-[#FF7A18] animate-pulse" size={28} />
+                            <h3 className="text-xl md:text-2xl font-black mb-10 md:mb-16 flex items-center gap-4 md:gap-5 text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12">
+                                <Activity className="text-[#FF7A18] animate-pulse" size={24} md:size={28} />
                                 Information
                             </h3>
 
-                            <div className="space-y-16">
-                                <div className="space-y-6 group/item">
-                                    <div className="flex items-center gap-6">
-                                        <div className={iconContainerClasses}>
-                                            <MapPin size={24} />
+                            <div className="space-y-10 md:space-y-16">
+                                <div className="space-y-4 md:space-y-6 group/item">
+                                    <div className="flex items-center gap-4 md:gap-6">
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
+                                            <MapPin size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic opacity-80">COORDINATES</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">COORDINATES</p>
                                     </div>
-                                    <p className="font-bold text-[#F8FAFC] text-lg leading-relaxed italic transform group-hover/item:translate-x-2 transition-transform duration-500">
+                                    <p className="font-bold text-[#F8FAFC] text-base md:text-lg leading-relaxed italic transform group-hover/item:translate-x-2 transition-transform duration-500">
                                         Opp: New RTC Main Bus Stand,<br />
                                         NR Peta, ELURU - 534 006
                                     </p>
                                 </div>
 
-                                <div className="space-y-6 group/item">
-                                    <div className="flex items-center gap-6">
-                                        <div className={iconContainerClasses}>
-                                            <Phone size={24} />
+                                <div className="space-y-4 md:space-y-6 group/item">
+                                    <div className="flex items-center gap-4 md:gap-6">
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
+                                            <Phone size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic opacity-80">COMMS LINE</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">COMMS LINE</p>
                                     </div>
-                                    <p className="font-black text-[#F8FAFC] text-3xl tracking-tighter italic transform group-hover/item:translate-x-2 transition-transform duration-500">
+                                    <p className="font-black text-[#F8FAFC] text-2xl md:text-3xl tracking-tighter italic transform group-hover/item:translate-x-2 transition-transform duration-500">
                                         +91 70369 23456
                                     </p>
                                 </div>
 
-                                <div className="space-y-6 group/item">
-                                    <div className="flex items-center gap-6">
-                                        <div className={iconContainerClasses}>
-                                            <Clock size={24} />
+                                <div className="space-y-4 md:space-y-6 group/item">
+                                    <div className="flex items-center gap-4 md:gap-6">
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
+                                            <Clock size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic opacity-80">RUNTIME CYCLE</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">RUNTIME CYCLE</p>
                                     </div>
-                                    <p className="font-bold text-[#F8FAFC] text-lg italic transform group-hover/item:translate-x-2 transition-transform duration-500">
+                                    <p className="font-bold text-[#F8FAFC] text-base md:text-lg italic transform group-hover/item:translate-x-2 transition-transform duration-500">
                                         DAILY: 09:00 – 23:00 IST
                                     </p>
                                 </div>
@@ -100,9 +100,9 @@ const Contact = () => {
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="lg:col-span-2 space-y-12"
+                        className="lg:col-span-2 space-y-8 md:space-y-12"
                     >
-                        <div className="glass-card rounded-[4rem] overflow-hidden border border-white/10 shadow-2xl h-[520px] relative group/map">
+                        <div className="glass-card rounded-3xl md:rounded-[4rem] overflow-hidden border border-white/10 shadow-2xl h-[400px] md:h-[520px] relative group/map">
                             <OptimizedImage
                                 src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80"
                                 className="w-full h-full object-cover opacity-20 grayscale group-hover/map:opacity-40 group-hover/map:grayscale-0 group-hover/map:scale-110 transition-all duration-[2000ms]"
@@ -111,27 +111,27 @@ const Contact = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#070B14] via-transparent to-[#070B14]/40" />
                             <div className="absolute inset-0 matrix-grid opacity-20" />
 
-                            <div className="absolute inset-0 flex items-center justify-center p-8">
+                            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
                                     whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
                                     viewport={{ once: true }}
-                                    className="bg-[#0F172A]/90 backdrop-blur-3xl p-10 rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col md:flex-row items-center gap-10 max-w-2xl relative overflow-hidden"
+                                    className="bg-[#0F172A]/90 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col md:flex-row items-center gap-6 md:gap-10 max-w-full md:max-w-2xl relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7A18]/5 blur-3xl rounded-full" />
-                                    <div className="relative z-10 p-6 bg-white/[0.03] rounded-[2.5rem] border border-white/10 shadow-2xl transform hover:rotate-6 transition-transform duration-500">
-                                        <img src="/E4LOGO.jpeg" alt="E4 Logo" className="h-24 w-auto object-contain brightness-125" />
+                                    <div className="relative z-10 p-4 md:p-6 bg-white/[0.03] rounded-2xl md:rounded-[2.5rem] border border-white/10 shadow-2xl transform hover:rotate-6 transition-transform duration-500">
+                                        <img src="/E4LOGO.jpeg" alt="E4 Logo" className="h-16 md:h-24 w-auto object-contain brightness-125" />
                                     </div>
-                                    <div className="relative z-10 text-center md:text-left space-y-6">
+                                    <div className="relative z-10 text-center md:text-left space-y-4 md:space-y-6">
                                         <div>
-                                            <h4 className="font-bold text-4xl text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 mb-2">Efour Eluru</h4>
-                                            <p className="text-[13px] text-[#AAB2C5] font-bold tracking-[0.4em] uppercase opacity-40 italic">OFFICE LOCATION</p>
+                                            <h4 className="font-bold text-2xl md:text-4xl text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 mb-1 md:mb-2">Efour Eluru</h4>
+                                            <p className="text-[11px] md:text-[13px] text-[#AAB2C5] font-bold tracking-[0.3em] md:tracking-[0.4em] uppercase opacity-40 italic">OFFICE LOCATION</p>
                                         </div>
                                         <a
                                             href="https://www.google.com/maps/place/EFOUR/@16.7089355,81.0863275,17z/data=!3m1!4b1!4m6!3m5!1s0x3a36131a0e74054d:0x366c34d3c0b4589c!8m2!3d16.7089304!4d81.0889024!16s%2Fg%2F11wnjn71fc?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="btn-premium px-12 py-5 rounded-2xl shadow-[0_20px_50px_rgba(255,122,24,0.3)]"
+                                            className="btn-premium px-8 md:px-12 py-4 md:py-5 rounded-xl md:rounded-2xl shadow-[0_20px_50px_rgba(255,122,24,0.3)] inline-block"
                                         >
                                             MAPS
                                         </a>
@@ -142,15 +142,15 @@ const Contact = () => {
 
                         <div className="flex justify-center">
                             {[
-                                { icon: <Bus size={32} />, title: 'TRANSPORT LINK', desc: 'New RTC Main Bus Stand, NR Peta, ELURU - 534 006', glow: 'group-hover:text-[#5B8CFF]' }
+                                { icon: <Bus size={28} />, title: 'TRANSPORT LINK', desc: 'New RTC Main Bus Stand, NR Peta, ELURU - 534 006', glow: 'group-hover:text-[#5B8CFF]' }
                             ].map((item, i) => (
-                                <div key={i} className="glass-card p-10 rounded-[3rem] border border-white/10 flex items-center gap-8 group hover:border-white/20 transition-all duration-500 w-full max-w-md">
-                                    <div className={`w-20 h-20 bg-white/5 border border-white/10 rounded-[2rem] flex items-center justify-center transition-all duration-500 ${item.glow} group-hover:scale-110 shadow-2xl`}>
+                                <div key={i} className="glass-card p-6 md:p-10 rounded-3xl md:rounded-[3rem] border border-white/10 flex flex-col md:flex-row items-center gap-6 md:gap-8 group hover:border-white/20 transition-all duration-500 w-full max-w-md text-center md:text-left">
+                                    <div className={`w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center transition-all duration-500 ${item.glow} group-hover:scale-110 shadow-2xl shrink-0`}>
                                         {item.icon}
                                     </div>
-                                    <div className="space-y-2">
-                                        <h4 className="font-bold text-[#F8FAFC] text-2xl tracking-tighter italic uppercase">{item.title}</h4>
-                                        <p className="text-[13px] font-bold text-[#AAB2C5] uppercase tracking-[0.3em] italic opacity-40">{item.desc}</p>
+                                    <div className="space-y-1 md:space-y-2">
+                                        <h4 className="font-bold text-[#F8FAFC] text-xl md:text-2xl tracking-tighter italic uppercase">{item.title}</h4>
+                                        <p className="text-[11px] md:text-[13px] font-bold text-[#AAB2C5] uppercase tracking-[0.2em] md:tracking-[0.3em] italic opacity-40">{item.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -162,46 +162,46 @@ const Contact = () => {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="glass-card rounded-[3rem] md:rounded-[5rem] p-8 md:p-24 relative overflow-hidden border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,0.4)]"
+                    className="glass-card rounded-[2.5rem] md:rounded-[5rem] p-6 xs:p-10 md:p-24 relative overflow-hidden border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,0.4)]"
                 >
                     <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-[#FF7A18]/10 rounded-full blur-[150px] pointer-events-none opacity-40" />
                     <div className="absolute bottom-0 left-0 w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none opacity-20" />
                     <div className="absolute inset-0 matrix-grid opacity-20 pointer-events-none" />
 
-                    <div className="relative z-10 grid xl:grid-cols-2 gap-32 items-center">
-                        <div className="space-y-12">
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4 text-[#FF7A18]">
-                                    <Shield size={20} className="animate-pulse" />
-                                    <span className="text-[14px] font-bold uppercase tracking-[0.6em] italic opacity-80">SECURE CONTACT</span>
+                    <div className="relative z-10 grid xl:grid-cols-2 gap-16 md:gap-32 items-center">
+                        <div className="space-y-10 md:space-y-12">
+                            <div className="space-y-4 md:space-y-6 text-center md:text-left">
+                                <div className="flex items-center justify-center md:justify-start gap-4 text-[#FF7A18]">
+                                    <Shield size={18} md:size={20} className="animate-pulse" />
+                                    <span className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.3em] md:tracking-[0.6em] italic opacity-80">SECURE CONTACT</span>
                                 </div>
-                                <h2 className="text-4xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.85] transform -skew-x-6 text-[#F8FAFC]">
+                                <h2 className="text-3xl sm:text-4xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.9] md:leading-[0.85] transform -skew-x-6 text-[#F8FAFC]">
                                     GET IN <br /><span className="text-gradient-primary">TOUCH</span>
                                 </h2>
                             </div>
 
-                            <p className="text-lg text-[#AAB2C5] font-black uppercase tracking-[0.3em] text-xs italic opacity-60 leading-relaxed border-l-2 border-[#FF7A18]/20 pl-8">
+                            <p className="text-sm md:text-lg text-[#AAB2C5] font-bold uppercase tracking-[0.15em] md:tracking-[0.3em] italic opacity-60 leading-relaxed border-l-2 border-[#FF7A18]/20 pl-6 md:pl-8 mx-auto md:mx-0 max-w-sm md:max-w-none text-center md:text-left">
                                 Our support team is here to help 24/7. Send us your message and we will get back to you as soon as possible.
                             </p>
 
-                            <div className="pt-8">
-                                <div className="flex items-center gap-10 text-2xl font-black text-[#F8FAFC] tracking-tighter italic uppercase group cursor-pointer">
-                                    <div className="w-20 h-20 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-2xl">
-                                        <Mail size={32} />
+                            <div className="pt-4 md:pt-8 flex justify-center md:justify-start">
+                                <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 text-xl md:text-2xl font-black text-[#F8FAFC] tracking-tighter italic uppercase group cursor-pointer text-center md:text-left">
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-[1.5rem] md:rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-2xl">
+                                        <Mail size={28} md:size={32} />
                                     </div>
-                                    <div className="space-y-2">
-                                        <p className="text-[14px] font-bold text-[#AAB2C5] tracking-[0.4em] uppercase opacity-40">DIRECT CHANNEL</p>
-                                        <span className="group-hover:text-[#FF7A18] transition-colors">efoureluru@gmail.com</span>
+                                    <div className="space-y-1 md:space-y-2">
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#AAB2C5] tracking-[0.3em] md:tracking-[0.4em] uppercase opacity-40">DIRECT CHANNEL</p>
+                                        <span className="group-hover:text-[#FF7A18] transition-colors text-base md:text-2xl break-all">efoureluru@gmail.com</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <form className="bg-[#0F172A]/60 backdrop-blur-3xl p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] space-y-8 md:space-y-10 relative">
+                        <form className="bg-[#0F172A]/60 backdrop-blur-3xl p-6 xs:p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] space-y-6 md:space-y-10 relative">
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF7A18]/40 to-transparent" />
 
                             <div className="space-y-1 w-full text-center mb-4 md:mb-6">
-                                <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.5em] uppercase opacity-40 italic">CONTACT FORM</p>
+                                <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] md:tracking-[0.5em] uppercase opacity-40 italic">CONTACT FORM</p>
                             </div>
 
                             <div className="space-y-6 md:space-y-8">
@@ -210,20 +210,20 @@ const Contact = () => {
                                     { label: 'EMAIL ADDRESS', type: 'email', placeholder: 'USERNAME@EMAIL.COM' }
                                 ].map((field, i) => (
                                     <div key={i} className="space-y-2 md:space-y-3">
-                                        <label className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">{field.label}</label>
+                                        <label className="text-[11px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic ml-4 opacity-70">{field.label}</label>
                                         <input
                                             type={field.type}
                                             placeholder={field.placeholder}
-                                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 md:px-8 py-5 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[14px] md:text-[15px] font-bold tracking-[0.1em] md:tracking-[0.2em] italic"
+                                            className="w-full bg-white/[0.03] border border-white/10 rounded-xl md:rounded-2xl px-5 md:px-8 py-4 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[13px] md:text-[15px] font-bold tracking-[0.05em] md:tracking-[0.2em] italic"
                                         />
                                     </div>
                                 ))}
                                 <div className="space-y-2 md:space-y-3">
-                                    <label className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.4em] italic ml-4 opacity-70">YOUR MESSAGE</label>
+                                    <label className="text-[11px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic ml-4 opacity-70">YOUR MESSAGE</label>
                                     <textarea
                                         placeholder="TYPE YOUR MESSAGE HERE..."
                                         rows="4"
-                                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 md:px-8 py-5 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[14px] md:text-[15px] font-bold tracking-[0.1em] md:tracking-[0.2em] italic resize-none"
+                                        className="w-full bg-white/[0.03] border border-white/10 rounded-xl md:rounded-2xl px-5 md:px-8 py-4 md:py-6 text-[#F8FAFC] outline-none focus:border-[#FF7A18]/40 focus:bg-white/[0.08] transition-all placeholder:text-[#AAB2C5]/20 text-[13px] md:text-[15px] font-bold tracking-[0.05em] md:tracking-[0.2em] italic resize-none"
                                     />
                                 </div>
                             </div>
@@ -232,9 +232,9 @@ const Contact = () => {
                                 href="https://wa.me/917036923456"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-premium w-full py-5 md:py-6 rounded-2xl md:rounded-3xl font-bold uppercase tracking-[0.4em] text-[12px] md:text-[14px] flex items-center justify-center gap-4 md:gap-6 group/btn shadow-[0_20px_60px_rgba(255,122,24,0.3)]"
+                                className="btn-premium w-full py-5 md:py-6 rounded-xl md:rounded-3xl font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-[11px] md:text-[14px] flex items-center justify-center gap-4 md:gap-6 group/btn shadow-[0_20px_60px_rgba(255,122,24,0.3)]"
                             >
-                                SEND MESSAGE <Send size={20} className="group-hover/btn:translate-x-2 group-hover/btn:-translate-y-2 transition-transform" />
+                                SEND MESSAGE <Send size={18} md:size={20} className="group-hover/btn:translate-x-2 group-hover/btn:-translate-y-2 transition-transform" />
                             </a>
                         </form>
                     </div>

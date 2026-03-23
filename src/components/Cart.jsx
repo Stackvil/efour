@@ -16,7 +16,9 @@ const Cart = () => {
     const [otp, setOtp] = useState('');
     const [authLoading, setAuthLoading] = useState(false);
 
-    const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const gstAmount = subtotal * 0.09;
+    const finalTotal = subtotal + gstAmount;
 
     const handlePayClick = () => {
         if (cart.length === 0) return;
@@ -65,7 +67,7 @@ const Cart = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items,
-                    amount: totalPrice,
+                    amount: Math.round(finalTotal),
                     location: 'E4',
                     name: currentUser?.name || 'Guest',
                     email: currentUser?.email || email || 'efoureluru@gmail.com',
@@ -282,12 +284,16 @@ const Cart = () => {
                                     <div className="p-10 bg-white/[0.02] border-t border-white/5 space-y-8 relative z-10 backdrop-blur-3xl">
                                         <div className="space-y-4">
                                             <div className="flex justify-between items-center opacity-40">
-                                                <span className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] italic">ESTIMATED PROTOCOL FEE</span>
-                                                <span className="text-[#F8FAFC] font-black italic">₹0.00</span>
+                                                <span className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] italic">STALL SUB_TOTAL</span>
+                                                <span className="text-[#F8FAFC] font-black italic">₹{subtotal.toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between items-center">
+                                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.4em] text-[10px] italic">PROTOCOL GST (9.0%)</span>
+                                                <span className="text-[#F8FAFC] font-black italic">+₹{gstAmount.toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center pt-2 border-t border-white/5">
                                                 <span className="text-[#AAB2C5] font-black uppercase tracking-[0.5em] text-[11px] italic">TOTAL CREDIT SYNC</span>
-                                                <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{totalPrice}</span>
+                                                <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{Math.round(finalTotal)}</span>
                                             </div>
                                         </div>
 

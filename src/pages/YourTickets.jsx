@@ -348,7 +348,7 @@ const YourTickets = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#070B14] text-[#F8FAFC] pt-24 md:pt-32 pb-24 md:pb-40 selection:bg-[#FF7A18]/40 relative overflow-hidden">
+        <div className="min-h-screen bg-[#070B14] text-[#F8FAFC] pt-40 md:pt-48 pb-24 md:pb-40 selection:bg-[#FF7A18]/40 relative overflow-hidden">
             {/* Background Effects */}
             <div className="absolute inset-0 matrix-grid opacity-[0.03] pointer-events-none" />
             <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[180px] pointer-events-none" />

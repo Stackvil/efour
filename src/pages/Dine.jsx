@@ -45,7 +45,7 @@ const Dine = () => {
 
     if (showComingSoon) {
         return (
-            <div className="bg-[#070B14] min-h-screen pt-32 pb-24 overflow-hidden relative selection:bg-[#FF7A18]/30">
+            <div className="min-h-screen bg-[#070B14] pt-40 md:pt-48 px-6 md:px-12 pb-24 md:pb-32 relative overflow-hidden selection:bg-[#FF7A18]/30">
                 {/* Advanced Light Architecture */}
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#FF7A18]/5 blur-[180px] rounded-full -translate-y-1/2 translate-x-1/4" />
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#5B8CFF]/5 blur-[150px] rounded-full translate-y-1/4 -translate-x-1/4" />
@@ -149,28 +149,28 @@ const Dine = () => {
     }
 
     return (
-        <div className="bg-[#070B14] min-h-screen pt-32 pb-32 selection:bg-[#FF7A18]/30 overflow-hidden relative">
+        <div className="bg-[#070B14] min-h-screen pt-44 md:pt-48 pb-32 selection:bg-[#FF7A18]/30 overflow-hidden relative">
             {/* Background Decorative Architecture */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-[#FF7A18]/5 to-transparent z-0 pointer-events-none" />
 
             <div className="container mx-auto px-6 relative z-10">
                 {/* --- Header Section Architecture --- */}
-                <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-white/5 pb-16">
-                    <div className="max-w-2xl">
+                <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12 border-b border-white/5 pb-10 md:pb-16 text-center md:text-left">
+                    <div className="max-w-2xl mx-auto md:mx-0">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 1 }}
                         >
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.5em] text-[10px] italic">Culinary Stalls</span>
-                                <div className="w-8 h-px bg-white/10" />
+                            <div className="flex items-center justify-center md:justify-start gap-4 mb-4 md:mb-6">
+                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[9px] md:text-[10px] italic">Culinary Stalls</span>
+                                <div className="hidden md:block w-8 h-px bg-white/10" />
                             </div>
-                            <h1 className="text-4xl md:text-8xl font-black italic tracking-tighter text-[#F8FAFC] leading-[0.85] transform -skew-x-6 mb-8 uppercase">
-                                The <span className="text-gradient-primary">Table</span> <br />
-                                Eluru
+                            <h1 className="text-3xl sm:text-4xl md:text-8xl font-black italic tracking-tighter text-[#F8FAFC] leading-[0.9] md:leading-[0.85] transform -skew-x-6 mb-6 md:mb-8 uppercase">
+                                The <span className="text-gradient-primary">Table</span> <br className="hidden md:block" />
+                                <span className="md:hidden"> </span>Eluru
                             </h1>
-                            <p className="text-[#AAB2C5] text-lg font-medium italic opacity-60 max-w-md border-l-2 border-white/10 pl-8">
+                            <p className="text-[#AAB2C5] text-base md:text-lg font-medium italic opacity-60 max-w-md border-l-2 border-white/10 pl-6 md:pl-8 mx-auto md:mx-0">
                                 Explore a collection of global flavors from our food stalls.
                             </p>
                         </motion.div>
@@ -178,24 +178,24 @@ const Dine = () => {
 
                     <div className="w-full md:max-w-md">
                         <div className="relative group">
-                            <Search size={22} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FF7A18] transition-colors" />
+                            <Search size={18} md:size={22} className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#FF7A18] transition-colors" />
                             <input
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search System (e.g., Pizza, Burger)"
-                                className="w-full bg-white/5 border border-white/10 rounded-[1.8rem] pl-16 pr-6 py-6 text-sm font-black uppercase tracking-widest text-[#F8FAFC] placeholder-white/10 shadow-inner focus:ring-4 focus:ring-[#FF7A18]/5 focus:border-[#FF7A18]/30 backdrop-blur-3xl outline-none transition-all duration-500"
+                                placeholder="Search (e.g., Pizza, Burger)"
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[1.8rem] pl-14 md:pl-16 pr-5 md:pr-6 py-4 md:py-6 text-[12px] md:text-sm font-black uppercase tracking-[0.1em] md:tracking-widest text-[#F8FAFC] placeholder-white/10 shadow-inner focus:ring-4 focus:ring-[#FF7A18]/5 focus:border-[#FF7A18]/30 backdrop-blur-3xl outline-none transition-all duration-500"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* --- Stall Filter Navigation --- */}
-                <div className="flex gap-4 overflow-x-auto pb-10 mb-16 no-scrollbar snap-x">
+                <div className="flex gap-3 md:gap-4 overflow-x-auto pb-6 md:pb-10 mb-10 md:mb-16 no-scrollbar snap-x">
                     {stalls.map(stall => (
                         <button
                             key={stall}
                             onClick={() => setActiveStall(stall)}
-                            className={`px-10 py-4 rounded-2xl whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.3em] border transition-all duration-500 italic snap-start transform -skew-x-6 ${activeStall === stall
+                            className={`px-6 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl whitespace-nowrap text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] md:tracking-[0.3em] border transition-all duration-500 italic snap-start transform -skew-x-4 md:-skew-x-6 ${activeStall === stall
                                 ? 'bg-white text-[#070B14] border-white shadow-[0_15px_35px_rgba(255,255,255,0.2)] scale-105'
                                 : 'bg-white/5 border-white/10 text-[#AAB2C5]/60 hover:border-[#FF7A18]/30 hover:text-white backdrop-blur-3xl'
                                 }`}
@@ -206,7 +206,7 @@ const Dine = () => {
                 </div>
 
                 {/* --- Menu Matrix Architecture --- */}
-                <div className="matrix-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                <div className="matrix-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
                     <AnimatePresence mode="popLayout">
                         {filteredMenu.map((item, idx) => (
                             <motion.div
@@ -216,10 +216,10 @@ const Dine = () => {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: Math.min(idx, 12) * 0.05 }}
-                                className="glass-card group rounded-3xl overflow-hidden flex flex-col h-full border border-white/10 hover:border-[#FF7A18]/40 hover:shadow-[0_45px_100px_rgba(255,122,24,0.15)] transition-all duration-700"
+                                className="glass-card group rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full border border-white/10 hover:border-[#FF7A18]/40 hover:shadow-[0_45px_100px_rgba(255,122,24,0.15)] transition-all duration-700"
                             >
                                 {/* Media Architecture */}
-                                <div className="relative h-40 overflow-hidden">
+                                <div className="relative h-36 md:h-40 overflow-hidden">
                                     <OptimizedImage
                                         src={item.image}
                                         alt={item.name}
@@ -228,14 +228,14 @@ const Dine = () => {
                                     />
 
                                     {/* Price Elevation */}
-                                    <div className="absolute top-4 right-4 bg-white/5 backdrop-blur-3xl px-3 py-1.5 rounded-xl shadow-3xl border border-white/10 group-hover:border-white/20 transition-all">
-                                        <span className="text-gradient-price font-black text-sm tracking-tight italic font-heading">₹{item.price}</span>
+                                    <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-white/5 backdrop-blur-3xl px-2 md:px-3 py-1 md:py-1.5 rounded-lg md:rounded-xl shadow-3xl border border-white/10 group-hover:border-white/20 transition-all">
+                                        <span className="text-gradient-price font-black text-[12px] md:text-sm tracking-tight italic font-heading">₹{item.price}</span>
                                     </div>
 
                                     {/* Stall Identity */}
-                                    <div className="absolute top-4 left-4 bg-white/5 backdrop-blur-3xl px-3 py-1 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_8px_#FF7A18]" />
-                                        <span className="text-white text-[9px] font-bold uppercase tracking-widest italic">{item.stall}</span>
+                                    <div className="absolute top-2 md:top-4 left-2 md:left-4 bg-white/5 backdrop-blur-3xl px-2 md:px-3 py-1 rounded-lg md:rounded-xl shadow-2xl border border-white/10 flex items-center gap-1.5 md:gap-2">
+                                        <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_8px_#FF7A18]" />
+                                        <span className="text-white text-[8px] md:text-[9px] font-bold uppercase tracking-widest italic truncate max-w-[60px] md:max-w-none">{item.stall}</span>
                                     </div>
 
                                     {/* Depth Overlay */}
@@ -243,24 +243,24 @@ const Dine = () => {
                                 </div>
 
                                 {/* Content Architecture */}
-                                <div className="p-4 flex flex-col flex-grow">
-                                    <div className="mb-4 md:mb-6 flex items-center justify-between">
-                                        <h3 className="text-sm md:text-md font-black text-[#F8FAFC] tracking-tighter uppercase group-hover:text-[#FF7A18] transition-colors leading-tight transform -skew-x-6 duration-700 line-clamp-1">
+                                <div className="p-3 md:p-4 flex flex-col flex-grow">
+                                    <div className="mb-3 md:mb-6 flex items-start justify-between gap-2">
+                                        <h3 className="text-[11px] md:text-[13px] lg:text-md font-black text-[#F8FAFC] tracking-tighter uppercase group-hover:text-[#FF7A18] transition-colors leading-tight transform -skew-x-6 duration-700 line-clamp-2">
                                             {item.name}
                                         </h3>
-                                        <Star size={18} className="text-[#FF7A18] fill-[#FF7A18] opacity-20 group-hover:opacity-100 transition-opacity" />
+                                        <Star size={14} md:size={18} className="text-[#FF7A18] fill-[#FF7A18] opacity-20 group-hover:opacity-100 transition-opacity shrink-0" />
                                     </div>
 
-                                    <p className="text-[#AAB2C5] text-[9px] md:text-[10px] font-medium leading-relaxed mb-4 flex-grow line-clamp-1 italic border-l border-white/10 pl-3 opacity-50 group-hover:opacity-100 transition-opacity duration-700 uppercase tracking-wider">
+                                    <p className="text-[#AAB2C5] text-[8px] md:text-[10px] font-medium leading-relaxed mb-4 flex-grow line-clamp-1 italic border-l border-white/10 pl-2 md:pl-3 opacity-50 group-hover:opacity-100 transition-opacity duration-700 uppercase tracking-wider">
                                         {item.stall}
                                     </p>
 
                                     {/* Action Integration */}
                                     <button
                                         onClick={() => handleAddToCart(item)}
-                                        className="w-full bg-white/5 hover:bg-white text-white hover:text-black py-2.5 rounded-xl font-bold text-[9px] uppercase tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-3 group/btn border border-white/5 hover:border-white shadow-3xl transform active:scale-95"
+                                        className="w-full bg-white/5 hover:bg-white text-white hover:text-black py-2 md:py-2.5 rounded-lg md:rounded-xl font-bold text-[8px] md:text-[9px] uppercase tracking-[0.1em] md:tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 group/btn border border-white/5 hover:border-white shadow-3xl transform active:scale-95"
                                     >
-                                        <ShoppingCart size={12} />
+                                        <ShoppingCart size={10} md:size={12} />
                                         ADD TO CART
                                     </button>
                                 </div>
