@@ -88,7 +88,7 @@ const Events = () => {
         });
 
         setBooked(true);
-        showToast("Reservation synchronized to Eluru!");
+        showToast("Booking added to cart!");
 
         setTimeout(() => {
             setBooked(false);
@@ -119,7 +119,7 @@ const Events = () => {
                             transition={{ duration: 1 }}
                         >
                             <div className="flex items-center gap-4 mb-6">
-                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.5em] text-[10px] italic">Eluru Venue Protocol</span>
+                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.5em] text-[10px] italic">Book Your Event</span>
                                 <div className="w-8 h-px bg-white/10" />
                             </div>
                             <h1 className="text-4xl md:text-8xl font-black italic tracking-tighter text-[#F8FAFC] leading-[0.85] transform -skew-x-6 mb-8 uppercase">
@@ -127,7 +127,7 @@ const Events = () => {
                                 <span className="text-gradient-primary">Special Moments.</span>
                             </h1>
                             <p className="text-[#AAB2C5] text-lg font-medium italic opacity-60 max-w-md border-l-2 border-white/10 pl-8">
-                                Engineering unforgettable experiences in our premium architectural event spaces.
+                                We offer beautiful spaces for your private parties and special events.
                             </p>
                         </motion.div>
                     </div>
@@ -139,12 +139,12 @@ const Events = () => {
                         {loadingEvents ? (
                             <div className="p-20 text-center bg-white/5 backdrop-blur-3xl rounded-[3.5rem] border border-white/5 shadow-2xl">
                                 <div className="w-12 h-12 border-3 border-[#FF7A18] border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-                                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Scanning Venue Data...</p>
+                                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Loading venues...</p>
                             </div>
                         ) : !room ? (
                             <div className="p-20 text-center bg-white/5 backdrop-blur-3xl rounded-[3.5rem] border border-white/5 shadow-2xl">
                                 <Info size={40} className="text-white/10 mx-auto mb-6" />
-                                <p className="text-[#F8FAFC] font-black uppercase tracking-widest italic">Zero Venues Detected</p>
+                                <p className="text-[#F8FAFC] font-black uppercase tracking-widest italic">No Venues Found</p>
                             </div>
                         ) : (
                             <>
@@ -190,7 +190,7 @@ const Events = () => {
                                             <User size={16} className="text-[#FF7A18]" /> {room.capacity || '20-50'} Guests
                                         </div>
                                         <div className="flex items-center gap-3 bg-[#5B8CFF]/10 text-[#5B8CFF] px-6 py-3.5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest border border-[#5B8CFF]/20 shadow-[0_0_15px_rgba(91,140,255,0.15)]">
-                                            <ShieldCheck size={16} /> Premium Integration
+                                            <ShieldCheck size={16} /> Best Service
                                         </div>
                                     </div>
 
@@ -198,8 +198,8 @@ const Events = () => {
                                         <div className="absolute top-0 left-0 w-1 h-full bg-[#FF7A18] opacity-20 group-hover/policy:opacity-100 transition-opacity" />
                                         <Info size={22} className="flex-shrink-0 mt-0.5 text-[#FF7A18]" />
                                         <p className="opacity-60 group-hover:opacity-100 transition-opacity duration-700">
-                                            <strong className="text-[#FF7A18] font-black uppercase tracking-widest mr-2">Policy:</strong>
-                                            We provide the architectural dimension. Tables, aesthetic seating, luxury decor & floral arrangements must be managed via external vendors.
+                                            <strong className="text-[#FF7A18] font-black uppercase tracking-widest mr-2">Note:</strong>
+                                            We provide the space. Tables, chairs, and decorations must be arranged by you.
                                         </p>
                                     </div>
                                 </motion.div>
@@ -212,7 +212,7 @@ const Events = () => {
                                     className="glass-card p-10 md:p-12 rounded-[3.5rem] border border-white/10 shadow-3xl"
                                 >
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-12">
-                                        <h3 className="text-3xl font-black italic text-[#F8FAFC] uppercase tracking-tighter transform -skew-x-6 leading-none">Resource Calendar</h3>
+                                        <h3 className="text-3xl font-black italic text-[#F8FAFC] uppercase tracking-tighter transform -skew-x-6 leading-none">Choose Date & Time</h3>
                                         <div className="relative group/input">
                                             <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FF7A18] group-hover/input:scale-110 transition-transform" size={20} />
                                             <input
@@ -230,19 +230,19 @@ const Events = () => {
                                     <div className="flex flex-wrap gap-6 text-[9px] font-black uppercase tracking-[0.2em] text-[#AAB2C5]/40 mb-12 italic border-b border-white/5 pb-8">
                                         <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-green-500/10 border border-green-500 shadow-[0_0_8px_rgba(34,197,94,0.3)]" /> Available ({availableCount})</div>
                                         <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-red-500/10 border border-red-500/30" /> Occupied ({bookedCount})</div>
-                                        <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-[#5B8CFF] shadow-[0_0_15px_rgba(91,140,255,0.4)]" /> Current Sync</div>
+                                        <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-[#5B8CFF] shadow-[0_0_15px_rgba(91,140,255,0.4)]" /> Selected</div>
                                     </div>
 
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                                         {loadingSlots ? (
                                             <div className="col-span-full py-20 text-center">
                                                 <div className="w-8 h-8 border-2 border-[#AAB2C5]/20 border-t-[#FF7A18] rounded-full animate-spin mx-auto mb-4" />
-                                                <p className="text-[#AAB2C5]/40 font-black uppercase tracking-widest text-[9px] italic">Synchronizing Calendar Matrix...</p>
+                                                <p className="text-[#AAB2C5]/40 font-black uppercase tracking-widest text-[9px] italic">Loading calendar...</p>
                                             </div>
                                         ) : slots.length === 0 ? (
                                             <div className="col-span-full py-20 text-center bg-white/5 rounded-[2.5rem] border border-white/5">
                                                 <Calendar size={32} className="text-white/5 mx-auto mb-4" />
-                                                <p className="text-[#AAB2C5]/40 font-black uppercase tracking-widest text-[9px] italic">Zero Slots found for telemetry {selectedDate}.</p>
+                                                <p className="text-[#AAB2C5]/40 font-black uppercase tracking-widest text-[9px] italic">No slots found for {selectedDate}.</p>
                                             </div>
                                         ) : (
                                             slots.map(slot => {
@@ -274,7 +274,7 @@ const Events = () => {
                                                     >
                                                         <span className="font-black italic text-lg uppercase tracking-tight mb-2 leading-none">{slot.label}</span>
                                                         <span className={`text-[10px] font-black uppercase tracking-widest italic flex items-center gap-1.5 ${isSelected ? 'text-white' : isAvailable ? 'text-[#FF7A18]' : 'text-current'}`}>
-                                                            {isAvailable ? `₹${(slot.price || room.price || 0).toLocaleString('en-IN')}` : isBooked ? 'Booked' : 'Locked'}
+                                                            {isAvailable ? `₹${(slot.price || room.price || 0).toLocaleString('en-IN')}` : isBooked ? 'Booked' : 'Wait'}
                                                         </span>
 
                                                         {isAvailable && (
@@ -307,11 +307,11 @@ const Events = () => {
                                     <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#FF7A18] border border-white/5 shadow-inner">
                                         <Zap size={20} />
                                     </div>
-                                    <h2 className="text-3xl font-black italic text-[#F8FAFC] tracking-tighter uppercase transform -skew-x-6 leading-none">Booking Engine</h2>
+                                    <h2 className="text-3xl font-black italic text-[#F8FAFC] tracking-tighter uppercase transform -skew-x-6 leading-none">Book Now</h2>
                                 </div>
 
                                 <p className="text-[#AAB2C5]/50 text-xs font-medium italic mb-12 border-l border-white/10 pl-6">
-                                    Define your telemetry data below to synchronize your reservation with the Eluru system.
+                                    Enter your details below to book your event space at Efour.
                                 </p>
 
                                 <form onSubmit={handleBook} className="space-y-8">
@@ -330,13 +330,13 @@ const Events = () => {
                                                         <span className="text-3xl text-white">{slots.find(s => s.hour === selectedSlotHour)?.label}</span>
                                                     </span>
                                                     <div className="h-px w-8 bg-white/10" />
-                                                    <span className="text-[9px] text-[#AAB2C5]/40 font-black uppercase tracking-[0.4em] italic leading-none">Telemetry Locked</span>
+                                                    <span className="text-[9px] text-[#AAB2C5]/40 font-black uppercase tracking-[0.4em] italic leading-none">Time Selected</span>
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-col items-center gap-4 py-4">
                                                     <Calendar size={24} className="text-white/5" />
                                                     <span className="text-[10px] text-[#AAB2C5]/30 font-black uppercase tracking-widest italic leading-relaxed max-w-[180px]">
-                                                        Awaiting Slot selection from Resource Calendar
+                                                        Please select a time slot above.
                                                     </span>
                                                 </div>
                                             )}
@@ -345,13 +345,13 @@ const Events = () => {
 
                                     <div className="space-y-8 pt-4">
                                         <div className="group/field">
-                                            <label className="text-[9px] uppercase tracking-[0.4em] font-black text-[#AAB2C5]/40 mb-4 block italic group-focus-within/field:text-[#FF7A18] transition-colors">Operator Identity</label>
+                                            <label className="text-[9px] uppercase tracking-[0.4em] font-black text-[#AAB2C5]/40 mb-4 block italic group-focus-within/field:text-[#FF7A18] transition-colors">Your Name</label>
                                             <div className="relative">
                                                 <User className="absolute left-6 top-1/2 -translate-y-1/2 text-[#AAB2C5]/20 group-focus-within/field:text-[#FF7A18] transition-colors" size={20} />
                                                 <input
                                                     type="text"
                                                     required
-                                                    placeholder="Enter Operational Name"
+                                                    placeholder="Enter your name"
                                                     className="w-full bg-black border border-white/10 rounded-[1.5rem] pl-16 pr-8 py-5 text-[#F8FAFC] placeholder-white/5 text-[10px] font-black uppercase tracking-widest italic outline-none focus:border-[#FF7A18]/50 focus:ring-4 focus:ring-[#FF7A18]/5 transition-all shadow-inner"
                                                     value={customerName}
                                                     onChange={(e) => setCustomerName(e.target.value)}
@@ -360,13 +360,13 @@ const Events = () => {
                                         </div>
 
                                         <div className="group/field">
-                                            <label className="text-[9px] uppercase tracking-[0.4em] font-black text-[#AAB2C5]/40 mb-4 block italic group-focus-within/field:text-[#FF7A18] transition-colors">Guest Capacity</label>
+                                            <label className="text-[9px] uppercase tracking-[0.4em] font-black text-[#AAB2C5]/40 mb-4 block italic group-focus-within/field:text-[#FF7A18] transition-colors">Number of Guests</label>
                                             <div className="relative">
                                                 <Zap className="absolute left-6 top-1/2 -translate-y-1/2 text-[#AAB2C5]/20 group-focus-within/field:text-[#FF7A18] transition-colors" size={20} />
                                                 <input
                                                     type="number"
                                                     required
-                                                    placeholder="Total Interaction Count"
+                                                    placeholder="Number of guests"
                                                     min="1"
                                                     className="w-full bg-black border border-white/10 rounded-[1.5rem] pl-16 pr-8 py-5 text-[#F8FAFC] placeholder-white/5 text-[10px] font-black uppercase tracking-widest italic outline-none focus:border-[#FF7A18]/50 focus:ring-4 focus:ring-[#FF7A18]/5 transition-all shadow-inner"
                                                     value={expectedGuests}
@@ -379,8 +379,8 @@ const Events = () => {
                                     {/* Total Valuation Engine */}
                                     <div className="flex justify-between items-center py-10 border-t border-white/5 mt-10">
                                         <div className="flex flex-col">
-                                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#AAB2C5]/30 italic mb-1">Total Valuation</span>
-                                            <span className="text-white/5 font-black text-xs uppercase italic">Synchronized Protocol</span>
+                                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#AAB2C5]/30 italic mb-1">Total Price</span>
+                                            <span className="text-white/5 font-black text-xs uppercase italic">Confirm Order</span>
                                         </div>
                                         {selectedSlotHour ? (
                                             <div className="flex flex-col items-end">
@@ -403,11 +403,11 @@ const Events = () => {
                                                 }`}
                                         >
                                             {booked ? (
-                                                <span className="text-[#22C55E] flex items-center gap-3 animate-pulse"><CheckCircle2 size={20} /> Protocol Initialized</span>
+                                                <span className="text-[#22C55E] flex items-center gap-3 animate-pulse"><CheckCircle2 size={20} /> Booking Added</span>
                                             ) : selectedSlotHour ? (
-                                                <>Confirm Reservation <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" /></>
+                                                <>Add to Cart <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" /></>
                                             ) : (
-                                                <>Awaiting Telemetry <Zap size={18} className="opacity-20" /></>
+                                                <>Select a Slot <Zap size={18} className="opacity-20" /></>
                                             )}
                                         </button>
                                     </div>

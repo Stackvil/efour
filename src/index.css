@@ -109,7 +109,7 @@
   }
 
   .floating-navbar {
-    @apply fixed top-0 left-0 right-0 z-[100] w-full py-4 md:py-6 transition-colors duration-500;
+    @apply fixed top-0 left-0 right-0 z-[100] w-full py-4 transition-colors duration-500;
     backdrop-filter: blur(24px);
     background: rgba(0, 0, 0, 0.85);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -138,6 +138,21 @@
   }
 }
 
-.frosted-glass {
-  @apply backdrop-blur-lg bg-white/5 border border-white/10;
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
 }
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-scan-line {
+  animation: scan-line 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}

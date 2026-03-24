@@ -128,7 +128,7 @@ const TicketCard = memo(({ ticket, item }) => {
                                     <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FF7A18]">
                                         <Cpu size={20} />
                                     </div>
-                                    <span className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-50">Ride Type</span>
+                                    <span className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase opacity-50">Ride</span>
                                 </div>
                                 <h3 className="text-[#F8FAFC] font-black text-3xl tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-3">
                                     {item.name}
@@ -161,7 +161,7 @@ const TicketCard = memo(({ ticket, item }) => {
                                 </div>
                                 <div className="text-right space-y-1.5">
                                     <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.2em] block opacity-50">Date</span>
-                                    <span className="text-[#F8FAFC] font-bold text-sm italic opacity-90">{safeDate(ticket.date || ticket.createdAt).toLocaleDateString()}</span>
+                                    <span className="text-[#F8FAFC] font-bold text-sm italic opacity-90">{safeDate(ticket.date || ticket.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</span>
                                 </div>
                             </div>
 
@@ -179,8 +179,8 @@ const TicketCard = memo(({ ticket, item }) => {
                                 <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
                                     <Lock className="text-red-500" size={32} />
                                 </div>
-                                <h4 className="text-[#F8FAFC] font-black text-3xl uppercase italic tracking-tighter mb-3 transform -skew-x-12">DEACTIVATED</h4>
-                                <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Temporal limit reached. <br />Protocol terminated.</p>
+                                <h4 className="text-[#F8FAFC] font-black text-3xl uppercase italic tracking-tighter mb-3 transform -skew-x-12">EXPIRED</h4>
+                                <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.4em] opacity-60">This ticket has expired.</p>
                             </div>
                         )}
                     </div>
@@ -196,7 +196,7 @@ const TicketCard = memo(({ ticket, item }) => {
 
                         <div className="w-full flex justify-between items-center relative z-10">
                             <div className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full backdrop-blur-xl">
-                                <span className="text-[#AAB2C5] text-[8px] font-black uppercase tracking-[0.4em]">SYSTEM VALIDATION</span>
+                                <span className="text-[#AAB2C5] text-[8px] font-black uppercase tracking-[0.4em]">EFOUR TICKET</span>
                             </div>
                             <img src="/E4LOGO.jpeg" className="w-10 h-10 rounded-xl border border-white/10 brightness-110 shadow-lg" alt="E4" />
                         </div>
@@ -209,7 +209,7 @@ const TicketCard = memo(({ ticket, item }) => {
                                 </div>
                             </div>
                             <div className="text-center space-y-2">
-                                <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.4em] block opacity-50">TICKET ID</span>
+                                <span className="text-[#AAB2C5] text-[9px] font-black uppercase tracking-[0.4em] block opacity-50">Ticket ID</span>
                                 <code className="bg-white/5 px-4 py-1.5 rounded-xl text-[#F8FAFC] font-mono text-xs border border-white/10 backdrop-blur-md">{(ticket.id || ticket._id || '').slice(0, 16).toUpperCase()}</code>
                             </div>
                         </div>
@@ -219,13 +219,13 @@ const TicketCard = memo(({ ticket, item }) => {
                                 <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
                                     <ShieldCheck size={16} />
                                 </div>
-                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">VALID TICKET</span>
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">Verified</span>
                             </div>
                             <div className="flex items-center gap-4 text-[#AAB2C5]">
                                 <div className="w-8 h-8 rounded-lg bg-[#FF7A18]/10 flex items-center justify-center text-[#FF7A18] border border-[#FF7A18]/20">
                                     <Zap size={16} />
                                 </div>
-                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">SECURE ACCESS</span>
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">Valid Entry</span>
                             </div>
                         </div>
 
@@ -326,7 +326,7 @@ const YourTickets = () => {
 
     if (!user || (!loading && tickets.length === 0)) {
         return (
-            <div className="min-h-screen bg-[#070B14] pt-32 pb-12 px-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="min-h-screen bg-[#070B14] pt-52 md:pt-64 pb-12 px-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
                 <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
                 <div className="absolute top-[20%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
 
@@ -348,7 +348,7 @@ const YourTickets = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#070B14] text-[#F8FAFC] pt-40 md:pt-48 pb-24 md:pb-40 selection:bg-[#FF7A18]/40 relative overflow-hidden">
+        <div className="min-h-screen bg-[#070B14] text-[#F8FAFC] pt-52 md:pt-64 pb-24 md:pb-40 selection:bg-[#FF7A18]/40 relative overflow-hidden">
             {/* Background Effects */}
             <div className="absolute inset-0 matrix-grid opacity-[0.03] pointer-events-none" />
             <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[180px] pointer-events-none" />
@@ -360,13 +360,13 @@ const YourTickets = () => {
                     <div className="space-y-8">
                         <div className="flex items-center gap-4 text-[#FF7A18]">
                             <div className="w-12 h-[1px] bg-[#FF7A18]/30" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.6em] italic">ADMIN DASHBOARD</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.6em] italic">MY TICKETS</span>
                         </div>
                         <h1 className="text-5xl md:text-9xl font-black italic tracking-tighter uppercase leading-[0.85] transform -skew-x-6">
-                            ELURU <br /> <span className="text-gradient-primary">TICKETS</span>
+                            MY <br /> <span className="text-gradient-primary">TICKETS</span>
                         </h1>
                         <p className="text-[#AAB2C5] text-xs font-black uppercase tracking-[0.4em] max-w-xl italic opacity-60 leading-relaxed border-l-2 border-[#FF7A18]/20 pl-6">
-                            Centralized cryptographic management for premium ride tokens. Validation protocols automatically terminate 24H post-acquisition.
+                            View and use your booked tickets here. Each ticket is valid for 24 hours after purchase.
                         </p>
                     </div>
 
@@ -436,7 +436,7 @@ const YourTickets = () => {
                         <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-10 shadow-2xl border border-white/10 group animate-pulse-subtle">
                             <Clock className="text-white/20 group-hover:text-[#FF7A18] transition-colors" size={40} />
                         </div>
-                        <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-xs italic leading-relaxed">Spectral filtering active. No credentials match the current filter selection.</p>
+                        <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-xs italic leading-relaxed">No tickets found for this category.</p>
                     </div>
                 )}
             </div>

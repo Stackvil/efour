@@ -3,38 +3,46 @@ import useStore from '../store/useStore';
 import OptimizedImage from './common/OptimizedImage';
 import { ShoppingBag, Zap, Sparkles } from 'lucide-react';
 
-const RideCard = memo(({ ride, priority = false }) => {
+const RideCard = ({ ride, priority = false }) => {
     const addToCart = useStore(state => state.addToCart);
     const openCart = useStore(state => state.openCart);
     const showToast = useStore(state => state.showToast);
 
     const handleAddToCart = (e) => {
-        e.stopPropagation();
-        addToCart({
+        if (e) e.stopPropagation();
+        
+        const cartItem = {
             id: `play-${ride.id}`,
             name: ride.title,
-            price: typeof ride.price === 'number' ? ride.price : 0,
+            price: typeof ride.price === 'number' ? ride.price : (parseFloat(ride.price) || 0),
             image: ride.image,
-            stall: ride.category
-        }, 1);
+            stall: ride.category || 'Ride',
+            quantity: 1
+        };
+
+        addToCart(cartItem, 1);
         showToast(`${ride.title} added to cart!`);
     };
 
     const handleBookNow = (e) => {
-        e.stopPropagation();
-        addToCart({
+        if (e) e.stopPropagation();
+        
+        const cartItem = {
             id: `play-${ride.id}`,
             name: ride.title,
-            price: typeof ride.price === 'number' ? ride.price : 0,
+            price: typeof ride.price === 'number' ? ride.price : (parseFloat(ride.price) || 0),
             image: ride.image,
-            stall: ride.category
-        }, 1);
+            stall: ride.category || 'Ride',
+            quantity: 1
+        };
+
+        addToCart(cartItem, 1);
         openCart();
     };
 
     return (
         <div className="glass-card rounded-[1.5rem] transition-all duration-500 group w-full flex flex-col h-full overflow-hidden relative border border-white/5 hover:border-white/10">
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             {/* --- Image Architecture --- */}
             <div className="w-full relative h-32 sm:h-36 overflow-hidden">
                 <OptimizedImage
@@ -75,17 +83,19 @@ const RideCard = memo(({ ride, priority = false }) => {
                 </div>
 
                 {/* --- Action Matrix --- stacked on mobile for usability */}
-                <div className="flex flex-col xl:flex-row gap-2 pt-2 border-t border-white/5">
+                <div className="flex flex-col xl:flex-row gap-2 pt-2 border-t border-white/5 relative z-20">
                     <button
+                        type="button"
                         onClick={handleAddToCart}
-                        className="flex-1 bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 text-[10px] font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all border border-white/5 active:scale-95 flex items-center justify-center gap-2 group/btn"
+                        className="flex-1 bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 text-[10px] font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all border border-white/5 active:scale-95 flex items-center justify-center gap-2 group/btn cursor-pointer"
                     >
                         <ShoppingBag size={12} />
                         Add
                     </button>
                     <button
+                        type="button"
                         onClick={handleBookNow}
-                        className="btn-premium flex-1 text-[10px] py-2.5 rounded-xl flex items-center justify-center gap-2 active:scale-95 shadow-none"
+                        className="btn-premium flex-1 text-[10px] py-2.5 rounded-xl flex items-center justify-center gap-2 active:scale-95 shadow-none cursor-pointer"
                     >
                         <Zap size={10} className="fill-current" />
                         Book
@@ -97,7 +107,7 @@ const RideCard = memo(({ ride, priority = false }) => {
             <div className="absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b from-indigo-500 to-transparent transition-all duration-700 ease-in-out" />
         </div>
     );
-});
+};
 
 export default RideCard;
 

@@ -43,12 +43,12 @@ const Header = () => {
 
     return (
         <header className="floating-navbar">
-            <div className="container mx-auto max-w-7xl flex justify-between items-center group/header px-4 md:px-8">
-                <Link to="/" className="flex items-center group shrink-0">
+            <div className="container mx-auto max-w-7xl h-20 md:h-32 flex justify-between items-center group/header px-4 md:px-8 relative">
+                <Link to="/" className="w-24 md:w-64 h-full flex items-center justify-start group shrink-0 relative z-30">
                     <img
                         src="/E4LOGO.jpeg"
                         alt="E4 Logo"
-                        className="h-14 md:h-24 w-auto object-contain brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-auto object-contain brightness-110 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 group-hover:scale-105"
                         loading="eager"
                         fetchpriority="high"
                     />
@@ -148,11 +148,11 @@ const FooterInfoBar = () => {
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex items-center gap-6 group transition-all hover:text-[#FF7A18]">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_10px_#FF7A18]" />
-                    <span className="text-[13px] font-bold uppercase tracking-[0.5em] italic opacity-60">SYSTEM_OPERATIONAL_01</span>
+                    <span className="text-[13px] font-bold uppercase tracking-[0.5em] italic opacity-60">EFOUR ELURU</span>
                 </div>
                 <div className="flex items-center gap-12 text-[13px] font-bold uppercase tracking-[0.3em] italic opacity-40">
-                    <span className="flex items-center gap-3 hover:opacity-100 transition-opacity"><Clock size={12} /> OPEN_UNTIL_23:00</span>
-                    <span className="flex items-center gap-3 hover:opacity-100 transition-opacity"><MapPin size={12} /> NR_PETA_NODE</span>
+                    <span className="flex items-center gap-3 hover:opacity-100 transition-opacity"><Clock size={12} /> OPEN UNTIL 11:00 PM</span>
+                    <span className="flex items-center gap-3 hover:opacity-100 transition-opacity"><MapPin size={12} /> NR PETA, ELURU</span>
                 </div>
             </div>
         </div>

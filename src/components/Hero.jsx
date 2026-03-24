@@ -498,10 +498,10 @@ const Hero = () => {
                         className="flex flex-col items-center"
                     >
                         <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-400 mb-8 antialiased">
-                            PREMIUM ENTERTAINMENT
+                            BEST ENTERTAINMENT
                         </span>
 
-                        <h1 className="text-6xl md:text-[9.5rem] lg:text-[11.5rem] font-black mb-12 leading-[0.8] tracking-tighter text-white text-center antialiased italic">
+                        <h1 className="text-5xl md:text-[8rem] lg:text-[10rem] font-black mb-12 leading-[0.8] tracking-tighter text-white text-center antialiased italic">
                             EAT. ENJOY.<br />
                             <span className="text-gradient-hero-orange drop-shadow-[0_0_40px_rgba(255,122,24,0.3)]">ENTERTAIN.</span>
                         </h1>
@@ -543,7 +543,7 @@ const Hero = () => {
                             transition={{ duration: 3, repeat: Infinity }}
                             className="text-[11px] font-bold text-white/40 tracking-[0.3em] uppercase"
                         >
-                            EXPLORE RIDES
+                            SEE RIDES
                         </motion.span>
                     </div>
 

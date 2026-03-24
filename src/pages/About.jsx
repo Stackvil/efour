@@ -47,7 +47,7 @@ const About = () => {
                             Eat. Enjoy. <span className="text-[#12796D]">Entertain.</span>
                         </h3>
                         <p className="text-xl text-[#AAB2C5] leading-relaxed font-bold uppercase tracking-wide opacity-60">
-                            Efour is a premier Food Court and Play Zone bringing families together through diverse cuisines and recreation under one roof.
+                            Efour is the best Food Court and Play Zone in Eluru. We bring families together with great food, thrilling rides and fun.
                         </p>
                     </div>
 
@@ -56,7 +56,7 @@ const About = () => {
                             <Store size={40} className="text-white mb-8" />
                             <h4 className="text-4xl font-black text-white mb-4 italic uppercase">For Vendors</h4>
                             <p className="text-white/80 leading-relaxed font-bold text-lg uppercase tracking-tight">
-                                Promote your culinary business directly to thousands. Benefit from an enhanced e-Experience with direct customer reviews.
+                                Show your food business to thousands. Get customer reviews and grow online.
                             </p>
                         </div>
 
@@ -64,7 +64,7 @@ const About = () => {
                             <Users size={40} className="text-white mb-8" />
                             <h4 className="text-4xl font-black text-white mb-4 italic uppercase">For Users</h4>
                             <p className="text-white/80 leading-relaxed font-bold text-lg uppercase tracking-tight">
-                                A wide range of services suited to your needs —from diverse cuisines to customized entertainment packages.
+                                Many services for you—from different food to special fun packages.
                             </p>
                         </div>
                     </div>
@@ -74,12 +74,12 @@ const About = () => {
                             <div className="w-14 h-14 rounded-2xl bg-[#FF7A18]/10 flex items-center justify-center border border-[#FF7A18]/20">
                                 <Building2 size={28} className="text-[#FF7A18]" />
                             </div>
-                            <h4 className="text-2xl font-black text-white uppercase italic">Founder's Vision</h4>
+                            <h4 className="text-2xl font-black text-white uppercase italic">Owner's Goal</h4>
                         </div>
 
                         <div className="bg-white/5 backdrop-blur-sm p-8 rounded-3xl mb-10 border border-white/5 shadow-inner">
                             <p className="text-xl sm:text-2xl italic text-[#AAB2C5] font-medium leading-relaxed uppercase tracking-widest opacity-80">
-                                "We designed an ample space for all cuisines and play zone activities to suit all ages and promote local talent."
+                                "We built a large space for all kinds of food and games for everyone. We also support local talent."
                             </p>
                         </div>
 
@@ -108,7 +108,7 @@ const About = () => {
                         onClick={onClose}
                         className="btn-premium w-full py-6 rounded-3xl font-bold uppercase tracking-[0.4em] text-[14px] transition-all flex items-center justify-center gap-4 italic"
                     >
-                        RETURN TO HUB <ArrowUpRight size={18} />
+                        GO BACK <ArrowUpRight size={18} />
                     </button>
                 </div>
             </motion.div>

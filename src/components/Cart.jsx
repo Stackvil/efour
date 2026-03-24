@@ -10,6 +10,7 @@ const Cart = () => {
     const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity, clearCart, user, setUser } = useStore();
     const navigate = useNavigate();
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showTaxBreakdown, setShowTaxBreakdown] = useState(false);
     const [authStep, setAuthStep] = useState(1);
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
@@ -197,10 +198,10 @@ const Cart = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <h2 className="text-3xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-1">YOUR <span className="text-[#FF7A18]">TICKETS</span></h2>
+                                            <h2 className="text-3xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12 leading-none mb-1">YOUR <span className="text-[#FF7A18]">CART</span></h2>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                                                <p className="text-[9px] text-[#AAB2C5] font-black uppercase tracking-[0.3em] opacity-40 italic">{cart.length} ITEMS IN CART</p>
+                                                <p className="text-[9px] text-[#AAB2C5] font-black uppercase tracking-[0.3em] opacity-40 italic">{cart.length} ITEMS</p>
                                             </div>
                                         </div>
                                     </div>
@@ -219,9 +220,9 @@ const Cart = () => {
                                             <div className="w-24 h-24 bg-white/5 rounded-[2.5rem] flex items-center justify-center text-white/5 mb-8 border border-white/5">
                                                 <ShoppingBag size={48} />
                                             </div>
-                                            <h3 className="text-xl font-black text-[#F8FAFC] uppercase tracking-tighter italic opacity-20 mb-4 transform -skew-x-12">EMPTY</h3>
+                                            <h3 className="text-xl font-black text-[#F8FAFC] uppercase tracking-tighter italic opacity-20 mb-4 transform -skew-x-12">YOUR CART IS EMPTY</h3>
                                             <button
-                                                onClick={toggleCart}
+                                                onClick={() => { toggleCart(); navigate('/#rides'); }}
                                                 className="text-[#FF7A18] font-black uppercase tracking-[0.5em] text-[10px] italic hover:opacity-100 opacity-60 transition-opacity"
                                             >
                                                 BOOK NOW
@@ -283,17 +284,39 @@ const Cart = () => {
                                 {cart.length > 0 && (
                                     <div className="p-10 bg-white/[0.02] border-t border-white/5 space-y-8 relative z-10 backdrop-blur-3xl">
                                         <div className="space-y-4">
-                                            <div className="flex justify-between items-center opacity-40">
-                                                <span className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] italic">STALL SUB_TOTAL</span>
-                                                <span className="text-[#F8FAFC] font-black italic">₹{subtotal.toFixed(2)}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.4em] text-[10px] italic">PROTOCOL GST (9.0%)</span>
-                                                <span className="text-[#F8FAFC] font-black italic">+₹{gstAmount.toFixed(2)}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                                <span className="text-[#AAB2C5] font-black uppercase tracking-[0.5em] text-[11px] italic">TOTAL CREDIT SYNC</span>
-                                                <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{Math.round(finalTotal)}</span>
+                                            <AnimatePresence>
+                                                {showTaxBreakdown && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="space-y-3 overflow-hidden pb-4"
+                                                    >
+                                                        <div className="flex justify-between items-center opacity-40">
+                                                            <span className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] italic">Rides Booking</span>
+                                                            <span className="text-[#F8FAFC] font-black italic">₹{subtotal.toFixed(2)}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center opacity-40">
+                                                            <span className="text-[#FF7A18] font-black uppercase tracking-[0.4em] text-[10px] italic">Gov Taxes (GST)</span>
+                                                            <span className="text-[#F8FAFC] font-black italic">₹{gstAmount.toFixed(2)}</span>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                            
+                                            <div className="flex flex-col gap-1 pt-2 border-t border-white/5">
+                                                <div className="flex justify-between items-end">
+                                                    <div>
+                                                        <span className="text-[#AAB2C5] font-black uppercase tracking-[0.5em] text-[11px] italic block mb-1">TOTAL PRICE</span>
+                                                        <button 
+                                                            onClick={() => setShowTaxBreakdown(!showTaxBreakdown)}
+                                                            className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 text-[8px] font-black uppercase tracking-[0.2em] text-[#FF7A18] hover:text-white transition-all italic flex items-center gap-2"
+                                                        >
+                                                            INC. ALL TAXES {showTaxBreakdown ? '−' : '+'}
+                                                        </button>
+                                                    </div>
+                                                    <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{Math.round(finalTotal)}</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -302,14 +325,14 @@ const Cart = () => {
                                                 onClick={handlePayClick}
                                                 className="btn-premium w-full py-6 rounded-3xl text-sm flex items-center justify-center gap-4 shadow-[0_20px_60px_rgba(255,122,24,0.3)] group/btn"
                                             >
-                                                INITIALIZE CHECKOUT <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                                                GO TO PAYMENT <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                                             </button>
 
                                             <button
                                                 onClick={clearCart}
                                                 className="w-full text-[10px] font-black text-[#AAB2C5] uppercase tracking-[0.5em] hover:text-[#FF3D3D] transition-all italic opacity-30 hover:opacity-100 flex items-center justify-center gap-3"
                                             >
-                                                <Trash2 size={12} /> PURGE_SELECTION
+                                                <Trash2 size={12} /> CLEAR ALL
                                             </button>
                                         </div>
                                     </div>
@@ -332,10 +355,10 @@ const Cart = () => {
                                                     <div className="space-y-2">
                                                         <div className="flex items-center gap-3 text-[#FF7A18]">
                                                             <Fingerprint size={20} />
-                                                            <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">IDENTITY_CHECK</span>
+                                                            <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">LOGIN</span>
                                                         </div>
                                                         <h3 className="text-4xl font-black text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12 leading-none">
-                                                            ELURU <br /><span className="text-[#FF7A18]">PROTOCOL</span>
+                                                            EFOUR <br /><span className="text-[#FF7A18]">LOGIN</span>
                                                         </h3>
                                                     </div>
                                                     <button
@@ -350,7 +373,7 @@ const Cart = () => {
                                                     {authStep === 1 ? (
                                                         <div className="space-y-6">
                                                             <div className="space-y-3">
-                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-4 italic">COMMUNICATION_BAND (MOBILE)</label>
+                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-4 italic">PHONE NUMBER</label>
                                                                 <div className="relative group">
                                                                     <div className="absolute -inset-1 bg-gradient-to-r from-[#FF7A18]/20 to-transparent rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
                                                                     <div className="relative flex items-center bg-white/[0.03] border border-white/10 rounded-2xl p-1 transition-all group-focus-within:border-[#FF7A18]/50 overflow-hidden">
@@ -361,7 +384,7 @@ const Cart = () => {
                                                                             type="tel"
                                                                             value={phone}
                                                                             onChange={(e) => setPhone(e.target.value)}
-                                                                            placeholder="INITIALIZE INPUT"
+                                                                            placeholder="Enter Number"
                                                                             className="w-full p-4 bg-transparent outline-none text-[#F8FAFC] font-black uppercase tracking-widest text-sm placeholder-[#AAB2C5]/20 italic"
                                                                             autoFocus
                                                                             required
@@ -373,7 +396,7 @@ const Cart = () => {
                                                     ) : (
                                                         <div className="space-y-8">
                                                             <div className="space-y-3 text-center">
-                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-6 italic">CRYPTOGRAPHIC_SYNC_CODE</label>
+                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-6 italic">ENTER OTP</label>
                                                                 <div className="relative flex justify-center">
                                                                     <input
                                                                         type="text"
@@ -390,7 +413,7 @@ const Cart = () => {
                                                             </div>
 
                                                             <div className="space-y-3">
-                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-3 italic">EMAIL_ALIAS (OPTIONAL)</label>
+                                                                <label className="block text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] mb-3 italic">EMAIL (OPTIONAL)</label>
                                                                 <div className="relative bg-white/[0.03] border border-white/10 rounded-2xl p-1 flex items-center">
                                                                     <div className="w-10 h-10 flex items-center justify-center text-[#5B8CFF]">
                                                                         <Mail size={16} />
@@ -399,7 +422,7 @@ const Cart = () => {
                                                                         type="email"
                                                                         value={email}
                                                                         onChange={(e) => setEmail(e.target.value)}
-                                                                        placeholder="ALIAS@ELURU"
+                                                                        placeholder="example@mail.com"
                                                                         className="w-full p-3 bg-transparent outline-none text-[#F8FAFC] font-black text-[11px] uppercase tracking-widest placeholder-[#AAB2C5]/10 italic"
                                                                     />
                                                                 </div>
@@ -415,7 +438,7 @@ const Cart = () => {
                                                             : 'bg-[#5B8CFF] text-white hover:bg-white hover:text-[#070B14] shadow-[#5B8CFF]/20'
                                                             }`}
                                                     >
-                                                        {authLoading ? 'SYS_SYNCHRONIZING...' : (authStep === 1 ? <>INITIALIZE OTP <Zap size={18} /></> : <>VALIDATE & SYNC <Cpu size={18} /></>)}
+                                                        {authLoading ? 'VERIFYING...' : (authStep === 1 ? <>SEND OTP <Zap size={18} /></> : <>LOGIN <Cpu size={18} /></>)}
                                                     </button>
                                                 </form>
 

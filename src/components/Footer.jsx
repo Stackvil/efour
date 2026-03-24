@@ -37,12 +37,12 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                             </div>
                             <div className="space-y-1">
                                 <h3 className="text-2xl md:text-3xl font-bold text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">EFOUR <span className="text-[#FF7A18]">ELURU</span></h3>
-                                <p className="text-[10px] md:text-[12px] font-bold text-[#AAB2C5] tracking-[0.4em] md:tracking-[0.5em] uppercase opacity-40 italic">ELURU NODE ALPHA-01</p>
+                                <p className="text-[10px] md:text-[12px] font-bold text-[#AAB2C5] tracking-[0.4em] md:tracking-[0.5em] uppercase opacity-40 italic">NR PETA, ELURU</p>
                             </div>
                         </motion.div>
 
                         <p className="text-[#AAB2C5] text-base md:text-lg font-black uppercase tracking-widest leading-relaxed max-w-lg italic opacity-60 border-l-2 border-[#FF7A18]/20 pl-4 md:pl-8">
-                            Located at NR Peta, we are the top destination for premium food and entertainment in Eluru.
+                            Located at NR Peta, we are the best place for Food, Rides and Fun in Eluru.
                         </p>
 
                         <div className="flex gap-8 pt-6">
@@ -90,7 +90,7 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
 
                     <div>
                         <h4 className={sectionTitleClasses}>
-                            <Shield size={16} /> Secure Links
+                            <Shield size={16} /> Other Links
                         </h4>
                         <ul className="space-y-6 flex flex-col items-start">
                             <li>
@@ -120,8 +120,8 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                             <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-[#FF7A18]">
                                 <MapPin size={18} />
                             </div>
-                            <span className="text-[14px] font-bold uppercase tracking-[0.2em] italic opacity-80">
-                                OPP TO RTC MAIN BUS STAND, NR PETA, ELURU, AP
+                            <span className="text-[14px] font-bold uppercase tracking-[0.2em] italic opacity-80 text-center md:text-left">
+                                ELURU, Opp to main RTC Bus Stand, NR Peta
                             </span>
                         </div>
                         <div className="flex items-center gap-6 text-[#AAB2C5]">
@@ -167,7 +167,7 @@ const Footer = ({ onOpenTerms, onOpenAbout, onOpenPrivacy }) => {
                         onClick={scrollToTop}
                         className="group flex items-center gap-6 text-[14px] uppercase tracking-[0.4em] font-bold text-[#FF7A18] hover:text-white transition-all italic"
                     >
-                        Back to Top <ArrowUp size={18} className="group-hover:-translate-y-2 transition-transform duration-500" />
+                        Go Up <ArrowUp size={18} className="group-hover:-translate-y-2 transition-transform duration-500" />
                     </button>
                 </div>
             </div>

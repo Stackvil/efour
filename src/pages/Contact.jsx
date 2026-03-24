@@ -33,7 +33,7 @@ const Contact = () => {
                         </p>
                         <div className="flex gap-4">
                             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
-                            <span className="text-[10px] md:text-[12px] font-bold text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] uppercase opacity-40">UPLINK STATUS: OPTIMAL</span>
+                            <span className="text-[10px] md:text-[12px] font-bold text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] uppercase opacity-40">STATUS: ONLINE</span>
                         </div>
                     </div>
                 </motion.div>
@@ -60,7 +60,7 @@ const Contact = () => {
                                         <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
                                             <MapPin size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">COORDINATES</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">LOCATION</p>
                                     </div>
                                     <p className="font-bold text-[#F8FAFC] text-base md:text-lg leading-relaxed italic transform group-hover/item:translate-x-2 transition-transform duration-500">
                                         Opp: New RTC Main Bus Stand,<br />
@@ -73,7 +73,7 @@ const Contact = () => {
                                         <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
                                             <Phone size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">COMMS LINE</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">PHONE</p>
                                     </div>
                                     <p className="font-black text-[#F8FAFC] text-2xl md:text-3xl tracking-tighter italic transform group-hover/item:translate-x-2 transition-transform duration-500">
                                         +91 70369 23456
@@ -85,10 +85,10 @@ const Contact = () => {
                                         <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF] group-hover:text-[#FF7A18] group-hover:scale-110 group-hover:bg-[#FF7A18]/10 transition-all duration-500 shadow-xl">
                                             <Clock size={20} md:size={24} />
                                         </div>
-                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">RUNTIME CYCLE</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#FF7A18] uppercase tracking-[0.3em] md:tracking-[0.4em] italic opacity-80">OPEN HOURS</p>
                                     </div>
                                     <p className="font-bold text-[#F8FAFC] text-base md:text-lg italic transform group-hover/item:translate-x-2 transition-transform duration-500">
-                                        DAILY: 09:00 – 23:00 IST
+                                        DAILY: 09:00 AM – 11:00 PM IST
                                     </p>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@ const Contact = () => {
 
                         <div className="flex justify-center">
                             {[
-                                { icon: <Bus size={28} />, title: 'TRANSPORT LINK', desc: 'New RTC Main Bus Stand, NR Peta, ELURU - 534 006', glow: 'group-hover:text-[#5B8CFF]' }
+                                { icon: <Bus size={28} />, title: 'ADDRESS', desc: 'New RTC Main Bus Stand, NR Peta, ELURU - 534 006', glow: 'group-hover:text-[#5B8CFF]' }
                             ].map((item, i) => (
                                 <div key={i} className="glass-card p-6 md:p-10 rounded-3xl md:rounded-[3rem] border border-white/10 flex flex-col md:flex-row items-center gap-6 md:gap-8 group hover:border-white/20 transition-all duration-500 w-full max-w-md text-center md:text-left">
                                     <div className={`w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center transition-all duration-500 ${item.glow} group-hover:scale-110 shadow-2xl shrink-0`}>
@@ -173,7 +173,7 @@ const Contact = () => {
                             <div className="space-y-4 md:space-y-6 text-center md:text-left">
                                 <div className="flex items-center justify-center md:justify-start gap-4 text-[#FF7A18]">
                                     <Shield size={18} md:size={20} className="animate-pulse" />
-                                    <span className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.3em] md:tracking-[0.6em] italic opacity-80">SECURE CONTACT</span>
+                                    <span className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.3em] md:tracking-[0.6em] italic opacity-80">CONTACT US</span>
                                 </div>
                                 <h2 className="text-3xl sm:text-4xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.9] md:leading-[0.85] transform -skew-x-6 text-[#F8FAFC]">
                                     GET IN <br /><span className="text-gradient-primary">TOUCH</span>
@@ -190,7 +190,7 @@ const Contact = () => {
                                         <Mail size={28} md:size={32} />
                                     </div>
                                     <div className="space-y-1 md:space-y-2">
-                                        <p className="text-[12px] md:text-[14px] font-bold text-[#AAB2C5] tracking-[0.3em] md:tracking-[0.4em] uppercase opacity-40">DIRECT CHANNEL</p>
+                                        <p className="text-[12px] md:text-[14px] font-bold text-[#AAB2C5] tracking-[0.3em] md:tracking-[0.4em] uppercase opacity-40">EMAIL</p>
                                         <span className="group-hover:text-[#FF7A18] transition-colors text-base md:text-2xl break-all">efoureluru@gmail.com</span>
                                     </div>
                                 </div>

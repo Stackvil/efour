@@ -38,10 +38,10 @@ const Home = () => {
 
     return (
         <div className="flex flex-col bg-[#070B14]">
-            {/* --- HERO SECTION: CINEMATIC IMMERSION --- */}
+            {/* --- HERO SECTION --- */}
             <Hero />
 
-            {/* --- RIDES SECTION: THE MATRIX GRID --- */}
+            {/* --- RIDES SECTION --- */}
             <section id="rides" className="relative py-24 md:py-32 overflow-hidden selection:bg-[#FF7A18]/30">
                 {/* Background Texture & Glows */}
                 <div className="absolute inset-0 z-0 pointer-events-none">
@@ -57,7 +57,7 @@ const Home = () => {
                                 All <span className="text-gradient-primary">Rides</span>
                             </h2>
                             <p className="text-[#AAB2C5] text-sm font-medium italic max-w-lg opacity-60">
-                                Choose your favorite rides and book your tickets easily.
+                                Experience the best thrill in Eluru. Choose your favorite rides and book your tickets easily.
                             </p>
                         </div>
 
@@ -67,7 +67,7 @@ const Home = () => {
                                 <input
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Search System (e.g., Train, Bumper)"
+                                    placeholder="Search for rides (e.g., Train, Bumper)"
                                     className="w-full rounded-[1.5rem] border border-white/10 bg-white/5 text-[#F8FAFC] placeholder-white/20 px-14 py-5 text-sm font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-[#FF7A18]/5 focus:border-[#FF7A18]/30 backdrop-blur-xl transition-all duration-500 shadow-inner"
                                 />
                             </div>
@@ -82,7 +82,7 @@ const Home = () => {
                         {isLoading && rides.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-40 gap-6">
                                 <div className="w-16 h-16 border-4 border-[#FF7A18] border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(255,122,24,0.3)]" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#AAB2C5] animate-pulse">Initializing System...</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#AAB2C5] animate-pulse">Loading...</p>
                             </div>
                         ) : visibleRides.length === 0 ? (
                             <div className="glass-card rounded-[3rem] border border-white/10 p-12 md:p-24 text-center">
@@ -90,7 +90,7 @@ const Home = () => {
                                     <Search size={40} />
                                 </div>
                                 <h3 className="text-2xl font-black text-[#F8FAFC] uppercase tracking-tight mb-2 italic">No Rides Found</h3>
-                                <p className="text-[#AAB2C5] text-sm font-medium italic opacity-50">System scan returned zero matching data.</p>
+                                <p className="text-[#AAB2C5] text-sm font-medium italic opacity-50">No results found.</p>
                             </div>
                         ) : (
                             <div className="matrix-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
@@ -110,7 +110,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* --- PHILOSOPHY SECTION: THE 4 E's --- */}
+            {/* --- ABOUT SECTION --- */}
             <About />
         </div>
     );

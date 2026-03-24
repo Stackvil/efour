@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { BASE_URL, fetchWithAuth } from '../utils/api';
 import { Link } from 'react-router-dom';
+import Scanner from './Scanner';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('analytics');
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({
-        name: '', category: '', price: '', description: '', image: '', stall: '', type: '', status: 'on'
+        name: '', category: '', price: '', description: '', image: '', stall: '', type: '', status: 'on', cuisine: 'General', contactNumber: '', menuImages: []
     });
 
     // Pagination States
@@ -311,14 +312,20 @@ const AdminDashboard = () => {
             } else {
                 // Dine item (best-effort wiring; backend expects /api/e4/dine)
                 const payload = {
-                    id: editId,
-                    name: formData.name,
-                    price: typeof formData.price === 'string' ? Number(formData.price) : formData.price,
-                    image: formData.image,
-                    category: formData.category || 'food',
+                    ...(editId ? { id: editId } : {}),
+                    name: formData.name || '',
+                    price: typeof formData.price === 'string' ? Number(formData.price) : formData.price || 0,
+                    image: formData.image || '',
+                    menuImages: formData.menuImages || [],
+                    category: (formData.category?.toLowerCase() === 'food' || !formData.category) ? 'dine' : formData.category.toLowerCase(),
+                    cuisine: formData.cuisine || 'General',
+                    contactNumber: formData.contactNumber || '',
                     stall: formData.stall || '',
                     open: typeof formData.open === 'boolean' ? formData.open : true,
+                    status: formData.status === 'off' ? 'off' : 'on'
                 };
+
+                console.log('Sending Verified Dine Payload:', JSON.stringify(payload, null, 2));
 
                 const res = await fetchWithAuth(editId ? `/api/e4/dine/${editId}` : `/api/e4/dine`, {
                     method: editId ? 'PUT' : 'POST',
@@ -446,8 +453,9 @@ const AdminDashboard = () => {
                     image: item.image || '',
                     category: item.category || 'food',
                     stall: item.stall || '',
-                    status: newStatus,
+                    status: newStatus === 'on' ? 'active' : 'inactive',
                     open: newStatus === 'on',
+                    menuImages: item.menuImages || [],
                 };
                 endpoint = `/api/e4/dine/${id}`;
             }
@@ -511,13 +519,13 @@ const AdminDashboard = () => {
                         <img src="/E4LOGO.jpeg" alt="Logo" className="w-full h-full object-contain brightness-110 group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-[#FF7A18] uppercase tracking-[0.4em] italic leading-none mb-1">Eluru Admin</p>
-                        <p className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-widest">v2.026.04</p>
+                        <p className="text-[10px] font-black text-[#FF7A18] uppercase tracking-[0.4em] italic leading-none mb-1">Admin Panel</p>
+
                     </div>
                 </div>
 
                 <nav className="p-6 space-y-3 overflow-y-auto h-[calc(100vh-180px)]">
-                    <p className="px-4 py-3 text-[10px] font-black text-[#AAB2C5]/30 uppercase tracking-[0.3em] mb-2 italic">Core Terminals</p>
+                    <p className="px-4 py-3 text-[10px] font-black text-[#AAB2C5]/30 uppercase tracking-[0.3em] mb-2 italic">Main Sections</p>
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
@@ -559,7 +567,7 @@ const AdminDashboard = () => {
                         <Search size={18} className="text-[#AAB2C5] group-focus-within:text-[#FF7A18] transition-colors" />
                         <input
                             type="text"
-                            placeholder="Universal Terminal Search..."
+                            placeholder="Search everything..."
                             className="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest ml-4 w-full placeholder-[#AAB2C5]/30 text-white"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -572,7 +580,7 @@ const AdminDashboard = () => {
                             className="flex items-center gap-3 px-5 py-3.5 text-[#AAB2C5] hover:bg-white/5 hover:text-white rounded-2xl transition-all border border-white/5 bg-white/2 group"
                         >
                             <Home size={18} className="group-hover:text-[#FF7A18] transition-colors" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] hidden lg:block italic">View Website</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] hidden lg:block italic">Go to Site</span>
                         </Link>
 
                         <button
@@ -585,7 +593,7 @@ const AdminDashboard = () => {
                         </button>
                         {headerDropdown === 'notifications' && (
                             <div className="glass-card absolute right-0 top-full mt-4 w-80 rounded-[2rem] border border-white/10 shadow-3xl py-4 z-50 overflow-hidden">
-                                <p className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#AAB2C5]/40 italic">Universal Notifications Null</p>
+                                <p className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#AAB2C5]/40 italic">No Notifications</p>
                             </div>
                         )}
 
@@ -597,8 +605,8 @@ const AdminDashboard = () => {
                             >
                                 <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#FF7A18]/20 to-[#5B8CFF]/10 text-white flex items-center justify-center font-black text-xs border border-white/10 group-hover:border-[#FF7A18]/50 transition-all italic">AD</div>
                                 <div className="hidden md:block text-left">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F8FAFC] italic">Eluru Overseer</p>
-                                    <p className="text-[8px] font-black uppercase tracking-widest text-[#AAB2C5]/50">Primary Access Restricted</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F8FAFC] italic">Eluru Admin</p>
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-[#AAB2C5]/50">Admin Account</p>
                                 </div>
                                 <ChevronDown size={16} className={`text-[#AAB2C5] hidden md:block transition-transform duration-500 ${headerDropdown === 'user' ? 'rotate-180 text-white' : ''}`} />
                             </button>
@@ -609,7 +617,7 @@ const AdminDashboard = () => {
                                         onClick={() => { setHeaderDropdown(null); localStorage.clear(); window.location.href = '/'; }}
                                         className="flex items-center gap-3 w-full px-6 py-4 text-[10px] font-black uppercase tracking-widest text-red-400 hover:bg-white/5 transition-all italic"
                                     >
-                                        <Power size={18} /> Exit Matrix
+                                        <Power size={18} /> Logout
                                     </button>
                                 </div>
                             )}
@@ -642,13 +650,13 @@ const AdminDashboard = () => {
                                         <div className="p-3 bg-white/5 border border-white/10 rounded-2xl animate-pulse-subtle">
                                             {React.createElement(tabs.find(t => t.id === activeTab)?.icon || LayoutDashboard, { size: 24 })}
                                         </div>
-                                        <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">System Terminal</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">Admin Panel</span>
                                     </div>
                                     <h2 className="text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-none transform -skew-x-6">
                                         {activeTab}
                                     </h2>
                                     <p className="text-[#AAB2C5] text-xs font-black uppercase tracking-widest max-w-lg italic opacity-70">
-                                        Universal administrative access to {activeTab} protocol data. Real-time encryption active.
+                                        Manage your {activeTab} here. All data is safe.
                                     </p>
 
                                     {(activeTab === 'rides' || activeTab === 'dine') && (
@@ -672,22 +680,32 @@ const AdminDashboard = () => {
                                         </div>
                                     )}
                                 </div>
-                                {(activeTab === 'rides' || activeTab === 'dine') && (
+                                <div className="flex items-center gap-4">
                                     <button
-                                        onClick={() => {
-                                            setEditingItem(null);
-                                            setFormData({
-                                                name: '', category: activeTab === 'rides' ? 'play' : 'food',
-                                                price: '', description: '', image: '', stall: '', type: '', status: 'on', capacity: '', start_time: '', end_time: ''
-                                            });
-                                            setIsModalOpen(true);
-                                        }}
-                                        className="btn-premium px-12 py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[10px] shadow-2xl flex items-center gap-4 group/add italic"
+                                        onClick={() => fetchData()}
+                                        className="w-14 h-14 rounded-[1.5rem] flex items-center justify-center bg-white/5 border border-white/10 text-[#AAB2C5] hover:text-[#FF7A18] hover:bg-white/10 transition-all group/refresh shadow-xl"
+                                        title="Refresh Data"
                                     >
-                                        <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
-                                        {activeTab === 'rides' ? 'Add Ride' : 'Add Dine'}
+                                        <RefreshCw size={20} className="group-hover/refresh:rotate-180 transition-transform duration-700" />
                                     </button>
-                                )}
+                                    {(activeTab === 'rides' || activeTab === 'dine') && (
+                                        <button
+                                            onClick={() => {
+                                                setEditingItem(null);
+                                                setFormData({
+                                                    name: '', category: activeTab === 'rides' ? 'play' : 'Dine',
+                                                    price: '', description: '', image: '', stall: '', type: '', status: 'on', capacity: '', start_time: '', end_time: '', 
+                                                    cuisine: 'General', contactNumber: '', menuImages: []
+                                                });
+                                                setIsModalOpen(true);
+                                            }}
+                                            className="btn-premium px-12 py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[10px] shadow-2xl flex items-center gap-4 group/add italic"
+                                        >
+                                            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                                            {activeTab === 'rides' ? 'Add Ride' : 'Add Dine'}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
                             {/* ═══════════════════════════════════════════════
@@ -711,7 +729,7 @@ const AdminDashboard = () => {
                                 const ad = analyticsData; // shorthand
 
                                 /* ── TODAY ── */
-                                const todayStr = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+                                const todayStr = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', hour12: true });
                                 const todayRevenue = ad?.today?.revenue ?? ad?.dailySales?.todayRevenue ?? ad?.todayRevenue ?? 0;
                                 const todayPaid = ad?.today?.paidOrders ?? ad?.dailySales?.paidOrders ?? ad?.paidOrders ?? 0;
                                 const todayOrderCount = ad?.today?.totalOrders ?? ad?.dailySales?.totalOrders ?? ad?.totalOrders ?? 0;
@@ -796,12 +814,12 @@ const AdminDashboard = () => {
                                         {/* ── LOADING / ERROR banner ── */}
                                         {analyticsLoading && (
                                             <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#FF7A18]/10 border border-[#FF7A18]/20 text-sm font-semibold text-[#FF7A18]">
-                                                <RefreshCw size={14} className="animate-spin" /> Fetching live analytics data…
+                                                <RefreshCw size={14} className="animate-spin" /> Loading sales data...
                                             </div>
                                         )}
                                         {analyticsError && !analyticsLoading && (
                                             <div className="flex items-center justify-between px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm font-semibold text-red-400">
-                                                <span>⚠ Could not reach analytics endpoint — showing cached data.</span>
+                                                <span>Could not load data — showing old data.</span>
                                                 <button onClick={fetchAnalytics} className="text-xs underline">Retry</button>
                                             </div>
                                         )}
@@ -812,7 +830,7 @@ const AdminDashboard = () => {
                                                 <div>
                                                     <div className="flex items-center gap-2">
                                                         <Calendar size={18} className="text-[#FF7A18]" />
-                                                        <h3 className="text-lg font-black text-white">Daily Sales</h3>
+                                                        <h3 className="text-lg font-black text-white">Today's Sales</h3>
                                                     </div>
                                                     <p className="text-xs text-white/40 mt-0.5">Today's performance &amp; 14-day history</p>
                                                 </div>
@@ -1048,7 +1066,7 @@ const AdminDashboard = () => {
                                                             return !items.includes('event') && !items.includes('celebration');
                                                         }).slice(0, 10).map((b, i) => {
                                                             const itemLabel = b.items?.map(it => `${it.quantity || 1}x ${it.name}`).join(', ') || b.facility || '—';
-                                                            const dateStr = new Date(b.createdAt || b.date || 0).toLocaleDateString('en-IN');
+                                                            const dateStr = new Date(b.createdAt || b.date || 0).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
                                                             const amt = b.amount ?? b.totalAmount ?? b.totalPrice ?? 0;
                                                             const st = (b.status || b.orderStatus || 'confirmed').toLowerCase();
                                                             return (
@@ -1075,69 +1093,125 @@ const AdminDashboard = () => {
 
                             {/* RIDES & DINE GRID */}
                             {(activeTab === 'rides' || activeTab === 'dine') && (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                                    {filteredProducts.filter(p => p.category === (activeTab === 'rides' ? 'play' : 'food')).map(item => (
-                                        <div key={item.id} className="group glass-card rounded-2xl border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-500 shadow-2xl hover:-translate-y-2">
-                                            <div className="relative h-32 overflow-hidden">
-                                                <img src={item.image || '/placeholder.jpg'} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-90 group-hover:brightness-110" />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#070B14] via-transparent to-transparent opacity-60" />
-                                                <div className="absolute inset-0 bg-[#070B14]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                                                    <button onClick={() => {
-                                                        setEditingItem(item);
-                                                        setFormData({
-                                                            ...item,
-                                                            start_time: item.start_time ? new Date(item.start_time).toISOString().slice(0, 16) : '',
-                                                            end_time: item.end_time ? new Date(item.end_time).toISOString().slice(0, 16) : ''
-                                                        });
-                                                        setIsModalOpen(true);
-                                                    }} className="w-12 h-12 bg-white/10 rounded-2xl text-white backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-[#FF7A18] hover:border-transparent transition-all"><Edit2 size={20} /></button>
-                                                    <button onClick={() => handleDelete(item.id, 'product')} className="w-12 h-12 bg-white/10 rounded-2xl text-red-400 backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-red-500 hover:text-white hover:border-transparent transition-all"><Trash2 size={20} /></button>
-                                                </div>
-                                                <div className="absolute top-4 right-4 bg-[#FF7A18] px-4 py-1.5 rounded-full text-[10px] font-black text-white shadow-2xl tracking-widest uppercase italic border border-white/20">
-                                                    ₹{item.price}
-                                                </div>
-                                            </div>
-                                            <div className="p-4 space-y-2">
-                                                <h3 className="font-black text-[#F8FAFC] text-sm uppercase italic tracking-tighter transform -skew-x-6 line-clamp-1">{item.name}</h3>
-                                                <p className="text-[#AAB2C5]/60 text-[8px] font-black uppercase tracking-widest line-clamp-1 leading-relaxed italic">{item.stall}</p>
-
-                                                {(activeTab === 'rides' || activeTab === 'dine') && (
-                                                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                                                        <div className="flex flex-col gap-2">
-                                                            <div
-                                                                className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.2em] italic border ${(item.status === 'on' || (item.open !== false && !item.status))
-                                                                    ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                                                                    : 'bg-red-500/10 text-red-500 border-red-500/20'
-                                                                    }`}
-                                                            >
-                                                                {(item.status === 'on' || (item.open !== false && !item.status)) ? 'Ride: Active' : 'Ride: Locked'}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10">
+                                    {filteredProducts.filter(p => {
+                                        if (activeTab === 'rides') {
+                                            return p.category === 'play' || p.category === 'ride';
+                                        } else {
+                                            return p.category === 'food' || p.category === 'dine';
+                                        }
+                                    }).map(item => {
+                                        const isOpen = (item.status === 'on' || item.status === 'active' || (item.open !== false && !item.status));
+                                        
+                                        return (
+                                            <motion.div
+                                                layout
+                                                key={item.id}
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className="group relative bg-[#0F172A]/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-700 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[#FF7A18]/10 hover:-translate-y-3"
+                                            >
+                                                {/* Image Section with Advanced Overlay */}
+                                                <div className="relative h-48 overflow-hidden">
+                                                    <img 
+                                                        src={item.image || '/placeholder.jpg'} 
+                                                        alt={item.name} 
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] brightness-90 group-hover:brightness-110" 
+                                                    />
+                                                    
+                                                    {/* Cinematic Gradient Overlays */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent opacity-80" />
+                                                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0F172A] to-transparent" />
+                                                    
+                                                    {/* Price Tag - Floating Badge */}
+                                                    {activeTab !== 'dine' && (
+                                                        <div className="absolute top-5 right-5 z-20">
+                                                            <div className="bg-[#FF7A18] px-5 py-2 rounded-2xl text-[10px] font-black text-white shadow-[0_10px_20px_rgba(255,122,24,0.3)] tracking-[0.2em] uppercase italic border border-white/20 backdrop-blur-md">
+                                                                ₹{item.price}
                                                             </div>
-                                                            {activeTab === 'dine' && (
-                                                                <div className="flex items-center gap-2 text-[8px] font-black text-[#5B8CFF] uppercase tracking-widest italic opacity-60">
-                                                                    <Utensils size={10} /> UNIT: {item.stall}
-                                                                </div>
-                                                            )}
                                                         </div>
+                                                    )}
+
+                                                    {/* Category / ID Badge */}
+                                                    {activeTab !== 'dine' && (
+                                                        <div className="absolute top-5 left-5 z-20">
+                                                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-2xl text-[8px] font-black text-[#AAB2C5] tracking-[0.3em] uppercase italic">
+                                                                ID: <span className="text-white font-mono">{String(item.id || '').padStart(3, '0')}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Quick Actions - Bottom Slide Up */}
+                                                    <div className="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30 flex gap-3">
+                                                        <button 
+                                                            onClick={() => {
+                                                                setEditingItem(item);
+                                                                setFormData({
+                                                                    ...item,
+                                                                    start_time: item.start_time ? new Date(item.start_time).toISOString().slice(0, 16) : '',
+                                                                    end_time: item.end_time ? new Date(item.end_time).toISOString().slice(0, 16) : ''
+                                                                });
+                                                                setIsModalOpen(true);
+                                                            }} 
+                                                            className="flex-1 py-3 bg-white/10 hover:bg-[#FF7A18] rounded-xl text-white backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all group/btn shadow-xl"
+                                                        >
+                                                            <Edit2 size={16} className="group-hover/btn:scale-110 transition-transform" />
+                                                            <span className="ml-2 text-[9px] font-black uppercase tracking-widest italic">MOD</span>
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleDelete(item.id, 'product')} 
+                                                            className="w-12 h-12 bg-white/5 hover:bg-red-500 rounded-xl text-[#AAB2C5] hover:text-white backdrop-blur-xl border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-xl"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Content Section */}
+                                                <div className="p-7 space-y-4">
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+                                                            <p className="text-[8px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.4em] italic">
+                                                                {activeTab === 'dine' ? 'Cuisine: ' : 'Class: '} <span className="text-white/60">{item.cuisine || item.category || 'General'}</span>
+                                                            </p>
+                                                        </div>
+                                                        <h3 className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight group-hover:text-[#FF7A18] transition-colors line-clamp-1 transform -skew-x-2">
+                                                            {item.name}
+                                                        </h3>
+                                                    </div>
+
+                                                    {/* Status & Control Row */}
+                                                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                                                        <div className="space-y-1">
+                                                            <div className={`text-[9px] font-black uppercase tracking-[0.2em] italic ${isOpen ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                                {activeTab === 'dine' ? (isOpen ? 'Terminal Open' : 'Terminal Closed') : (isOpen ? 'Protocol Active' : 'Protocol Locked')}
+                                                            </div>
+                                                            <div className="text-[8px] font-black text-[#AAB2C5]/30 uppercase tracking-widest italic flex items-center gap-1.5">
+                                                                <MapPin size={8} /> {item.stall || 'Sector E4'}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* High-Tech Toggle */}
                                                         <button
                                                             type="button"
                                                             onClick={() => handleToggleStatus(item)}
-                                                            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-500 ${(item.status === 'on' || (item.open !== false && !item.status))
-                                                                ? 'bg-[#FF7A18] shadow-[0_0_15px_#FF7A18]'
-                                                                : 'bg-white/10 border border-white/10'
-                                                                }`}
+                                                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all duration-700 ${isOpen ? 'bg-[#FF7A18] shadow-[0_0_20px_rgba(255,122,24,0.4)]' : 'bg-white/5 border border-white/10'}`}
                                                         >
+                                                            <div className={`absolute left-1.5 text-[6px] font-black text-white transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>ON</div>
+                                                            <div className={`absolute right-1.5 text-[6px] font-black text-[#AAB2C5] transition-opacity duration-300 ${!isOpen ? 'opacity-100' : 'opacity-0'}`}>OFF</div>
                                                             <span
-                                                                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-2xl transition-transform duration-500 ${(item.status === 'on' || (item.open !== false && !item.status))
-                                                                    ? 'translate-x-6'
-                                                                    : 'translate-x-1'
-                                                                    }`}
+                                                                className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isOpen ? 'translate-x-7' : 'translate-x-1'}`}
                                                             />
                                                         </button>
                                                     </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                                </div>
+
+                                                {/* Decorative Holographic Border (Top) */}
+                                                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                            </motion.div>
+                                        );
+                                    })}
                                 </div>
                             )}
 
@@ -1149,13 +1223,22 @@ const AdminDashboard = () => {
                                             <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] italic">Employees</h2>
                                             <p className="text-[#AAB2C5]/50 text-xs font-bold uppercase tracking-widest mt-1">Manage Ethree Food Court operations</p>
                                         </div>
-                                        <button onClick={() => {
-                                            setFormData({ name: '', category: '', price: '', description: '', image: '', stall: '', type: '', status: 'on' });
-                                            setEditingItem(null);
-                                            setIsModalOpen('employee');
-                                        }} className="flex items-center gap-3 px-6 py-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                                            <Users size={18} /> Add New Employee
-                                        </button>
+                                        <div className="flex items-center gap-4">
+                                            <button
+                                                onClick={() => fetchData()}
+                                                className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 text-[#AAB2C5] hover:text-[#FF7A18] hover:bg-white/10 transition-all group/refresh shadow-xl"
+                                                title="Refresh Employees"
+                                            >
+                                                <RefreshCw size={20} className="group-hover/refresh:rotate-180 transition-transform duration-700" />
+                                            </button>
+                                            <button onClick={() => {
+                                                setFormData({ name: '', category: '', price: '', description: '', image: '', stall: '', type: '', status: 'on' });
+                                                setEditingItem(null);
+                                                setIsModalOpen('employee');
+                                            }} className="flex items-center gap-3 px-6 py-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                                                <Users size={18} /> Add New Employee
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="bg-[#0F172A]/40 backdrop-blur-3xl rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl">
@@ -1264,7 +1347,7 @@ const AdminDashboard = () => {
                                                                             : (item.items?.map(i => `${i.name} [${i.quantity}]`).join(', '))}
                                                                     </td>
                                                                     <td className="px-10 py-8 text-[10px] font-black text-[#AAB2C5] uppercase tracking-widest italic">
-                                                                        {new Date(item.date || item.createdAt).toLocaleDateString()}
+                                                                        {new Date(item.date || item.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}
                                                                     </td>
                                                                     <td className="px-10 py-8 text-sm font-black text-white italic tracking-tighter">
                                                                         ₹{item.totalPrice || item.totalAmount}
@@ -1328,7 +1411,7 @@ const AdminDashboard = () => {
                                 <div>
                                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#FF7A18] italic block mb-2">Protocol Override</span>
                                     <h3 className="text-3xl font-black italic tracking-tighter uppercase transform -skew-x-6">
-                                        {isModalOpen === 'employee' ? (editingItem ? 'Edit Employee' : 'Add Employee') : editingItem ? 'Edit Metadata' : 'Add New Ride'}
+                                        {isModalOpen === 'employee' ? (editingItem ? 'Edit Employee' : 'Add Employee') : editingItem ? 'Edit Metadata' : (activeTab === 'rides' ? 'Add New Ride' : 'Add New Dine')}
                                     </h3>
                                 </div>
                                 <button onClick={() => setIsModalOpen(false)} className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-[#AAB2C5] hover:text-white hover:bg-white/10 transition-all border border-white/10"><X size={24} /></button>
@@ -1349,33 +1432,44 @@ const AdminDashboard = () => {
                                     </>
                                 ) : (
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Ride Name</label>
+                                        <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">{activeTab === 'rides' ? 'Ride Name' : 'Dine Name'}</label>
                                         <input required type="text" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-sm uppercase tracking-widest text-white shadow-inner"
                                             value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="Enter Designation" />
                                     </div>
                                 )}
                                 {isModalOpen !== 'employee' && (
                                     <div className="grid grid-cols-2 gap-8">
+                                        {activeTab !== 'dine' && (
+                                            <div className="space-y-3">
+                                                <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">{activeTab === 'rides' ? 'Value Core [₹]' : 'Unit Price [₹]'}</label>
+                                                <input required type="number" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-sm uppercase tracking-widest text-white shadow-inner"
+                                                    value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} placeholder="0" />
+                                            </div>
+                                        )}
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Value Core [₹]</label>
-                                            <input required type="number" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-sm uppercase tracking-widest text-white shadow-inner"
-                                                value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} placeholder="0" />
+                                            {/* Advanced metadata kept in state but removed from UI for cleaner experience as requested */}
+                                            </div>
+                                        </div>
+                                    )}
+                                {isModalOpen !== 'employee' && false && (
+                                    <div className="grid grid-cols-2 gap-8">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Station ID</label>
+                                            <input required type="text" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#5B8CFF]/50 outline-none transition-all font-black text-[10px] uppercase tracking-widest text-white shadow-inner"
+                                                value={formData.stall} onChange={e => setFormData({ ...formData, stall: e.target.value })} placeholder="e.g. ST-01 ELURU" />
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Ride Class</label>
-                                            <select disabled className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 outline-none font-black text-[10px] uppercase tracking-[0.2em] text-[#AAB2C5]/50 cursor-not-allowed italic" value={formData.category}>
-                                                <option value="play">Thrill Ride</option>
-                                                <option value="food">Food Item</option>
-                                                <option value="event">Portal Event</option>
-                                            </select>
+                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Cuisine Specialty</label>
+                                            <input required type="text" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-[10px] uppercase tracking-widest text-white shadow-inner"
+                                                value={formData.cuisine || ''} onChange={e => setFormData({ ...formData, cuisine: e.target.value })} placeholder="Enter Cuisine" />
                                         </div>
                                     </div>
                                 )}
-                                {isModalOpen !== 'employee' && formData.category === 'food' && (
+                                {activeTab === 'dine' && false && (
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Station ID</label>
-                                        <input required type="text" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#5B8CFF]/50 outline-none transition-all font-black text-[10px] uppercase tracking-widest text-white shadow-inner"
-                                            value={formData.stall} onChange={e => setFormData({ ...formData, stall: e.target.value })} placeholder="e.g. ST-01 ELURU" />
+                                        <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Contact Number</label>
+                                        <input required type="tel" className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-sm uppercase tracking-widest text-[#AAB2C5] font-mono shadow-inner"
+                                            value={formData.contactNumber || ''} onChange={e => setFormData({ ...formData, contactNumber: e.target.value })} placeholder="Enter Phone Number" />
                                     </div>
                                 )}
                                 {isModalOpen !== 'employee' && (
@@ -1399,28 +1493,28 @@ const AdminDashboard = () => {
                                                     )}
                                                 </div>
                                                 <div className="flex-1 space-y-3">
-                                                    <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Visual Protocol Interface</label>
+                                                    <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Item Image</label>
                                                     <div className="flex gap-4">
                                                         <label className="flex-1 flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF7A18]/50 px-5 py-4 rounded-xl cursor-pointer transition-all group/upload relative overflow-hidden">
                                                             <Upload size={18} className="text-[#AAB2C5] group-hover/upload:text-[#FF7A18] transition-colors relative z-10" />
-                                                            <span className="text-[10px] font-black uppercase tracking-widest text-[#AAB2C5] group-hover/upload:text-white relative z-10">Choose Protocol Image</span>
+                                                            <span className="text-[10px] font-black uppercase tracking-widest text-[#AAB2C5] group-hover/upload:text-white relative z-10">Upload Image</span>
                                                             <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
                                                             <div className="absolute inset-0 bg-gradient-to-r from-[#FF7A18]/0 via-[#FF7A18]/5 to-[#FF7A18]/0 translate-x-[-100%] group-hover/upload:translate-x-[100%] transition-transform duration-1000" />
                                                         </label>
                                                     </div>
-                                                    <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest italic opacity-50">Local Secure Upload Active. Sync on deploy.</p>
+                                                    <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest italic opacity-50">Upload complete.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Operation Brief</label>
+                                            <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Description</label>
                                             <textarea className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-xs uppercase tracking-widest text-white shadow-inner leading-relaxed resize-none italic"
-                                                value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} rows="4" placeholder="Input operation parameters..."></textarea>
+                                                value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} rows="4" placeholder="Enter Description..."></textarea>
                                         </div>
                                     </>
                                 )}
                                 <button type="submit" className="btn-premium w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-[10px] shadow-3xl italic mt-6 group flex items-center justify-center gap-4">
-                                    {isModalOpen === 'employee' ? (editingItem ? 'Update Employee' : 'Authorize Employee') : editingItem ? 'Update Parameters' : 'Deploy Ride'}
+                                    {isModalOpen === 'employee' ? (editingItem ? 'Update Employee' : 'Add Employee') : editingItem ? 'Save Changes' : (activeTab === 'rides' ? 'Add Ride' : 'Add Item')}
                                     <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </button>
                             </form>
@@ -1446,7 +1540,7 @@ const StatCard = ({ title, value, icon: Icon, color, bg }) => (
                 <span className="text-[10px] font-black text-[#AAB2C5]/30 uppercase tracking-[0.4em] italic mb-1">Status</span>
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
-                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest italic">Live Flow</span>
+                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest italic">Online</span>
                 </div>
             </div>
         </div>

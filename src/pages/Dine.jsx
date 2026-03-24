@@ -29,14 +29,14 @@ const Dine = () => {
 
     const handleAddToCart = (item) => {
         addToCart(item);
-        showToast(`${item.name} synchronized to terminal!`);
+        showToast(`${item.name} added to cart!`);
     };
 
     if (isLoading.menu && menuData.length === 0) {
         return (
             <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-center gap-6">
                 <div className="w-16 h-16 border-4 border-[#FF7A18] border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(255,122,24,0.3)]" />
-                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Loading Food Menu...</p>
+                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.4em] text-[10px] animate-pulse italic">Loading food...</p>
             </div>
         );
     }
@@ -79,7 +79,7 @@ const Dine = () => {
                             </div>
 
                             <h4 className="text-[10px] font-black text-[#FF7A18] uppercase tracking-[0.6em] mb-6 italic">
-                                The Table Eluru : Eluru Core
+                                Efour Food Court
                             </h4>
 
                             <h1 className="text-6xl md:text-9xl font-black italic tracking-tighter uppercase leading-[0.8] transform -skew-x-6 mb-12 text-[#F8FAFC]">
@@ -163,7 +163,7 @@ const Dine = () => {
                             transition={{ duration: 1 }}
                         >
                             <div className="flex items-center justify-center md:justify-start gap-4 mb-4 md:mb-6">
-                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[9px] md:text-[10px] italic">Culinary Stalls</span>
+                                <span className="text-[#FF7A18] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[9px] md:text-[10px] italic">Food Stalls</span>
                                 <div className="hidden md:block w-8 h-px bg-white/10" />
                             </div>
                             <h1 className="text-3xl sm:text-4xl md:text-8xl font-black italic tracking-tighter text-[#F8FAFC] leading-[0.9] md:leading-[0.85] transform -skew-x-6 mb-6 md:mb-8 uppercase">
@@ -205,7 +205,6 @@ const Dine = () => {
                     ))}
                 </div>
 
-                {/* --- Menu Matrix Architecture --- */}
                 <div className="matrix-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
                     <AnimatePresence mode="popLayout">
                         {filteredMenu.map((item, idx) => (
@@ -215,61 +214,75 @@ const Dine = () => {
                                 initial={{ opacity: 0, scale: 0.9, y: 30 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: Math.min(idx, 12) * 0.05 }}
-                                className="glass-card group rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full border border-white/10 hover:border-[#FF7A18]/40 hover:shadow-[0_45px_100px_rgba(255,122,24,0.15)] transition-all duration-700"
+                                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: Math.min(idx, 12) * 0.05 }}
+                                className="group relative bg-[#0F172A]/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-700 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[#FF7A18]/10 hover:-translate-y-3"
                             >
-                                {/* Media Architecture */}
-                                <div className="relative h-36 md:h-40 overflow-hidden">
+                                {/* Media Architecture - Cinematic Focus */}
+                                <div className="relative h-56 overflow-hidden">
                                     <OptimizedImage
                                         src={item.image}
                                         alt={item.name}
                                         priority={idx < 8}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out brightness-90 group-hover:brightness-105"
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out brightness-90 group-hover:brightness-110"
                                     />
 
-                                    {/* Price Elevation */}
-                                    <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-white/5 backdrop-blur-3xl px-2 md:px-3 py-1 md:py-1.5 rounded-lg md:rounded-xl shadow-3xl border border-white/10 group-hover:border-white/20 transition-all">
-                                        <span className="text-gradient-price font-black text-[12px] md:text-sm tracking-tight italic font-heading">₹{item.price}</span>
+                                    {/* Advanced Gradient Overlays */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent opacity-90" />
+                                    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0F172A] to-transparent" />
+                                    
+                                    {/* Action Reveal - Slide Up HUD */}
+                                    <div className="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30">
+                                        <button
+                                            onClick={() => handleAddToCart(item)}
+                                            className="w-full bg-white/10 hover:bg-[#FF7A18] rounded-2xl text-white py-4 backdrop-blur-xl border border-white/20 flex items-center justify-center gap-3 transition-all group/btn shadow-2xl active:scale-95"
+                                        >
+                                            <ShoppingCart size={18} className="group-hover/btn:scale-110 transition-transform" />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] italic">Add to Cart</span>
+                                        </button>
                                     </div>
-
-                                    {/* Stall Identity */}
-                                    <div className="absolute top-2 md:top-4 left-2 md:left-4 bg-white/5 backdrop-blur-3xl px-2 md:px-3 py-1 rounded-lg md:rounded-xl shadow-2xl border border-white/10 flex items-center gap-1.5 md:gap-2">
-                                        <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_8px_#FF7A18]" />
-                                        <span className="text-white text-[8px] md:text-[9px] font-bold uppercase tracking-widest italic truncate max-w-[60px] md:max-w-none">{item.stall}</span>
-                                    </div>
-
-                                    {/* Depth Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
                                 </div>
 
-                                {/* Content Architecture */}
-                                <div className="p-3 md:p-4 flex flex-col flex-grow">
-                                    <div className="mb-3 md:mb-6 flex items-start justify-between gap-2">
-                                        <h3 className="text-[11px] md:text-[13px] lg:text-md font-black text-[#F8FAFC] tracking-tighter uppercase group-hover:text-[#FF7A18] transition-colors leading-tight transform -skew-x-6 duration-700 line-clamp-2">
+                                {/* Content Architecture - Minimalist & Bold */}
+                                <div className="p-8 pt-2">
+                                    <div className="flex items-start justify-between gap-4 mb-4">
+                                        <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none group-hover:text-[#FF7A18] transition-colors duration-500 transform -skew-x-2 line-clamp-2">
                                             {item.name}
                                         </h3>
-                                        <Star size={14} md:size={18} className="text-[#FF7A18] fill-[#FF7A18] opacity-20 group-hover:opacity-100 transition-opacity shrink-0" />
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18]/30 group-hover:bg-[#FF7A18] group-hover:animate-pulse shadow-[0_0_10px_rgba(255,122,24,0)] group-hover:shadow-[0_0_15px_#FF7A18] transition-all duration-700 mt-2 shrink-0" />
                                     </div>
-
-                                    <p className="text-[#AAB2C5] text-[8px] md:text-[10px] font-medium leading-relaxed mb-4 flex-grow line-clamp-1 italic border-l border-white/10 pl-2 md:pl-3 opacity-50 group-hover:opacity-100 transition-opacity duration-700 uppercase tracking-wider">
-                                        {item.stall}
-                                    </p>
-
-                                    {/* Action Integration */}
-                                    <button
-                                        onClick={() => handleAddToCart(item)}
-                                        className="w-full bg-white/5 hover:bg-white text-white hover:text-black py-2 md:py-2.5 rounded-lg md:rounded-xl font-bold text-[8px] md:text-[9px] uppercase tracking-[0.1em] md:tracking-[0.2em] transition-all duration-700 flex items-center justify-center gap-2 md:gap-3 group/btn border border-white/5 hover:border-white shadow-3xl transform active:scale-95"
-                                    >
-                                        <ShoppingCart size={10} md:size={12} />
-                                        ADD TO CART
-                                    </button>
+                                    
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-8 h-[1px] bg-white/10 group-hover:w-12 group-hover:bg-[#FF7A18]/50 transition-all duration-700" />
+                                        <p className="text-[9px] font-black text-[#AAB2C5]/30 group-hover:text-[#AAB2C5]/60 uppercase tracking-[0.4em] italic transition-colors duration-700">
+                                            {item.stall || 'Efour Area'}
+                                        </p>
+                                    </div>
                                 </div>
 
                                 {/* Aesthetic Side Ornament */}
-                                <div className="absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-[#FF7A18] transition-all duration-1000 ease-in-out" />
+                                <div className="absolute top-0 right-0 w-[1px] h-0 group-hover:h-full bg-gradient-to-b from-transparent via-[#FF7A18] to-transparent transition-all duration-1000 ease-in-out" />
+                                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                             </motion.div>
                         ))}
                     </AnimatePresence>
+
+                    {/* --- Minimalist Coming Soon Text --- */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        className="col-span-full py-16 text-center border-t border-white/5 mt-12 bg-gradient-to-r from-transparent via-white/5 to-transparent backdrop-blur-3xl rounded-[3rem]"
+                    >
+                        <div className="flex flex-col items-center gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_10px_#FF7A18]" />
+                                <h3 className="text-[12px] font-black text-[#FF7A18] uppercase tracking-[0.5em] italic">More flavors coming soon</h3>
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse shadow-[0_0_10px_#FF7A18]" />
+                            </div>
+                            <p className="text-[#AAB2C5] text-lg font-black italic uppercase tracking-tighter opacity-20 max-w-sm">
+                                Pizza • Desserts • Beverages • Grill • More
+                            </p>
+                        </div>
+                    </motion.div>
                 </div>
 
                 {/* --- Empty State Architecture --- */}
@@ -282,8 +295,8 @@ const Dine = () => {
                         <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 border border-white/10 rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 text-white/20 shadow-4xl backdrop-blur-3xl">
                             <ShoppingBag size={40} />
                         </div>
-                        <h3 className="text-2xl md:text-3xl font-black text-[#F8FAFC] mb-4 uppercase tracking-tight italic">Zero Stalls Detected</h3>
-                        <p className="text-[12px] md:text-base font-medium italic opacity-50">System scan returned no culinary data matching your search.</p>
+                        <h3 className="text-2xl md:text-3xl font-black text-[#F8FAFC] mb-4 uppercase tracking-tight italic">No food found</h3>
+                        <p className="text-[12px] md:text-base font-medium italic opacity-50">We couldn't find any food items matching your search.</p>
                     </motion.div>
                 )}
             </div>

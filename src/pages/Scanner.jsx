@@ -1,108 +1,246 @@
-import React, { useState, useEffect } from 'react';
-import { LogOut, Maximize, Scan } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { LogOut, Maximize, Scan, CheckCircle2, AlertCircle, RefreshCcw, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Html5Qrcode } from 'html5-qrcode';
+import useStore from '../store/useStore';
 
-const Scanner = () => {
+const Scanner = ({ isEmbedded = false }) => {
     const navigate = useNavigate();
+    const { showToast } = useStore();
     const [result, setResult] = useState('');
     const [isScanning, setIsScanning] = useState(false);
     const [hasCameraError, setHasCameraError] = useState(false);
+    const [isConfirmed, setIsConfirmed] = useState(false);
+    const scannerRef = useRef(null);
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');
     };
 
-    useEffect(() => {
-        const html5QrCode = new Html5Qrcode("qr-camera-element");
+    const stopScanner = async () => {
+        if (scannerRef.current && scannerRef.current.isScanning) {
+            try {
+                await scannerRef.current.stop();
+                setIsScanning(false);
+            } catch (err) {
+                console.error("Failed to stop scanner", err);
+            }
+        }
+    };
 
-        const startScanner = () => {
-            html5QrCode.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
+    const startScanner = async () => {
+        setHasCameraError(false);
+        setIsConfirmed(false);
+        setResult('');
+
+        try {
+            if (!scannerRef.current) {
+                scannerRef.current = new Html5Qrcode("qr-camera-element");
+            }
+
+            if (scannerRef.current.isScanning) {
+                await scannerRef.current.stop();
+            }
+
+            // High-fidelity hardware discovery
+            const devices = await Html5Qrcode.getCameras();
+            let targetCameraId = null;
+
+            if (devices && devices.length > 0) {
+                // Priority 1: Specifically seek the mobile back/environment sensor
+                const backCamera = devices.find(d => 
+                    d.label.toLowerCase().includes('back') || 
+                    d.label.toLowerCase().includes('environment') ||
+                    d.label.toLowerCase().includes('rear')
+                );
+                // Priority 2: Use the last detected camera (usually the higher-res back sensor)
+                targetCameraId = backCamera ? backCamera.id : devices[devices.length - 1].id;
+            }
+
+            const config = {
+                fps: 20,
+                qrbox: (viewWidth, viewHeight) => {
+                    const size = Math.min(viewWidth, viewHeight) * 0.75;
+                    return { width: size, height: size };
                 },
+                aspectRatio: 1.0,
+                showTorchButtonIfSupported: true
+            };
+
+            const cameraRequest = targetCameraId ? targetCameraId : { facingMode: "environment" };
+
+            await scannerRef.current.start(
+                cameraRequest,
+                config,
                 (decodedText) => {
                     setResult(decodedText);
-                    // html5QrCode.stop(); // Optional: stop scanning after read
+                    stopScanner(); 
                 },
                 (errorMessage) => {
-                    // Ignore regular frame errors
+                    // Frame scan skip (normal operation)
                 }
-            ).then(() => {
-                setIsScanning(true);
-            }).catch((err) => {
-                console.error(err);
-                setHasCameraError(true);
-            });
-        };
+            );
+            setIsScanning(true);
+        } catch (err) {
+            console.error("Hardware synchronization failed:", err);
+            setHasCameraError(true);
+            setIsScanning(false);
+        }
+    };
 
-        // Delay starting slightly to ensure DOM is ready
-        setTimeout(startScanner, 300);
+    const handleSystemReload = () => {
+        window.location.reload();
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            startScanner();
+        }, 1500);
 
         return () => {
-            if (html5QrCode.isScanning) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(console.error);
+            clearTimeout(timer);
+            if (scannerRef.current && scannerRef.current.isScanning) {
+                scannerRef.current.stop().catch(err => console.warn("Resource cleanup error:", err));
             }
         };
     }, []);
 
+    const handleConfirm = () => {
+        setIsConfirmed(true);
+        showToast("Access Identity Verified Successfully!");
+        // Here you would typically send the result to your backend
+    };
+
+    const handleReset = () => {
+        setResult('');
+        setIsConfirmed(false);
+        startScanner();
+    };
+
     return (
-        <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-center font-sans text-white p-6 relative overflow-hidden">
-            <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] bg-[#FF7A18]/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[10%] right-[-10%] w-[50%] h-[50%] bg-[#5B8CFF]/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className={isEmbedded ? "flex flex-col items-center justify-center font-sans text-white relative h-full" : "min-h-screen bg-[#070B14] flex flex-col items-center justify-center font-sans text-white p-6 relative overflow-hidden selection:bg-[#FF7A18]/30"}>
+            {/* Background Architecture */}
+            {!isEmbedded && (
+                <>
+                    <div className="absolute inset-0 matrix-grid opacity-5 pointer-events-none" />
+                    <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none" />
+                </>
+            )}
 
-            {/* Header */}
-            <header className="fixed top-0 w-full p-6 flex justify-between items-center z-10 bg-white/5 backdrop-blur-xl border-b border-white/10">
-                <div className="flex items-center gap-4">
-                    <Scan className="text-[#FF7A18]" size={28} />
-                    <h1 className="text-xl font-black uppercase tracking-[0.3em] text-white italic">E4 Scanner</h1>
-                </div>
-                <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition-colors flex items-center gap-2 font-bold uppercase tracking-widest text-[10px]">
-                    <LogOut size={18} /> Exit
-                </button>
-            </header>
-
-            {/* Main Scanner Area */}
-            <div className="mt-20 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 w-full max-w-sm flex flex-col items-center shadow-2xl relative z-10">
-                <h2 className="text-2xl font-black uppercase tracking-[0.2em] italic mb-6">Ticket Scanner</h2>
-                
-                <div className="relative w-full aspect-square border-4 border-dashed border-[#AAB2C5]/30 rounded-3xl flex items-center justify-center bg-black/40 overflow-hidden group hover:border-[#FF7A18]/50 transition-colors">
-                    {!isScanning && !hasCameraError && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                            <Maximize className="text-[#AAB2C5]/20 group-hover:text-[#FF7A18]/40 transition-colors mb-4" size={48} />
-                            <p className="text-[#AAB2C5]/50 text-[10px] font-bold tracking-widest uppercase">Initializing Camera...</p>
+            {/* Terminal Header */}
+            {!isEmbedded && (
+                <header className="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-[#070B14]/80 backdrop-blur-2xl border-b border-white/5">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                            <Scan className="text-[#FF7A18]" size={20} />
                         </div>
-                    )}
-                    
-                    {hasCameraError && (
-                        <div className="text-center p-4 absolute z-10">
-                            <p className="text-red-400 text-[10px] font-bold tracking-widest uppercase mb-2">Camera Access Denied</p>
-                            <p className="text-[#AAB2C5]/50 text-[8px] uppercase">Please allow permissions.</p>
+                        <div>
+                            <h1 className="text-sm font-black uppercase tracking-[0.4em] text-white italic leading-none mb-1">E4 Scanner</h1>
+                            <p className="text-[8px] font-black text-[#AAB2C5]/40 uppercase tracking-widest">Protocol Ver: 2.026</p>
                         </div>
-                    )}
-
-                    {/* The element where the camera feed will be rendered */}
-                    <div id="qr-camera-element" className={`absolute inset-0 z-0 [&>video]:object-cover [&>video]:w-full [&>video]:h-full [&>video]:rounded-3xl ${hasCameraError ? 'hidden' : ''}`}></div>
-                </div>
-
-                <p className="mt-6 text-xs text-[#AAB2C5]/60 text-center font-bold tracking-widest uppercase">Align the QR code within the frame to scan seamlessly.</p>
-                
-                {result && (
-                    <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl w-full text-center text-emerald-400 font-bold uppercase tracking-widest text-[10px] break-all">
-                        {result}
-                        <button 
-                            onClick={() => setResult('')} 
-                            className="mt-3 w-full py-3 bg-emerald-500/20 rounded-lg text-emerald-400 hover:bg-emerald-500/30 transition-colors font-black tracking-[0.2em]"
-                        >
-                            CLEAR RESULT
-                        </button>
                     </div>
-                )}
+                    <button onClick={handleLogout} className="group flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-red-400 hover:bg-red-500/10 transition-all font-black uppercase tracking-widest text-[9px] italic">
+                        <LogOut size={14} className="group-hover:-translate-x-1 transition-transform" /> EXIT TERMINAL
+                    </button>
+                </header>
+            )}
+
+            {/* Scan Interface Module */}
+            <div className={`${isEmbedded ? 'mt-0' : 'mt-20'} w-full max-w-md relative z-10`}>
+                <div className={`${isEmbedded ? 'bg-transparent border-none' : 'bg-[#0F172A]/40 border border-white/10'} backdrop-blur-3xl rounded-[3.5rem] p-8 md:p-12 shadow-2xl overflow-hidden relative`}>
+                    {/* Decorative Corner */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FF7A18]/10 to-transparent blur-2xl" />
+
+                    <div className="text-center mb-10">
+                        <h2 className="text-3xl font-black uppercase tracking-[0.2em] italic text-[#F8FAFC] mb-2">Ticket Scanner</h2>
+                        <div className="flex items-center justify-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] animate-pulse" />
+                            <p className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em]">Operational Status: Active</p>
+                        </div>
+                    </div>
+                    
+                    {/* Camera Viewport Module */}
+                    <div className="relative w-full aspect-square border-2 border-dashed border-[#AAB2C5]/20 rounded-[2.5rem] flex items-center justify-center overflow-hidden ring-offset-4 ring-offset-[#070B14] group transition-all bg-[#070B14]">
+                        
+                        {/* Scanning Overlay Grid */}
+                        {isScanning && !result && (
+                            <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-[#FF7A18]/0 via-[#FF7A18]/10 to-[#FF7A18]/0 animate-scan-line h-1/2" />
+                                <div className="absolute inset-0 opacity-10 matrix-grid" />
+                            </div>
+                        )}
+
+                        {!isScanning && !result && !hasCameraError && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-[#070B14]/80 backdrop-blur-sm">
+                                <div className="w-16 h-16 border-4 border-[#FF7A18] border-t-transparent rounded-full animate-spin mb-6" />
+                                <p className="text-[#AAB2C5] text-[10px] font-black tracking-[0.4em] uppercase italic animate-pulse">Initializing Data Stream...</p>
+                            </div>
+                        )}
+                        
+                        {hasCameraError && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-red-500/10 backdrop-blur-md p-8 text-center">
+                                <AlertCircle className="text-red-500 mb-4" size={48} />
+                                <p className="text-white text-xs font-black tracking-widest uppercase mb-2">Optical System Error</p>
+                                <p className="text-[#AAB2C5]/60 text-[8px] uppercase italic mb-6 leading-relaxed max-w-[200px]">
+                                    Camera access restricted. Ensure the connection is SECURE (HTTPS) and permissions are granted in browser settings.
+                                </p>
+                                <button onClick={handleSystemReload} className="px-8 py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FF7A18] hover:text-white transition-all">Relink Data Stream</button>
+                            </div>
+                        )}
+
+                        {/* Result Confirmation View */}
+                        {result && (
+                            <div className={`absolute inset-0 z-30 flex flex-col items-center justify-center p-8 transition-all duration-500 ${isConfirmed ? 'bg-emerald-500/90' : 'bg-[#0F172A]/95'}`}>
+                                {isConfirmed ? (
+                                    <div className="text-center animate-in fade-in zoom-in duration-500">
+                                        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                                            <CheckCircle2 className="text-emerald-500" size={48} />
+                                        </div>
+                                        <h3 className="text-white text-2xl font-black uppercase tracking-widest italic mb-2">Identity Verified</h3>
+                                        <p className="text-white/80 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">Access Granted Successfully</p>
+                                        <button onClick={handleReset} className="px-10 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-white font-black text-[10px] uppercase tracking-widest transition-all">Next Subject</button>
+                                    </div>
+                                ) : (
+                                    <div className="w-full text-center">
+                                        <div className="w-20 h-20 bg-[#FF7A18]/10 border border-[#FF7A18]/30 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                                            <ShieldCheck className="text-[#FF7A18]" size={32} />
+                                        </div>
+                                        <h3 className="text-white text-lg font-black uppercase tracking-[0.2em] italic mb-2">Subject Detected</h3>
+                                        <div className="bg-white/5 border border-white/10 p-4 rounded-xl mb-8 break-all">
+                                            <p className="text-[10px] font-black text-[#AAB2C5] tracking-widest uppercase mb-1">Payload Data:</p>
+                                            <p className="text-xs font-mono text-[#FF7A18] font-bold">{result}</p>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <button 
+                                                onClick={handleConfirm}
+                                                className="w-full py-5 bg-white text-black hover:bg-[#FF7A18] hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all shadow-xl shadow-white/5 italic"
+                                            >
+                                                Confirm Scan
+                                            </button>
+                                            <button 
+                                                onClick={handleReset}
+                                                className="w-full py-4 text-[#AAB2C5] hover:text-white transition-all font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2"
+                                            >
+                                                <RefreshCcw size={14} /> Scan Again
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Camera Element */}
+                        <div id="qr-camera-element" className="absolute inset-0 z-0 [&>video]:object-cover [&>video]:w-full [&>video]:h-full border-none"></div>
+                    </div>
+
+                    <div className="mt-10 px-4">
+                        <p className="text-[10px] text-[#AAB2C5]/40 leading-relaxed text-center font-black uppercase tracking-[0.2em] italic">
+                            System is searching for encrypted QR sequences. Keep subject stable within optical bounds.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );

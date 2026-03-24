@@ -65,7 +65,7 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, rides: true } }));
                 try {
-                    const res = await fetch(`/api/e4/rides`);
+                    const res = await fetch(`/api/e4/rides?all=true`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
                     let items = Array.isArray(data) ? data : (data.rides || data.data || []);
@@ -100,7 +100,7 @@ const useStore = create(
 
                 set(state => ({ isLoading: { ...state.isLoading, menu: true } }));
                 try {
-                    const res = await fetch(`/api/e4/dine`);
+                    const res = await fetch(`/api/e4/dine?all=true`);
                     if (!res.ok) throw new Error(`API Error: ${res.status}`);
                     const data = await res.json();
 

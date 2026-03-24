@@ -178,7 +178,7 @@ const Login = () => {
                 if (res.ok) {
                     await apiLogout();
                     setUser(null);
-                    alert("Account successfully purged from system.");
+                    alert("Account has been deleted.");
                     navigate('/login');
                 } else {
                     const data = await res.json();
@@ -186,7 +186,7 @@ const Login = () => {
                 }
             } catch (error) {
                 console.error("Account Deletion Error:", error);
-                alert("Synchronization error during account purging.");
+                alert("Error deleting account.");
             } finally {
                 setLoading(false);
             }
@@ -195,7 +195,7 @@ const Login = () => {
 
     if (user) {
         return (
-            <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-start pt-56 pb-20 px-6 lg:p-12 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
+            <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-start pt-48 md:pt-64 pb-20 px-6 lg:px-12 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
                 {/* Background Grid & Blurs */}
                 <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
                 <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
@@ -226,7 +226,7 @@ const Login = () => {
                                     <div className="hidden md:block w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
                                 </div>
                                 <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
-                                    <span className="px-3 md:px-4 py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-[8px] md:text-[9px] font-black text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] border border-white/10 uppercase">CLASSIFIED: CUSTOMER</span>
+                                    <span className="px-3 md:px-4 py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-[8px] md:text-[9px] font-black text-[#AAB2C5] tracking-[0.2em] md:tracking-[0.3em] border border-white/10 uppercase">Customer Account</span>
                                     <span className="px-3 md:px-4 py-1.5 bg-[#FF7A18]/10 backdrop-blur-md rounded-xl text-[8px] md:text-[9px] font-black text-[#FF7A18] tracking-[0.2em] md:tracking-[0.3em] border border-[#FF7A18]/20 uppercase italic">EFOUR ELURU</span>
                                 </div>
                             </div>
@@ -238,7 +238,7 @@ const Login = () => {
                                 className="relative z-10 bg-white/5 hover:bg-[#FF7A18] text-[#F8FAFC] px-8 py-4 rounded-2xl border border-white/10 transition-all flex items-center gap-3 group/edit shadow-xl font-black text-[10px] uppercase tracking-[0.3em] italic transform -skew-x-6 active:scale-95"
                             >
                                 <Edit2 size={16} className="group-hover/edit:rotate-12 transition-transform" />
-                                MODIFY IDENTITY
+                                Edit Profile
                             </button>
                         )}
                     </div>
@@ -251,14 +251,14 @@ const Login = () => {
                                 className="max-w-3xl mx-auto space-y-12"
                             >
                                 <div className="text-center space-y-3">
-                                    <h3 className="text-3xl font-black text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12">OVERRIDE IDENTITY PROTOCOL</h3>
-                                    <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.4em] opacity-60">SECURE PROFILE RE-CLASSIFICATION</p>
+                                    <h3 className="text-3xl font-black text-[#F8FAFC] uppercase tracking-tighter italic transform -skew-x-12">Edit Profile</h3>
+                                    <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Update your information</p>
                                 </div>
 
                                 <form onSubmit={handleSaveProfile} className="space-y-10">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div className="space-y-3">
-                                            <label className={labelClasses}>Full Legal Designation</label>
+                                            <label className={labelClasses}>Full Name</label>
                                             <input
                                                 type="text"
                                                 value={editName}
@@ -268,7 +268,7 @@ const Login = () => {
                                             />
                                         </div>
                                         <div className="space-y-3">
-                                            <label className={labelClasses}>Encrypted Communication (Email)</label>
+                                            <label className={labelClasses}>Email</label>
                                             <input
                                                 type="email"
                                                 value={editEmail}
@@ -279,9 +279,9 @@ const Login = () => {
                                         </div>
                                     </div>
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
-                                        <button type="button" onClick={() => setIsEditing(false)} className="px-10 py-5 rounded-2xl text-[#AAB2C5] font-black hover:text-white transition-all uppercase text-[10px] tracking-[0.4em] italic opacity-60 hover:opacity-100">DISCARD CHANGES</button>
+                                        <button type="button" onClick={() => setIsEditing(false)} className="px-10 py-5 rounded-2xl text-[#AAB2C5] font-black hover:text-white transition-all uppercase text-[10px] tracking-[0.4em] italic opacity-60 hover:opacity-100">CANCEL</button>
                                         <button type="submit" disabled={loading} className="btn-premium px-16 py-5 rounded-2xl shadow-[0_20px_50px_rgba(255,122,24,0.35)]">
-                                            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'APPLY CLASSIFICATION'}
+                                            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'SAVE CHANGES'}
                                         </button>
                                     </div>
                                 </form>
@@ -292,12 +292,12 @@ const Login = () => {
                                 <div className="space-y-12">
                                     <div className="flex items-center gap-4 text-[#FF7A18]">
                                         <Shield size={20} />
-                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">ACCOUNT DETAILS</h3>
+                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">Your Info</h3>
                                     </div>
 
                                     <div className="space-y-10">
                                         {[
-                                            { label: 'USER NAME', value: user.name || 'UNASSIGNED', icon: <User size={22} /> },
+                                            { label: 'NAME', value: user.name || 'NOT SET', icon: <User size={22} /> },
                                             { label: 'EMAIL ADDRESS', value: user.email || 'NOT CONFIGURATED', icon: <Mail size={22} /> },
                                             { label: 'PHONE NUMBER', value: `+${user.phone || '91 0000000000'}`, icon: <Phone size={22} /> }
                                         ].map((item, i) => (
@@ -318,17 +318,17 @@ const Login = () => {
                                 <div className="space-y-12">
                                     <div className="flex items-center gap-4 text-[#5B8CFF]">
                                         <Trophy size={20} />
-                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">LOYALTY PULSE</h3>
+                                        <h3 className="text-xl font-black tracking-[0.3em] uppercase italic transform -skew-x-12">Your Points</h3>
                                     </div>
 
                                     <div className="bg-[#5B8CFF]/5 p-10 rounded-[2.5rem] border border-[#5B8CFF]/20 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-48 h-48 bg-[#5B8CFF]/10 blur-[80px] rounded-full pointer-events-none" />
                                         <div className="relative z-10 space-y-10">
                                             <div>
-                                                <p className="text-[#5B8CFF] font-black text-[10px] uppercase tracking-[0.4em] mb-6 italic opacity-70">CREDIT BALANCE</p>
+                                                <p className="text-[#5B8CFF] font-black text-[10px] uppercase tracking-[0.4em] mb-6 italic opacity-70">Points Balance</p>
                                                 <div className="flex items-baseline gap-4">
                                                     <span className="text-7xl font-black text-[#F8FAFC] leading-none tracking-tighter animate-pulse-subtle">{user.points || 0}</span>
-                                                    <span className="text-xl font-black text-[#5B8CFF]/60 uppercase tracking-widest italic transform -skew-x-6">CREDITS</span>
+                                                    <span className="text-xl font-black text-[#5B8CFF]/60 uppercase tracking-widest italic transform -skew-x-6">POINTS</span>
                                                 </div>
                                             </div>
 
@@ -337,8 +337,8 @@ const Login = () => {
                                                     <Zap size={24} fill="currentColor" />
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <p className="text-[13px] font-black text-[#F8FAFC] leading-tight uppercase italic transform -skew-x-6">EARN <span className="text-[#5B8CFF]">500 CREDITS</span> TO GET <span className="text-[#FF7A18]">ONE FREE TICKET 🎟️</span></p>
-                                                    <p className="text-[9px] font-black text-[#AAB2C5] tracking-widest opacity-50">REMAINING: {500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} CREDITS FOR FREE TICKET</p>
+                                                    <p className="text-[13px] font-black text-[#F8FAFC] leading-tight uppercase italic transform -skew-x-6">EARN <span className="text-[#5B8CFF]">500 POINTS</span> TO GET <span className="text-[#FF7A18]">ONE FREE TICKET 🎟️</span></p>
+                                                    <p className="text-[9px] font-black text-[#AAB2C5] tracking-widest opacity-50">REMAINING: {500 - (user.points || 0) > 0 ? 500 - (user.points || 0) : 0} POINTS FOR FREE TICKET</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -382,7 +382,7 @@ const Login = () => {
                     <div className="absolute inset-0 matrix-grid opacity-20" />
                 </div>
 
-                <div className="relative z-10 w-full flex flex-col justify-between p-20 text-[#F8FAFC]">
+                <div className="relative z-10 w-full flex flex-col justify-between p-20 pt-44 lg:pt-56 text-[#F8FAFC]">
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -390,7 +390,7 @@ const Login = () => {
                     >
                         <Link to="/" className="inline-flex items-center gap-4 text-[#AAB2C5] hover:text-[#FF7A18] transition-all group/back bg-white/5 px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-xl">
                             <ArrowRight className="rotate-180 group-hover:-translate-x-2 transition-transform" size={18} />
-                            <span className="font-black text-[10px] tracking-[0.4em] uppercase italic">EXIT TO MAIN ELURU</span>
+                            <span className="font-black text-[10px] tracking-[0.4em] uppercase italic">GO BACK</span>
                         </Link>
                     </motion.div>
 
@@ -413,8 +413,8 @@ const Login = () => {
                             transition={{ delay: 0.4, duration: 1 }}
                             className="text-7xl lg:text-9xl font-black mb-10 leading-[0.8] tracking-tighter uppercase italic transform -skew-x-6"
                         >
-                            ACCESS THE <br />
-                            <span className="text-gradient-primary">FUTURE</span>
+                            WELCOME TO <br />
+                            <span className="text-gradient-primary">EFOUR</span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -422,7 +422,7 @@ const Login = () => {
                             transition={{ delay: 0.6, duration: 1 }}
                             className="text-xl text-[#AAB2C5] font-black border-l-4 border-[#FF7A18] pl-8 leading-relaxed italic opacity-80 uppercase tracking-widest"
                         >
-                            UNLOCK EXCLUSIVE PRIVILEGES AND CINEMATIC PROTOCOLS. YOUR JOURNEY TRANSCENDS REALITY.
+                            JOIN US FOR THE BEST FOOD AND FUN IN ELURU. YOUR VISIT WILL BE SPECIAL.
                         </motion.p>
                     </div>
 
@@ -457,8 +457,8 @@ const Login = () => {
                             <div className="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center mx-auto mb-8 shadow-2xl transform rotate-12">
                                 <Key className="text-[#FF7A18]" size={32} />
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">IDENTITY</h2>
-                            <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.5em] italic opacity-50">NODE ACCESS: EFOUR_ELURU_XXVI</p>
+                            <h2 className="text-4xl md:text-5xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">LOGIN</h2>
+                            <p className="text-[#AAB2C5] text-[10px] font-black uppercase tracking-[0.5em] italic opacity-50">WELCOME TO EFOUR ELURU</p>
                         </div>
 
                         <form onSubmit={step === 1 ? handleSendOtp : handleVerifyOtp} className="space-y-10">
@@ -471,7 +471,7 @@ const Login = () => {
                                         exit={{ opacity: 0, x: 20 }}
                                         className="space-y-4"
                                     >
-                                        <label className={labelClasses}>Personal Neural Link (Phone)</label>
+                                        <label className={labelClasses}>Phone Number</label>
                                         <div className="relative group">
                                             <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-[#AAB2C5]/30 group-focus-within:text-[#FF7A18] transition-colors" size={20} />
                                             <input
@@ -493,7 +493,7 @@ const Login = () => {
                                         className="space-y-8"
                                     >
                                         <div className="space-y-4">
-                                            <label className={labelClasses}>DISPOSABLE SECURITY TOKEN (OTP)</label>
+                                            <label className={labelClasses}>ENTER OTP</label>
                                             <div className="relative group">
                                                 <Fingerprint className="absolute left-5 top-1/2 -translate-y-1/2 text-[#AAB2C5]/30 group-focus-within:text-[#5B8CFF] transition-colors" size={20} />
                                                 <input
@@ -509,13 +509,13 @@ const Login = () => {
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-center px-2">
-                                            <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] uppercase italic opacity-60">TARGET: {phone}</p>
+                                            <p className="text-[9px] font-black text-[#AAB2C5] tracking-[0.3em] uppercase italic opacity-60">PHONE: {phone}</p>
                                             <button
                                                 type="button"
                                                 onClick={() => setStep(1)}
                                                 className="text-[9px] font-black text-[#FF7A18] hover:text-[#FF3D3D] tracking-[0.3em] uppercase transition-all italic border-b border-[#FF7A18]/20"
                                             >
-                                                CHANGE NODE
+                                                CHANGE NUMBER
                                             </button>
                                         </div>
                                     </motion.div>
@@ -532,7 +532,7 @@ const Login = () => {
                                         <Activity className="animate-spin" size={24} />
                                     ) : (
                                         <>
-                                            {step === 1 ? 'REQUEST AUTHENTICATION' : 'SYNCHRONIZE SESSION'}
+                                            {step === 1 ? 'SEND OTP' : 'VERIFY OTP'}
                                             <ArrowRight size={20} className="group-hover/btn:translate-x-2 transition-transform" />
                                         </>
                                     )}
@@ -547,7 +547,7 @@ const Login = () => {
                                         onClick={handleSendOtp}
                                         className="text-[10px] font-black text-[#AAB2C5] hover:text-white tracking-[0.4em] uppercase disabled:opacity-30 transition-all italic"
                                     >
-                                        {otpTimer > 0 ? `NEW TOKEN IN ${otpTimer}S` : 'REGENERATE SECURITY TOKEN'}
+                                        {otpTimer > 0 ? `RESEND OTP IN ${otpTimer}S` : 'RESEND OTP'}
                                     </button>
                                 </p>
                             )}
@@ -556,7 +556,7 @@ const Login = () => {
                 </motion.div>
 
                 <div className="absolute bottom-12 text-center text-[9px] font-black text-[#AAB2C5]/20 tracking-[1em] uppercase w-full italic">
-                    &copy; MMXXVI EFOUR ELURU PROTOCOL
+                    &copy; 2026 EFOUR ELURU OFFICIAL
                 </div>
             </div>
 
