@@ -1,9 +1,109 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Environment, MeshWobbleMaterial, ContactShadows, PresentationControls } from '@react-three/drei'
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
-import { ArrowDown, Zap, Activity, Shield, Target } from 'lucide-react'
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion'
+import { ArrowDown, Zap, Activity, Shield, Target, Plus, Star } from 'lucide-react'
 import * as THREE from 'three'
+
+// --- Layer 1 Components ---
+const BackgroundSystem = ({ mousePos }) => {
+    return (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            {/* Animated Deep Mesh Gradient */}
+            <motion.div
+                animate={{
+                    background: [
+                        'radial-gradient(circle at 20% 30%, rgba(108,92,231,0.15) 0%, transparent 50%)',
+                        'radial-gradient(circle at 80% 70%, rgba(108,92,231,0.15) 0%, transparent 50%)',
+                        'radial-gradient(circle at 20% 30%, rgba(108,92,231,0.15) 0%, transparent 50%)'
+                    ]
+                }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 opacity-40 blur-[100px]"
+            />
+            
+            {/* Dynamic Focal Point Light Source */}
+            <motion.div 
+                style={{ 
+                    x: mousePos.x * 0.5, 
+                    y: mousePos.y * 0.5,
+                }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-gradient-to-r from-[#6C5CE7]/10 via-[#FF7A00]/5 to-transparent rounded-full blur-[180px] opacity-40"
+            />
+
+            {/* Cinematic Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,4,10,0.4)_70%,rgba(2,4,10,0.8)_100%)] z-10" />
+            
+            {/* Grain / Noise Texture */}
+            <div className="absolute inset-0 noise-overlay opacity-[0.03] z-20" />
+
+            {/* Particle Field (Foreground of BG) */}
+            <div className="absolute inset-0 z-30">
+                {[...Array(30)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-[1px] h-[1px] bg-white rounded-full"
+                        initial={{ 
+                            x: Math.random() * 100 + "%", 
+                            y: Math.random() * 100 + "%",
+                            opacity: Math.random() * 0.4 
+                        }}
+                        animate={{ 
+                            y: ["0%", "-20%"],
+                            opacity: [0.1, 0.4, 0.1]
+                        }}
+                        transition={{ 
+                            duration: 10 + Math.random() * 20, 
+                            repeat: Infinity, 
+                            ease: "linear" 
+                        }}
+                        style={{ 
+                            filter: `blur(${Math.random() * 2}px)`
+                        }}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// --- Layer 2 Components ---
+const FloatingShapes = ({ mousePos }) => {
+    return (
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+            <motion.div
+                style={{ x: mousePos.x * 3, y: mousePos.y * 3 }}
+                animate={{ 
+                    rotate: 360,
+                    y: [0, -50, 0]
+                }}
+                transition={{ 
+                    rotate: { duration: 60, repeat: Infinity, ease: "linear" },
+                    y: { duration: 15, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] border border-white/[0.03] rounded-full blur-sm opacity-20"
+            />
+            <motion.div
+                style={{ x: -mousePos.x * 2, y: -mousePos.y * 2 }}
+                animate={{ 
+                    rotate: -360,
+                    y: [0, 60, 0]
+                }}
+                transition={{ 
+                    rotate: { duration: 80, repeat: Infinity, ease: "linear" },
+                    y: { duration: 20, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute bottom-[20%] right-[10%] w-[25rem] h-[25rem] border border-[#6C5CE7]/[0.05] rounded-[4rem] blur-md opacity-20"
+            />
+            <motion.div
+                style={{ x: mousePos.x, y: -mousePos.y }}
+                className="absolute top-[40%] right-[20%] text-[#FF7A00]/10 blur-[2px]"
+            >
+                <Plus size={120} strokeWidth={0.5} />
+            </motion.div>
+        </div>
+    )
+}
 
 const Balloon = ({ position, color, popped }) => {
     const mesh = useRef()
@@ -434,87 +534,138 @@ const Sculpture = () => {
 
 const Hero = () => {
     const containerRef = useRef(null)
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     const isInView = useInView(containerRef, { margin: "200px" })
     const { scrollY } = useScroll()
-    const y1 = useTransform(scrollY, [0, 500], [0, 150])
-    const opacity = useTransform(scrollY, [0, 400], [1, 0])
+    
+    // Parallax transforms - Refined for subtle effect
+    const y1 = useTransform(scrollY, [0, 800], [0, 300])
+    const y2 = useTransform(scrollY, [0, 800], [0, -150])
+    const opacity = useTransform(scrollY, [0, 600], [1, 0])
+    const scale = useTransform(scrollY, [0, 600], [1, 0.95])
+    const blur = useTransform(scrollY, [0, 400], ["blur(0px)", "blur(10px)"])
+
+    const handleMouseMove = (e) => {
+        const { clientX, clientY } = e
+        const { innerWidth, innerHeight } = window
+        const x = (clientX / innerWidth - 0.5) * 15
+        const y = (clientY / innerHeight - 0.5) * 15
+        setMousePos({ x, y })
+    }
 
     return (
-        <section ref={containerRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#000000] pt-24 md:pt-[120px]">
-            {/* Ambient Background - Pure Dark Luxury */}
-            <div className="absolute inset-x-0 inset-y-0 bg-[#000000]" />
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[60rem] h-[60rem] bg-[#FF7A18]/2 rounded-full blur-[160px]" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/2 rounded-full blur-[140px]" />
-            </div>
-            <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
+        <section 
+            ref={containerRef} 
+            onMouseMove={handleMouseMove}
+            className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#02040a] pt-24 md:pt-[140px]"
+        >
+            {/* Layer 1: Advanced Background System */}
+            <BackgroundSystem mousePos={mousePos} />
 
-            {/* 3D Scene - Enhanced abstract sculpture */}
-            <div className="absolute inset-0 z-0 mask-bottom opacity-60 md:opacity-100 top-24 md:top-36">
+            {/* Layer 2: Floating Midground Elements */}
+            <FloatingShapes mousePos={mousePos} />
+
+            {/* Layer 2.5: 3D Scene Assembly */}
+            <motion.div 
+                style={{ y: y2, filter: blur }}
+                className="absolute inset-0 z-10 mask-bottom opacity-50 md:opacity-80 top-20 md:top-36 pointer-events-none"
+            >
                 {isInView && (
                     <Canvas
-                        dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1}
+                        dpr={[1, 2]}
                         camera={{
-                            position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 14 : 8],
-                            fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 48 : 40
+                            position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 16 : 10],
+                            fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 35
                         }}
-                        performance={{ min: 0.5 }}
-                        gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: true }}
+                        gl={{ 
+                            powerPreference: "high-performance", 
+                            antialias: true,
+                            alpha: true
+                        }}
                     >
                         <ambientLight intensity={0.5} />
-                        <spotLight position={[10, 20, 10]} angle={0.15} penumbra={1} intensity={12} color="#FFFFFF" castShadow />
-                        <pointLight position={[-10, -10, -10]} intensity={8} color="#FF3D3D" />
-                        <pointLight position={[0, 10, 0]} intensity={3} color="#FFFFFF" />
-                        <group scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.5 : 1.2}>
+                        <spotLight position={[15, 20, 10]} angle={0.2} penumbra={1} intensity={30} color="#6C5CE7" castShadow />
+                        <pointLight position={[-15, -10, -10]} intensity={20} color="#FF7A00" />
+                        
+                        <group 
+                            rotation={[
+                                -mousePos.y * 0.003,
+                                mousePos.x * 0.003,
+                                0
+                            ]}
+                            scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1.35}
+                        >
                             <Sculpture />
                             <ShootingGame />
                         </group>
-                        <Environment frames={Infinity} resolution={256}>
-                            <group rotation={[1, 1, 1]}>
-                                <mesh position={[0, 0, -10]} scale={[25, 25, 1]}>
-                                    <planeGeometry />
-                                    <meshBasicMaterial color="#FF7A18" />
-                                </mesh>
-                                <mesh position={[0, 0, 10]} scale={[25, 25, 1]}>
-                                    <planeGeometry />
-                                    <meshBasicMaterial color="#5B8CFF" />
-                                </mesh>
-                            </group>
-                        </Environment>
+
+                        <Environment preset="night" />
                     </Canvas>
                 )}
-            </div>
+            </motion.div>
 
-            {/* Content Layer */}
-            <div className="container relative z-10 text-center px-6">
+            {/* Layer 3: Sharp High-Fidelity Foreground Content */}
+            <div className="container relative z-30 text-center px-6">
                 <motion.div
-                    style={{ y: y1, opacity }}
+                    style={{ y: y1, opacity, scale }}
                     className="flex flex-col items-center relative"
                 >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                        className="flex flex-col items-center"
-                    >
-                        <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-400 mb-8 antialiased">
-                            BEST ENTERTAINMENT
-                        </span>
+                    {/* Inner Text Glow Focal Point */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-[#6C5CE7]/5 rounded-full blur-[120px] pointer-events-none" />
 
-                        <h1 className="text-5xl md:text-[8rem] lg:text-[10rem] font-black mb-12 leading-[0.8] tracking-tighter text-white text-center antialiased italic">
-                            EAT. ENJOY.<br />
-                            <span className="text-gradient-hero-orange drop-shadow-[0_0_40px_rgba(255,122,24,0.3)]">ENTERTAIN.</span>
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex flex-col items-center relative z-10"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1.2, delay: 0.4 }}
+                            className="flex items-center gap-4 mb-10 px-6 py-2 bg-white/[0.03] backdrop-blur-3xl rounded-full border border-white/5 shadow-2xl"
+                        >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#6C5CE7] animate-pulse shadow-[0_0_10px_#6C5CE7]" />
+                            <span className="text-[9px] md:text-[11px] font-black uppercase text-slate-400 antialiased tracking-[0.5em] italic">
+                                ELURU'S PREMIER ENTERTAINMENT HUB
+                            </span>
+                        </motion.div>
+
+                        <h1 className="text-4xl xs:text-5xl md:text-[5.5rem] lg:text-[6.8rem] font-black mb-12 leading-[0.9] tracking-[-0.04em] text-white text-center antialiased italic relative group">
+                            {/* Layered Text Shadows for Depth */}
+                            <span className="relative z-10 block filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                                EAT. ENJOY.<br />
+                                <span className="premium-text-gradient block mt-2 opacity-95 group-hover:opacity-100 transition-opacity duration-1000">
+                                    ENTERTAIN.
+                                </span>
+                            </span>
+                            
+                            {/* Ambient Heading Glow */}
+                            <div className="absolute inset-0 blur-[60px] bg-[#6C5CE7]/10 -z-10 rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-all duration-1000" />
                         </h1>
 
-                        <div className="flex flex-wrap items-center justify-center gap-6 mt-2">
+                        <div className="relative group/cta mt-6">
+                            {/* Advanced Button Glow System */}
+                            <div className="absolute -inset-2 bg-gradient-to-r from-[#6C5CE7] via-[#4834D4] to-[#0EA5E9] rounded-[2rem] blur-2xl opacity-0 group-hover/cta:opacity-40 transition-all duration-1000 group-hover/cta:duration-500 animate-pulse" />
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#6C5CE7] to-[#4834D4] rounded-[2rem] blur-xl opacity-20 group-hover/cta:opacity-50 transition-all duration-700" />
+                            
                             <motion.button
                                 onClick={() => document.getElementById('rides')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="btn-premium px-12 py-5"
-                                whileHover={{ y: 2 }}
+                                className="relative bg-[#02040a]/80 backdrop-blur-3xl px-16 py-8 rounded-[1.8rem] border border-white/10 group-hover/cta:border-[#6C5CE7]/40 transition-all duration-700 overflow-hidden shadow-4xl group/btn"
+                                whileHover={{ scale: 1.02, y: -4 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                <span className="relative z-10 flex items-center gap-3">
-                                    BOOK YOUR RIDE <ArrowDown size={18} />
+                                {/* Inner Glass Reflection */}
+                                <div className="absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover/btn:left-[150%] transition-all duration-[1.5s] ease-in-out" />
+                                
+                                <span className="relative z-10 flex items-center gap-6 text-sm font-black uppercase tracking-[0.4em] text-white italic">
+                                    EXPLORE RIDES 
+                                    <motion.div
+                                        animate={{ y: [0, 5, 0] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                    >
+                                        <ArrowDown size={22} className="text-[#6C5CE7] group-hover/btn:text-white transition-colors" />
+                                    </motion.div>
                                 </span>
                             </motion.button>
                         </div>
@@ -522,55 +673,45 @@ const Hero = () => {
                 </motion.div>
             </div>
 
-
-            {/* Professional Directive HUD (Scroll Indicator) */}
+            {/* Premium Scroll Indicator */}
             <motion.div
-                className="absolute bottom-12 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:gap-4 z-20 cursor-pointer group lg:flex"
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-40 cursor-pointer hidden md:flex group/scroll"
                 onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
+                transition={{ delay: 2.5 }}
             >
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-60">Scroll</span>
-                </div>
-
-                <div className="flex flex-col items-center">
-                    <div className="relative h-12 flex flex-col items-center justify-center mb-2">
-                        <motion.span
-                            animate={{ opacity: [0.4, 0.8, 0.4] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                            className="text-[11px] font-bold text-white/40 tracking-[0.3em] uppercase"
-                        >
-                            SEE RIDES
-                        </motion.span>
-                    </div>
-
-                    {/* Minimal Scanning Line */}
-                    <div className="relative w-40 h-[1px] bg-white/5 overflow-hidden">
-                        <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent w-20"
-                            animate={{ x: [-100, 300] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                        />
-                    </div>
-                </div>
-
-                <div className="relative mt-2">
-                    <div className="w-[1px] h-16 bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
-                    <motion.div
-                        className="absolute top-0 left-[-1.5px] w-[4px] h-[4px] bg-[#FF7A18] rounded-full shadow-[0_0_15px_rgba(255,122,24,0.6)]"
-                        animate={{ y: [0, 60, 0], opacity: [0, 1, 0] }}
-                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                <span className="text-[10px] font-black text-slate-600 tracking-[0.6em] uppercase opacity-40 group-hover/scroll:opacity-100 group-hover/scroll:text-[#6C5CE7] transition-all italic">SCROLL</span>
+                <div className="w-[2px] h-16 bg-white/[0.03] relative rounded-full overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#6C5CE7] to-transparent opacity-20" />
+                    <motion.div 
+                        className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white to-[#6C5CE7] rounded-full shadow-[0_0_15px_rgba(108,92,231,0.5)]"
+                        animate={{ y: ["0%", "200%", "0%"] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                     />
                 </div>
             </motion.div>
 
             <style dangerouslySetInnerHTML={{
                 __html: `
+                .premium-text-gradient {
+                    background: linear-gradient(180deg, 
+                        rgba(255,255,255,1) 0%, 
+                        rgba(255,180,100,1) 30%, 
+                        rgba(255,122,0,1) 60%, 
+                        rgba(108,92,231,1) 100%
+                    );
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    filter: drop-shadow(0 0 30px rgba(108,92,231,0.2));
+                }
                 .mask-bottom {
-                    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+                    mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+                    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+                }
+                .shadow-4xl {
+                    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8), 0 20px 50px -10px rgba(108, 92, 231, 0.2);
                 }
             `}} />
         </section >

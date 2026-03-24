@@ -4,6 +4,7 @@ import { CheckCircle, ArrowRight, User, X, ShieldCheck, Zap, Cpu, Sparkles, Acti
 import { BASE_URL } from '../utils/api';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import useStore from '../store/useStore';
+import OptimizedImage from '../components/common/OptimizedImage';
 
 const Success = () => {
     const [searchParams] = useSearchParams();
@@ -44,40 +45,42 @@ const Success = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#070B14] flex flex-col items-center justify-center p-6 pt-24 space-y-8">
+            <div className="min-h-screen bg-[#02040a] flex flex-col items-center justify-center p-8 pt-24 space-y-12 relative overflow-hidden">
+                <div className="absolute inset-0 matrix-grid opacity-20 pointer-events-none" />
                 <div className="relative">
-                    <div className="absolute inset-0 bg-[#FF7A18]/20 rounded-full blur-2xl animate-pulse" />
-                    <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-[#FF7A18] relative z-10 shadow-[0_0_30px_rgba(255,122,24,0.4)]"></div>
+                    <div className="absolute inset-0 bg-[#6C5CE7]/20 rounded-full blur-3xl animate-pulse" />
+                    <div className="animate-spin rounded-[2.5rem] h-24 w-24 border-t-2 border-b-2 border-[#6C5CE7] relative z-10 shadow-4xl"></div>
                 </div>
-                <p className="text-[#AAB2C5] font-black uppercase tracking-[0.5em] text-[10px] animate-pulse italic">Synchronizing Protocol...</p>
+                <p className="text-slate-600 font-black uppercase tracking-[0.6em] text-[12px] animate-pulse italic">SYNCING QUANTUM STREAM...</p>
             </div>
         );
     }
 
     if (!isSuccess && status) {
         return (
-            <div className="min-h-screen bg-[#070B14] flex items-center justify-center p-6 pt-24 relative overflow-hidden">
-                <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
+            <div className="min-h-screen bg-[#02040a] flex items-center justify-center p-8 pt-32 relative overflow-hidden">
+                <div className="absolute inset-0 matrix-grid opacity-20 pointer-events-none" />
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="glass-card p-16 rounded-[4rem] border border-red-500/20 max-w-xl w-full text-center shadow-[0_50px_100px_rgba(239,68,68,0.1)] relative z-10"
+                    initial={{ opacity: 0, scale: 0.95, y: 40 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    className="bg-white/[0.02] backdrop-blur-4xl p-16 md:p-24 rounded-[4rem] border border-red-500/20 max-w-2xl w-full text-center shadow-4xl relative z-10 overflow-hidden"
                 >
-                    <div className="w-28 h-28 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-10 border border-red-500/20 shadow-[0_0_50px_rgba(239,68,68,0.2)]">
-                        <X size={56} />
+                    <div className="absolute inset-0 noise-overlay opacity-[0.02]" />
+                    <div className="w-32 h-32 bg-red-500/5 text-red-500 rounded-[2.5rem] flex items-center justify-center mx-auto mb-12 border border-red-500/20 shadow-4xl group">
+                        <X size={64} className="group-hover:scale-110 transition-transform duration-700" />
                     </div>
 
-                    <h1 className="text-5xl font-black text-[#F8FAFC] mb-6 tracking-tighter uppercase italic transform -skew-x-12 leading-none">
-                        PAYMENT <br /><span className="text-red-500">FAILED</span>
+                    <h1 className="text-6xl font-black text-white mb-8 tracking-tighter uppercase italic transform -skew-x-12 leading-none">
+                        TELEMETRY <br /><span className="text-red-500">ABORTED</span>
                     </h1>
-                    <p className="text-[#AAB2C5] mb-12 font-black uppercase tracking-[0.4em] text-[10px] italic opacity-60">The transaction protocol was interrupted. <br />Telemetry indicates a synchronization error.</p>
+                    <p className="text-slate-600 mb-16 font-black uppercase tracking-[0.5em] text-[11px] italic opacity-60 leading-relaxed border-l-2 border-red-500/20 pl-10 mx-auto text-left max-w-md">The synchronization cycle was terminated by the host. <br />Handshake sequence failed.</p>
 
-                    <div className="space-y-6">
-                        <Link to="/" className="w-full btn-premium py-5 rounded-2xl shadow-[0_20px_50px_rgba(239,68,68,0.2)] bg-gradient-to-r from-red-600 to-rose-700">
-                            RETRY PROTOCOL <ArrowRight size={20} className="ml-3" />
+                    <div className="space-y-8">
+                        <Link to="/" className="w-full btn-premium py-8 rounded-[2.5rem] shadow-4xl bg-gradient-to-r from-red-600 to-rose-700 group flex items-center justify-center gap-6">
+                            RE-INITIATE <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform duration-700" />
                         </Link>
-                        <Link to="/contact" className="block text-[10px] text-[#AAB2C5] font-black uppercase tracking-[0.5em] hover:text-[#F8FAFC] transition-colors italic">
-                            CONNECT WITH SUPPORT
+                        <Link to="/contact" className="block text-[11px] text-slate-800 font-black uppercase tracking-[0.6em] hover:text-white transition-all italic underline underline-offset-8">
+                            UPLINK SUPPORT
                         </Link>
                     </div>
                 </motion.div>
@@ -86,145 +89,152 @@ const Success = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#070B14] flex items-center justify-center p-6 py-32 relative overflow-hidden selection:bg-[#FF7A18] selection:text-white">
+        <div className="min-h-screen bg-[#02040a] flex items-center justify-center p-8 md:p-12 py-40 relative overflow-hidden selection:bg-[#6C5CE7]/30">
             {/* Background Effects */}
-            <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
-            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none" />
+            <div className="absolute inset-0 matrix-grid opacity-[0.05] pointer-events-none" />
+            <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#6C5CE7]/5 rounded-full blur-[200px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#FF7A00]/5 rounded-full blur-[200px] pointer-events-none" />
+            <div className="absolute inset-0 noise-overlay opacity-[0.02]" />
 
             <motion.div
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-8 md:p-16 rounded-[3rem] md:rounded-[4.5rem] border border-white/10 max-w-2xl w-full text-center shadow-[0_60px_120px_rgba(0,0,0,0.6)] relative z-10 overflow-hidden"
+                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-white/[0.02] backdrop-blur-4xl p-10 md:p-20 rounded-[4rem] md:rounded-[5rem] border border-white/10 max-w-3xl w-full text-center shadow-4xl relative z-10 overflow-hidden"
             >
                 {/* Status Header */}
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF7A18]/40 to-transparent" />
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#6C5CE7]/40 to-transparent" />
 
-                <div className="relative mb-12">
-                    <div className="absolute inset-0 bg-[#FF7A18]/20 rounded-full blur-3xl opacity-40 animate-pulse" />
-                    <div className="w-28 h-28 bg-[#FF7A18]/10 text-[#FF7A18] rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-[#FF7A18]/20 shadow-[0_20px_60px_rgba(255,122,24,0.3)] transform -rotate-12 hover:rotate-0 transition-transform duration-700">
-                        <ShieldCheck size={56} />
+                <div className="relative mb-16">
+                    <div className="absolute inset-0 bg-[#6C5CE7]/20 rounded-full blur-3xl opacity-40 animate-pulse" />
+                    <div className="w-32 h-32 bg-[#6C5CE7]/10 text-[#6C5CE7] rounded-[3rem] flex items-center justify-center mx-auto mb-10 border border-[#6C5CE7]/20 shadow-4xl transform -rotate-12 hover:rotate-0 transition-transform duration-1000 group">
+                        <ShieldCheck size={64} className="group-hover:scale-110 transition-transform duration-1000" />
                     </div>
                 </div>
 
-                <div className="space-y-4 mb-16">
-                    <div className="flex items-center justify-center gap-4 text-[#FF7A18]">
-                        <div className="w-12 h-[1px] bg-[#FF7A18]/20" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.6em] italic opacity-80">VALIDATION SUCCESS</span>
-                        <div className="w-12 h-[1px] bg-[#FF7A18]/20" />
+                <div className="space-y-6 mb-20">
+                    <div className="flex items-center justify-center gap-6 text-[#6C5CE7]">
+                        <div className="w-16 h-[2px] bg-[#6C5CE7]/30 shadow-[0_0_10px_#6C5CE7]" />
+                        <span className="text-[11px] font-black uppercase tracking-[0.8em] italic opacity-80">ENCRYPTION VERIFIED</span>
+                        <div className="w-16 h-[2px] bg-[#6C5CE7]/30 shadow-[0_0_10px_#6C5CE7]" />
                     </div>
-                    <h1 className="text-4xl md:text-7xl font-black text-[#F8FAFC] tracking-tighter uppercase leading-[0.85] transform -skew-x-6">
-                        PROTOCOL <br /><span className="text-gradient-primary">CONFIRMED</span>
+                    <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase leading-[0.8] transform -skew-x-12">
+                        VAULT KEY <br /><span className="text-gradient-primary">ISSUED</span>
                     </h1>
                 </div>
 
-                <div className="flex justify-center mb-16 group">
+                <div className="flex justify-center mb-20 group">
                     <div className="relative">
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-[#FF7A18]/10 to-[#5B8CFF]/10 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                        <div className="p-4 md:p-6 bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_90px_rgba(0,0,0,0.5)] border-4 border-white/10 relative z-10 transform group-hover:scale-105 transition-transform duration-700">
+                        <div className="absolute -inset-10 bg-gradient-to-tr from-[#6C5CE7]/20 to-[#FF7A00]/20 rounded-[4rem] blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-1500" />
+                        <div className="p-8 md:p-10 bg-white rounded-[3.5rem] md:rounded-[4rem] shadow-4xl border-[6px] border-white/5 relative z-10 transform group-hover:scale-105 transition-transform duration-1000">
                             <img
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${orderId || 'ETH-782'}`}
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${orderId || 'ETH-782'}`}
                                 alt="Order QR Code"
-                                className="rounded-xl w-32 md:w-48 h-32 md:h-48"
+                                className="rounded-2xl w-40 md:w-64 h-40 md:h-64"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* Tickets Section: Digital Access Tokens */}
-                <div className="space-y-8 mb-16 text-left">
-                    <div className="flex items-center gap-4 mb-2">
-                        <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#5B8CFF]">
-                            <Cpu size={18} />
+                <div className="space-y-12 mb-20 text-left">
+                    <div className="flex items-center gap-6 mb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-[#6C5CE7] shadow-inner">
+                            <Cpu size={22} />
                         </div>
-                        <h2 className="text-[10px] font-black text-[#AAB2C5] uppercase tracking-[0.4em] italic opacity-60">Digital Access Tokens</h2>
+                        <h2 className="text-[11px] font-black text-slate-800 uppercase tracking-[0.5em] italic opacity-40">AUTHORIZED MODULES</h2>
                     </div>
 
-                    <div className="space-y-5">
+                    <div className="space-y-6">
                         {(orderDetails?.items || []).map((item, idx) => (
                             <motion.div
                                 key={item.id || item._id}
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={{ opacity: 0, x: -30 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 + idx * 0.1 }}
-                                className="bg-[#0F172A]/40 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-6 shadow-2xl flex items-center justify-between gap-6 relative overflow-hidden group hover:border-[#FF7A18]/30 transition-all duration-500"
+                                transition={{ delay: 0.4 + idx * 0.1, duration: 0.8 }}
+                                className="bg-black/40 backdrop-blur-4xl border border-white/5 rounded-[3.5rem] p-8 shadow-4xl flex items-center justify-between gap-8 relative overflow-hidden group hover:border-[#6C5CE7]/30 transition-all duration-700"
                             >
-                                <div className="absolute top-0 left-0 w-2 h-full bg-[#FF7A18] opacity-30 group-hover:opacity-100 transition-opacity" />
-                                <div className="flex items-center gap-6">
-                                    <div className="relative">
-                                        <div className="absolute inset-0 bg-[#FF7A18]/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute top-0 left-0 w-2 h-full bg-[#6C5CE7] opacity-0 group-hover:opacity-100 transition-all duration-700 blur-[1px]" />
+                                <div className="flex items-center gap-8">
+                                    <div className="relative shrink-0">
+                                        <div className="absolute -inset-2 bg-[#6C5CE7]/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                         <OptimizedImage
                                             src={item.image ? decodeURIComponent(item.image) : ''}
                                             alt={item.name}
                                             priority={idx < 4}
-                                            className="w-20 h-20 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all relative z-10"
+                                            className="w-24 h-24 rounded-[2rem] object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-110 transition-all duration-1000 relative z-10 border border-white/10"
                                         />
                                     </div>
-                                    <div className="space-y-1">
-                                        <h3 className="font-black text-[#F8FAFC] text-xl uppercase tracking-tighter italic transform -skew-x-12 leading-tight group-hover:text-[#FF7A18] transition-colors">{item.name}</h3>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-[10px] text-[#AAB2C5] font-black uppercase tracking-widest opacity-60">QTY: {item.quantity}</span>
-                                            <div className="w-1 h-1 rounded-full bg-white/10" />
-                                            <span className="text-[10px] text-[#FF7A18] font-black uppercase tracking-widest">₹{item.price * item.quantity}</span>
+                                    <div className="space-y-2">
+                                        <h3 className="font-black text-white text-2xl uppercase tracking-tighter italic transform -skew-x-12 leading-none group-hover:text-gradient-primary transition-all duration-700">{item.name}</h3>
+                                        <div className="flex items-center gap-5">
+                                            <span className="text-[10px] text-slate-800 font-black uppercase tracking-widest italic opacity-60">QTY: {item.quantity}</span>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+                                            <span className="text-[10px] text-[#6C5CE7] font-black uppercase tracking-widest italic tracking-[0.2em]">₹{item.price * item.quantity}</span>
                                         </div>
-                                        <div className="flex items-center gap-2 mt-3">
-                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                                            <span className="text-[8px] uppercase font-black text-emerald-400 tracking-[0.3em] italic">VALIDATED</span>
+                                        <div className="flex items-center gap-3 mt-4">
+                                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_#10b981]" />
+                                            <span className="text-[9px] uppercase font-black text-emerald-400 tracking-[0.4em] italic leading-none">ACTIVE SYNC</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="hidden sm:flex flex-col items-center border-l border-dashed border-white/10 pl-8 space-y-3">
-                                    <div className="p-2 bg-white rounded-xl shadow-xl transform group-hover:rotate-6 transition-transform">
+                                <div className="hidden sm:flex flex-col items-center border-l border-white/5 pl-10 space-y-4">
+                                    <div className="p-3 bg-white rounded-2xl shadow-4xl transform group-hover:rotate-6 transition-transform duration-700">
                                         <img
                                             src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ETH-${orderId || '782'}-${item.id || item._id}`}
                                             alt="QR"
-                                            className="w-14 h-14 pointer-events-none"
+                                            className="w-16 h-16 pointer-events-none"
                                         />
                                     </div>
-                                    <span className="text-[8px] font-black text-[#AAB2C5] tracking-[0.4em] uppercase opacity-40">T-TOKEN</span>
+                                    <span className="text-[8px] font-black text-slate-800 tracking-[0.5em] uppercase opacity-40 italic leading-none">ALPHA-KEY</span>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-6">
-                    <Link to="/login" className="flex-1 btn-premium py-6 rounded-3xl shadow-[0_20px_60px_rgba(255,122,24,0.35)] group/btn">
-                        PROFILE ELURU <User size={20} className="ml-3 group-hover/btn:scale-110 transition-transform" />
+                <div className="flex flex-col sm:flex-row gap-8">
+                    <Link to="/login" className="flex-1 btn-premium py-8 rounded-[2.5rem] shadow-4xl group/btn flex items-center justify-center gap-4 italic h-full">
+                        PROFILE HUB <User size={22} className="group-hover/btn:scale-110 transition-transform duration-700" />
                     </Link>
-                    <Link to="/dine" className="flex-1 glass-card border border-[#5B8CFF]/20 hover:border-[#5B8CFF]/50 py-6 rounded-3xl flex items-center justify-center gap-3 text-[#5B8CFF] font-black uppercase tracking-[0.4em] text-[11px] italic transition-all duration-500 group/dine shadow-xl">
-                        CULINARY DOCK <ArrowRight size={20} className="group-hover/dine:translate-x-2 transition-transform" />
+                    <Link to="/dine" className="flex-1 glass-card border border-white/10 hover:border-[#6C5CE7]/40 py-8 rounded-[2.5rem] flex items-center justify-center gap-4 text-white font-black uppercase tracking-[0.5em] text-[12px] italic transition-all duration-1000 group/dine shadow-4xl bg-white/[0.03] backdrop-blur-4xl h-full">
+                        DINE MODULE <ArrowRight size={22} className="group-hover/dine:translate-x-3 transition-transform duration-700" />
                     </Link>
                 </div>
 
                 {/* Protocol Guidelines */}
-                <div className="mt-20 p-10 bg-white/[0.02] rounded-[3rem] text-left border border-white/5 backdrop-blur-3xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#5B8CFF]/5 blur-3xl rounded-full" />
-                    <div className="relative z-10 flex items-start gap-8">
-                        <div className="w-16 h-16 rounded-2xl bg-[#5B8CFF]/10 flex items-center justify-center text-[#5B8CFF] shrink-0 border border-[#5B8CFF]/20 shadow-2xl">
-                            <Activity size={28} />
+                <div className="mt-24 p-12 bg-black/40 rounded-[4rem] text-left border border-white/5 backdrop-blur-4xl relative overflow-hidden group hover:border-[#6C5CE7]/20 transition-all duration-1000">
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-[#6C5CE7]/5 blur-[60px] rounded-full translate-x-20 -translate-y-20 transition-opacity duration-1000 opacity-60" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-start gap-10">
+                        <div className="w-20 h-20 rounded-[2rem] bg-[#6C5CE7]/5 flex items-center justify-center text-[#6C5CE7] shrink-0 border border-[#6C5CE7]/20 shadow-4xl group-hover:scale-110 transition-transform duration-1000">
+                            <Activity size={36} />
                         </div>
-                        <div className="space-y-6">
-                            <h3 className="font-black text-[#F8FAFC] tracking-[0.5em] uppercase text-[10px] italic opacity-40">PROTOCOL GUIDELINES Alpha-02</h3>
-                            <ul className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-[11px] text-[#AAB2C5] font-black uppercase tracking-[0.1em] italic opacity-60 leading-relaxed">
-                                <li className="flex gap-4"><Zap size={14} className="text-[#FF7A18] shrink-0" /> PRESENT DIGITAL TOKENS AT DESIGNATED STALLS FOR IMMEDIATE SYNC.</li>
-                                <li className="flex gap-4"><Zap size={14} className="text-[#FF7A18] shrink-0" /> REAL-TIME TELEMETRY UPDATES AVAILABLE IN COMMAND DASHBOARD.</li>
-                                <li className="flex gap-4"><Zap size={14} className="text-[#FF7A18] shrink-0" /> ACCESS PRIVILEGES ARE BINDED TO THIS CRYPTOGRAPHIC SESSION.</li>
-                                <li className="flex gap-4"><Zap size={14} className="text-[#FF7A18] shrink-0" /> ENJOY THE PREMIUM EFOUR EXPERIENCE. PROTOCOL COMPLETE.</li>
+                        <div className="space-y-8 flex-grow">
+                            <div className="flex items-center gap-4">
+                                <h3 className="font-black text-white tracking-[0.6em] uppercase text-[11px] italic opacity-40 leading-none">DIRECTIVE OMNI-01</h3>
+                                <div className="h-[1px] flex-grow bg-white/5" />
+                            </div>
+                            <ul className="grid md:grid-cols-2 gap-x-16 gap-y-6 text-[12px] text-slate-500 font-bold uppercase tracking-[0.15em] italic opacity-90 leading-relaxed">
+                                <li className="flex gap-5"><Zap size={18} className="text-[#6C5CE7] shrink-0" /> Synchronize digital keys at designated kiosks for instant verification.</li>
+                                <li className="flex gap-5"><Zap size={18} className="text-[#6C5CE7] shrink-0" /> Real-time telemetry monitoring enabled via profile uplink.</li>
+                                <li className="flex gap-5"><Zap size={18} className="text-[#6C5CE7] shrink-0" /> Access tokens are unique to this holographic session.</li>
+                                <li className="flex gap-5"><Zap size={18} className="text-[#6C5CE7] shrink-0" /> Protocol execution successful. Welcome to Efour Quantum.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </motion.div>
 
-            {/* Perspective Styles */}
+            {/* Global Styles */}
             <style dangerouslySetInnerHTML={{
                 __html: `
                 .matrix-grid {
                     background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-                    background-size: 40px 40px;
+                    background-size: 50px 50px;
                 }
+                .backdrop-blur-4xl { backdrop-filter: blur(80px); }
+                .shadow-4xl { box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9); }
             `}} />
         </div>
     );

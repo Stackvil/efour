@@ -12,122 +12,135 @@ const Terms = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#070B14] flex flex-col justify-center items-center p-4 sm:p-8 pt-32 pb-20 relative overflow-hidden">
-            <div className="absolute inset-0 matrix-grid opacity-10 pointer-events-none" />
-            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#FF7A18]/5 rounded-full blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#5B8CFF]/5 rounded-full blur-[150px] pointer-events-none" />
+        <div className="min-h-screen bg-[#02040a] flex flex-col justify-center items-center p-6 sm:p-12 pt-40 pb-24 relative overflow-hidden">
+            <div className="absolute inset-0 matrix-grid opacity-20 pointer-events-none" />
+            <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#6C5CE7]/5 rounded-full blur-[200px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#FF7A00]/5 rounded-full blur-[200px] pointer-events-none" />
+            <div className="absolute inset-0 noise-overlay opacity-[0.02]" />
             
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                initial={{ opacity: 0, scale: 0.95, y: 60 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="glass-card rounded-[3rem] shadow-3xl w-full max-w-3xl overflow-hidden flex flex-col border border-white/10 relative z-10"
+                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-white/[0.02] backdrop-blur-4xl rounded-[4rem] shadow-4xl w-full max-w-4xl overflow-hidden flex flex-col border border-white/10 relative z-10"
             >
                 {/* Header */}
-                <div className="px-10 py-8 border-b border-white/5 flex items-center justify-between bg-white/2 relative z-10">
-                    <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-2xl bg-[#5B8CFF]/10 flex items-center justify-center border border-[#5B8CFF]/20 shadow-[0_0_20px_rgba(91,140,255,0.1)]">
-                            <BookHeart size={28} className="text-[#5B8CFF]" />
+                <div className="px-12 py-10 border-b border-white/5 flex items-center justify-between bg-white/[0.03] relative z-10">
+                    <div className="flex items-center gap-8">
+                        <div className="w-16 h-16 rounded-[2rem] bg-[#6C5CE7]/10 flex items-center justify-center border border-[#6C5CE7]/20 shadow-4xl group">
+                            <BookHeart size={32} className="text-[#6C5CE7] group-hover:scale-110 transition-transform duration-700" />
                         </div>
                         <div>
-                            <span className="text-[13px] font-bold text-[#5B8CFF] uppercase tracking-[0.4em] mb-1 block italic opacity-60">User Agreement</span>
-                            <h2 className="text-3xl font-black italic tracking-tighter uppercase transform -skew-x-6 text-white">Terms of Use</h2>
+                            <span className="text-[11px] font-black text-[#6C5CE7] uppercase tracking-[0.6em] mb-2 block italic opacity-60 leading-none">OUR RULES</span>
+                            <h2 className="text-4xl font-black italic tracking-tighter uppercase transform -skew-x-12 text-white leading-none">TERMS OF USE</h2>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-12 h-12 flex items-center justify-center text-[#AAB2C5] hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-white/10"
+                        className="w-16 h-16 flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/10 rounded-[2rem] transition-all border border-white/10 active:scale-90"
                     >
-                        <X size={24} />
+                        <X size={28} />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-10 overflow-y-auto bg-transparent flex-grow custom-scrollbar max-h-[70vh]">
-                    <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] mb-10 shadow-inner">
-                        <p className="text-[#AAB2C5] text-base font-bold italic uppercase tracking-wider leading-relaxed">
-                            Engagement with <span className="text-white">EFOUR-ELURU.COM</span> constitutes formal acceptance of this Eluru Protocol. Acceptance is non-optional for system interaction.
+                <div className="p-12 lg:p-16 overflow-y-auto bg-transparent flex-grow custom-scrollbar max-h-[65vh]">
+                    <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[3rem] mb-12 shadow-inner group hover:border-[#6C5CE7]/20 transition-all duration-700">
+                        <p className="text-slate-600 text-lg font-bold italic uppercase tracking-[0.1em] leading-relaxed border-l-2 border-[#6C5CE7]/30 pl-10">
+                            By using <span className="text-white">EFOUR-ELURU.COM</span>, you agree to follow the <span className="text-[#6C5CE7]">EFOUR RULES.</span> You must follow these guidelines to use our website.
                         </p>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-8 mb-8">
-                        <div className="glass-card p-8 rounded-[2rem] border border-white/5 shadow-2xl hover:border-[#5B8CFF]/30 transition-all group bg-white/2">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                                    <Scale size={18} className="text-[#5B8CFF]" />
+                    <div className="grid sm:grid-cols-2 gap-10 mb-12">
+                        <div className="bg-white/[0.01] p-10 rounded-[3rem] border border-white/5 shadow-4xl hover:border-[#6C5CE7]/30 transition-all duration-700 group">
+                            <div className="flex items-center gap-6 mb-8 text-[#6C5CE7]">
+                                <div className="w-12 h-12 rounded-2xl bg-[#6C5CE7]/5 flex items-center justify-center border border-[#6C5CE7]/10 shadow-inner">
+                                    <Scale size={24} />
                                 </div>
-                                <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Obligations</h3>
+                                <h3 className="font-black text-white uppercase tracking-[0.4em] italic text-[14px]">YOUR PART</h3>
                             </div>
-                            <p className="text-[13px] text-[#AAB2C5] font-bold uppercase tracking-widest italic leading-relaxed opacity-60">
-                                Usage must align with Tier-1 legal frameworks. You are the sole architect of your account security. Provision of false telemetry is strictly prohibited.
+                            <p className="text-[13px] text-slate-500 font-bold uppercase tracking-[0.15em] italic leading-relaxed opacity-80 group-hover:text-white transition-colors">
+                                You must follow the law when using our website. You are responsible for your account's safety. Providing false information is not allowed.
                             </p>
                         </div>
 
-                        <div className="glass-card p-8 rounded-[2rem] border border-white/5 shadow-2xl hover:border-[#FF7A18]/30 transition-all group bg-white/2">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                                    <LinkIcon size={18} className="text-[#FF7A18]" />
+                        <div className="bg-white/[0.01] p-10 rounded-[3rem] border border-white/5 shadow-4xl hover:border-[#FF7A00]/30 transition-all duration-700 group">
+                            <div className="flex items-center gap-6 mb-8 text-[#FF7A00]">
+                                <div className="w-12 h-12 rounded-2xl bg-[#FF7A00]/5 flex items-center justify-center border border-[#FF7A00]/10 shadow-inner">
+                                    <LinkIcon size={24} />
                                 </div>
-                                <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Data Rights</h3>
+                                <h3 className="font-black text-white uppercase tracking-[0.4em] italic text-[14px]">CONTENT</h3>
                             </div>
-                            <p className="text-[13px] text-[#AAB2C5] font-bold uppercase tracking-widest italic leading-relaxed opacity-60">
-                                Interface assets are for isolated personal viewing. External extraction, mining, or harvesting of protocol data is a security violation.
+                            <p className="text-[13px] text-slate-500 font-bold uppercase tracking-[0.15em] italic leading-relaxed opacity-80 group-hover:text-white transition-colors">
+                                All photos and videos on this website are for your personal use only. Copying or stealing our data is strictly forbidden.
                             </p>
                         </div>
                     </div>
 
-                    <div className="glass-card p-8 rounded-[2.5rem] border border-white/5 bg-white/2 mb-8 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/10 to-transparent rounded-bl-full blur-2xl" />
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                    <div className="bg-white/[0.01] p-10 rounded-[4rem] border border-white/5 mb-12 shadow-4xl group hover:border-red-500/20 transition-all duration-700 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 blur-[100px] rounded-full translate-x-32 -translate-y-32" />
+                        <div className="flex items-center gap-6 mb-10 text-red-500">
+                            <div className="w-12 h-12 rounded-2xl bg-red-500/5 flex items-center justify-center border border-red-500/10 shadow-inner group-hover:scale-110 transition-transform">
+                                <AlertCircle size={24} />
+                            </div>
+                            <h3 className="font-black text-white uppercase tracking-[0.4em] italic text-[14px]">LIMITS & REFUNDS</h3>
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-10 mb-10 relative z-10">
+                            <p className="text-[14px] text-slate-500 font-bold uppercase tracking-[0.1em] italic opacity-80 group-hover:text-white transition-colors leading-relaxed">
+                                <span className="text-red-500 italic block mb-2 opacity-100">NO LIABILITY</span>
+                                You agree that Efour is not responsible for any website errors or technical problems.
+                            </p>
+                            <p className="text-[14px] text-slate-500 font-bold uppercase tracking-[0.1em] italic opacity-80 group-hover:text-white transition-colors leading-relaxed">
+                                <span className="text-[#6C5CE7] italic block mb-2 opacity-100">SERVICE</span>
+                                The website is provided as-is. We do not guarantee it will always be online or error-free.
+                            </p>
+                        </div>
+
+                        <div className="bg-red-500/5 p-10 rounded-[3rem] border border-red-500/10 shadow-inner group-hover:bg-red-500/10 transition-colors duration-700">
+                            <div className="flex items-center gap-4 mb-6">
                                 <AlertCircle size={18} className="text-red-500" />
+                                <h4 className="font-black text-[13px] text-red-500 uppercase tracking-[0.4em] italic leading-none">REFUND POLICY</h4>
                             </div>
-                            <h3 className="font-bold text-white uppercase tracking-widest italic text-[14px]">Liability & Finality</h3>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-8 mb-8">
-                            <p className="text-[13px] text-[#AAB2C5] font-bold uppercase tracking-widest italic opacity-60">
-                                <span className="text-white italic">Indemnity:</span> You release Efour from all liability arising from interface engagement errors.
-                            </p>
-                            <p className="text-[13px] text-[#AAB2C5] font-bold uppercase tracking-widest italic opacity-60">
-                                <span className="text-white italic">Protocol Risk:</span> Service availability is provided "as-is". No guarantees for 100% Eluru uptime.
-                            </p>
-                        </div>
-
-                        <div className="bg-red-500/5 p-6 rounded-2xl border border-red-500/20 shadow-inner">
-                            <div className="flex items-center gap-3 mb-3">
-                                <AlertCircle size={14} className="text-red-500" />
-                                <h4 className="font-bold text-[12px] text-red-500 uppercase tracking-widest italic">Terminal Transaction Policy</h4>
-                            </div>
-                            <p className="text-[13px] text-red-400/60 font-bold uppercase tracking-widest italic">
-                                All resource transfers are terminal. No refunds, returns, or reversal of credits once a booking or culinary request is initiated.
+                            <p className="text-[14px] text-red-500/60 font-black uppercase tracking-[0.2em] italic leading-relaxed">
+                                ALL PAYMENTS ARE FINAL. NO REFUNDS WILL BE GIVEN ONCE A BOOKING OR FOOD ORDER IS PLACED.
                             </p>
                         </div>
                     </div>
 
-                    <div className="grid sm:grid-cols-3 gap-6">
+                    <div className="grid sm:grid-cols-3 gap-8">
                         {[
-                            { icon: Globe, title: "Domain", desc: "India Core Legal Jurisdiction", color: "#5B8CFF" },
-                            { icon: Power, title: "Status", desc: "Right to Terminate Connection", color: "#FF7A18" },
-                            { icon: Gavel, title: "Justice", desc: "Court Resolution: Vijayawada", color: "#AAB2C5" }
+                            { icon: Globe, title: "LOCATION", desc: "Subject to Indian Laws", color: "#6C5CE7" },
+                            { icon: Power, title: "YOUR ACCOUNT", desc: "We can close accounts if rules are broken", color: "#FF7A00" },
+                            { icon: Gavel, title: "SUPPORT", desc: "Help office: Vijayawada", color: "#slate-600" }
                         ].map((item, idx) => (
-                            <div key={idx} className="glass-card p-6 rounded-3xl border border-white/5 shadow-xl hover:bg-white/5 transition-all bg-white/2">
-                                <item.icon size={20} className="mb-4" style={{ color: item.color }} />
-                                <h4 className="text-[12px] font-bold text-white uppercase tracking-[0.3em] mb-2 italic">{item.title}</h4>
-                                <p className="text-[12px] text-[#AAB2C5]/50 font-bold uppercase tracking-widest leading-relaxed italic">{item.desc}</p>
+                            <div key={idx} className="bg-white/[0.01] p-8 rounded-[2.5rem] border border-white/5 shadow-4xl hover:bg-white/[0.03] transition-all duration-700 group">
+                                <item.icon size={28} className="mb-6 opacity-60 group-hover:opacity-100 transition-opacity" style={{ color: item.color }} />
+                                <h4 className="text-[13px] font-black text-white uppercase tracking-[0.4em] mb-4 italic leading-none">{item.title}</h4>
+                                <p className="text-[12px] text-slate-800 font-bold uppercase tracking-[0.1em] leading-relaxed italic opacity-60 group-hover:opacity-100 transition-opacity">{item.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Footer Action */}
-                <div className="px-10 py-8 bg-white/2 border-t border-white/5">
+                <div className="px-12 py-10 bg-white/[0.03] border-t border-white/5 relative z-10">
                     <button
                         onClick={onClose}
-                        className="btn-premium w-full py-6 rounded-3xl font-bold uppercase tracking-[0.4em] text-[14px] transition-all flex items-center justify-center gap-4 italic"
+                        className="btn-premium w-full py-8 rounded-[2.5rem] font-black uppercase tracking-[0.6em] text-[12px] shadow-4xl hover:-translate-y-2 transition-all duration-700 italic flex items-center justify-center gap-6"
                     >
-                        ACCEPT PROTOCOL <Zap size={18} />
+                        I AGREE <Zap size={20} className="group-hover:scale-125 transition-transform" />
                     </button>
                 </div>
             </motion.div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                .backdrop-blur-4xl { backdrop-filter: blur(80px); }
+                .shadow-4xl { box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9); }
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(108, 92, 231, 0.2); border-radius: 10px; }
+            `}} />
         </div>
     );
 };

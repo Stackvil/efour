@@ -366,6 +366,40 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleMenuImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        const uploadPromises = files.map(file => {
+            return new Promise((resolve, reject) => {
+                if (file.size > 5 * 1024 * 1024) {
+                    reject(new Error(`File ${file.name} is too large. Max 5MB.`));
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(uploadPromises)
+            .then(base64Images => {
+                setFormData(prev => ({
+                    ...prev,
+                    menuImages: [...(prev.menuImages || []), ...base64Images]
+                }));
+            })
+            .catch(err => alert(err.message));
+    };
+
+    const removeMenuImage = (index) => {
+        setFormData(prev => ({
+            ...prev,
+            menuImages: prev.menuImages.filter((_, i) => i !== index)
+        }));
+    };
+
 
     // --- Helpers (match backend API: orders use amount, bookings use totalPrice) ---
     const totalRevenue = orders.reduce((acc, curr) => acc + (curr.amount ?? curr.totalAmount ?? 0), 0) + bookings.reduce((acc, curr) => acc + (curr.totalPrice ?? 0), 0);
@@ -512,8 +546,21 @@ const AdminDashboard = () => {
             <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] bg-[#FF7A18]/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[10%] right-[-10%] w-[50%] h-[50%] bg-[#5B8CFF]/5 rounded-full blur-[120px] pointer-events-none" />
 
+            {/* Mobile Sidebar Overlay */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-md z-[35] md:hidden"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* --- SIDEBAR --- */}
-            <aside className={`fixed inset-y-0 left-0 z-40 w-80 bg-[#0F172A]/40 backdrop-blur-2xl border-r border-white/10 transform transition-all duration-500 ease-in-out md:translate-x-0 md:sticky md:top-0 h-screen shadow-2xl ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-[#0F172A]/80 backdrop-blur-2xl border-r border-white/10 transform transition-all duration-500 ease-in-out md:translate-x-0 md:sticky md:top-0 h-screen shadow-2xl ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="flex items-center gap-5 p-8 h-28 border-b border-white/5">
                     <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 group overflow-hidden">
                         <img src="/E4LOGO.jpeg" alt="Logo" className="w-full h-full object-contain brightness-110 group-hover:scale-110 transition-transform duration-500" />
@@ -539,7 +586,7 @@ const AdminDashboard = () => {
                                 <tab.icon size={18} className={activeTab === tab.id ? 'text-[#FF7A18]' : 'text-[#AAB2C5] group-hover:text-white transition-colors'} />
                             </div>
                             <span className="flex-grow text-left">{tab.label}</span>
-                            {activeTab === tab.id && <motion.div layoutId="active-nav-dot" className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] shadow-[0_0_8px_#FF7A18]" />}
+                            {activeTab === tab.id && <motion.div layout className="w-1.5 h-1.5 rounded-full bg-[#FF7A18] shadow-[0_0_8px_#FF7A18]" />}
                         </button>
                     ))}
                 </nav>
@@ -558,7 +605,7 @@ const AdminDashboard = () => {
             <main className="flex-1 flex flex-col min-w-0">
 
                 {/* TOP BAR */}
-                <header className="h-24 px-8 flex items-center justify-between z-20 sticky top-0 bg-[#070B14]/90 backdrop-blur-xl border-b border-white/5 w-full">
+                <header className="h-20 md:h-24 px-6 md:px-8 flex items-center justify-between z-20 sticky top-0 bg-[#070B14]/90 backdrop-blur-xl border-b border-white/5 w-full">
                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden p-3 text-[#AAB2C5] hover:bg-white/5 rounded-2xl transition-all">
                         <Menu size={24} />
                     </button>
@@ -669,7 +716,7 @@ const AdminDashboard = () => {
                                                 >
                                                     {statusFilter === s && (
                                                         <motion.div
-                                                            layoutId="status-bg"
+                                                            layout
                                                             className="absolute inset-0 bg-white/10 border border-white/10 rounded-2xl shadow-xl"
                                                             transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                                                         />
@@ -932,7 +979,7 @@ const AdminDashboard = () => {
                                         </div>
 
                                         {/* ── STATS ROW ── */}
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                             {[
                                                 { icon: Gamepad2, color: '#FF7A18', bg: 'rgba(255,122,24,0.1)', label: 'Total Rides', val: totalRidesCount },
                                                 { icon: Power, color: '#22C55E', bg: 'rgba(34,197,94,0.1)', label: 'Rides Active', val: `${ridesOnCount}/${totalRidesCount}` },
@@ -1511,6 +1558,36 @@ const AdminDashboard = () => {
                                             <textarea className="w-full bg-white/5 px-6 py-5 rounded-2xl border border-white/10 focus:border-[#FF7A18]/50 outline-none transition-all font-black text-xs uppercase tracking-widest text-white shadow-inner leading-relaxed resize-none italic"
                                                 value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} rows="4" placeholder="Enter Description..."></textarea>
                                         </div>
+
+                                        {activeTab === 'dine' && (
+                                            <div className="space-y-6 pt-4 border-t border-white/5">
+                                                <div className="flex items-center justify-between">
+                                                    <label className="text-[10px] font-black text-[#AAB2C5]/40 uppercase tracking-[0.3em] italic">Menu Images / Add Menu</label>
+                                                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Optional</span>
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-4 gap-4">
+                                                    {formData.menuImages?.map((img, idx) => (
+                                                        <div key={idx} className="relative aspect-square bg-white/5 rounded-2xl overflow-hidden border border-white/10 group/menu-img">
+                                                            <img src={img} className="w-full h-full object-cover" />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => removeMenuImage(idx)}
+                                                                className="absolute inset-0 bg-red-500/60 opacity-0 group-hover/menu-img:opacity-100 transition-opacity flex items-center justify-center text-white"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                    <label className="aspect-square bg-white/5 hover:bg-white/10 border border-dashed border-white/20 hover:border-[#FF7A18]/50 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-all group/add-menu border-2">
+                                                        <Menu size={20} className="text-[#AAB2C5] group-hover/add-menu:text-[#FF7A18] transition-colors" />
+                                                        <span className="text-[8px] font-black uppercase text-[#AAB2C5] tracking-[0.2em] px-4 text-center">Add Multiple Images</span>
+                                                        <input type="file" multiple className="hidden" onChange={handleMenuImagesChange} accept="image/*" />
+                                                    </label>
+                                                </div>
+                                                <p className="text-[8px] font-black text-[#AAB2C5]/20 uppercase tracking-[0.3em] italic">Upload scans or photos of your physical menu items.</p>
+                                            </div>
+                                        )}
                                     </>
                                 )}
                                 <button type="submit" className="btn-premium w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-[10px] shadow-3xl italic mt-6 group flex items-center justify-center gap-4">

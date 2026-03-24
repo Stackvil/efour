@@ -50,7 +50,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                             </div>
 
                             {/* Content */}
-                            <div className="p-10 overflow-y-auto bg-transparent flex-grow flex flex-col items-center custom-scrollbar">
+                            <div className="p-6 md:p-10 overflow-y-auto bg-transparent flex-grow flex flex-col items-center custom-scrollbar">
                                 <div className="mb-12 max-w-2xl text-center relative">
                                     <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-40 h-40 bg-[#FF7A18]/5 blur-3xl rounded-full" />
                                     <span className="text-[14px] font-bold tracking-[0.3em] text-[#FF7A18] uppercase mb-4 block">OUR STORY</span>
@@ -63,7 +63,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                                 </div>
 
                                 <div className="grid sm:grid-cols-2 gap-6 w-full mb-10">
-                                    <div className="bg-[#0D7066] p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+                                    <div className="bg-[#0D7066] p-6 md:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
                                         <Store size={40} className="text-white mb-8" />
                                         <h4 className="text-4xl font-black text-white mb-4">For Vendors</h4>
                                         <p className="text-white/80 leading-relaxed font-bold text-lg">
@@ -71,7 +71,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                                         </p>
                                     </div>
 
-                                    <div className="bg-[#FF5722] p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+                                    <div className="bg-[#FF5722] p-6 md:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group">
                                         <Users size={40} className="text-white mb-8" />
                                         <h4 className="text-4xl font-black text-white mb-4">For Users</h4>
                                         <p className="text-white/80 leading-relaxed font-bold text-lg">
@@ -80,7 +80,7 @@ const AboutModal = ({ isOpen, onClose }) => {
                                     </div>
                                 </div>
 
-                                <div className="w-full bg-[#F8FAFC] p-8 sm:p-10 rounded-[2.5rem] shadow-xl relative mt-8">
+                                <div className="w-full bg-[#F8FAFC] p-6 md:p-10 rounded-[2.5rem] shadow-xl relative mt-8">
                                     <div className="flex items-center gap-6 mb-8">
                                         <div className="w-14 h-14 rounded-2xl bg-[#E6F3F2] flex items-center justify-center border border-[#12796D]/10">
                                             <Building2 size={28} className="text-[#12796D]" />
@@ -94,23 +94,23 @@ const AboutModal = ({ isOpen, onClose }) => {
                                         </p>
                                     </div>
 
-                                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-10 pt-10 border-t border-black/5">
+                                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-10 pt-10 border-t border-black/5">
                                         <div className="relative shrink-0">
                                             <img
                                                 src="/jaynarayana.jpeg"
                                                 alt="Jayanarayana Kureti"
-                                                className="w-40 h-40 sm:w-48 sm:h-48 rounded-[2.5rem] object-cover object-top border-8 border-white shadow-2xl relative z-10"
+                                                className="w-24 h-24 xs:w-32 xs:h-32 sm:w-48 sm:h-48 rounded-[1.5rem] sm:rounded-[2.5rem] object-cover object-top border-4 sm:border-8 border-white shadow-2xl relative z-10"
                                                 onError={(e) => {
                                                     e.target.style.display = 'none';
                                                     e.target.nextSibling.style.display = 'flex';
                                                 }}
                                             />
-                                            <div className="hidden w-40 h-40 sm:w-48 sm:h-48 rounded-[2.5rem] bg-[#1A1F2C] items-center justify-center text-white font-black text-4xl border-8 border-white shadow-2xl">
+                                            <div className="hidden w-24 h-24 xs:w-32 xs:h-32 sm:w-48 sm:h-48 rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#1A1F2C] items-center justify-center text-white font-black text-2xl sm:text-4xl border-4 sm:border-8 border-white shadow-2xl">
                                                 JK
                                             </div>
                                         </div>
                                         <div className="text-center sm:text-left pt-4">
-                                            <h3 className="text-4xl sm:text-5xl font-black text-[#1A1F2C] leading-tight mb-2 tracking-tighter">Jayanarayana Kureti</h3>
+                                            <h3 className="text-2xl xs:text-3xl sm:text-5xl font-black text-[#1A1F2C] leading-tight mb-2 tracking-tighter">Jayanarayana Kureti</h3>
                                             <div className="flex items-center justify-center sm:justify-start gap-3">
                                                 <div className="w-8 h-1 bg-[#12796D] rounded-full" />
                                                 <span className="text-lg font-bold text-[#718096] uppercase tracking-[0.2em]">Founder & CEO</span>
