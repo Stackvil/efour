@@ -63,12 +63,29 @@ const Cart = () => {
                 details: item.details || {}
             }));
 
+            const totalForBackend = finalTotal;
+            const subtotalItems = items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+            const taxNeeded = totalForBackend - subtotalItems;
+
+            // Include GST as a separate item to ensure the final total matches the bill exactly
+            const itemsWithTax = [
+                ...items,
+                {
+                    id: 'tax-gst-9',
+                    name: 'GST (9%)',
+                    price: taxNeeded, // Exact tax amount
+                    quantity: 1,
+                    image: '',
+                    details: {}
+                }
+            ];
+
             const res = await fetchWithAuth('/api/orders/e4/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    items,
-                    amount: Math.round(finalTotal),
+                    items: itemsWithTax,
+                    amount: totalForBackend,
                     location: 'E4',
                     name: currentUser?.name || 'Guest',
                     email: currentUser?.email || email || 'efoureluru@gmail.com',
@@ -315,7 +332,7 @@ const Cart = () => {
                                                             INC. ALL TAXES {showTaxBreakdown ? '−' : '+'}
                                                         </button>
                                                     </div>
-                                                    <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{Math.round(finalTotal)}</span>
+                                                    <span className="text-4xl font-black text-[#F8FAFC] tracking-tighter uppercase italic transform -skew-x-12">₹{finalTotal % 1 === 0 ? finalTotal : finalTotal.toFixed(2)}</span>
                                                 </div>
                                             </div>
                                         </div>

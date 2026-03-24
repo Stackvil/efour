@@ -17,6 +17,8 @@ import About from './pages/About';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Analytics from './pages/Analytics';
+import Failed from './pages/Failed';
+
 
 import ScrollToTop from './components/common/ScrollToTop';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -102,7 +104,9 @@ function App() {
                             <Route path="/login" element={<Login />} />
                             <Route path="/tickets" element={<YourTickets />} />
                             <Route path="/success" element={<Success />} />
+                            <Route path="/failed" element={<Failed />} />
                             <Route path="/about" element={<About />} />
+
                             <Route path="/privacy" element={<Privacy />} />
                             <Route path="/terms" element={<Terms />} />
                         </Route>

@@ -48,7 +48,7 @@ const Header = () => {
                     <img
                         src="/E4LOGO.jpeg"
                         alt="E4 Logo"
-                        className="h-16 md:h-20 w-auto object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:scale-105 group-hover:rotate-2"
+                        className="h-[4.5rem] md:h-28 w-auto object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:scale-105 group-hover:rotate-2"
                         loading="eager"
                         fetchpriority="high"
                     />

@@ -41,7 +41,7 @@ const About = () => {
                         </div>
 
                         <h2 className="text-4xl xs:text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter uppercase italic transform -skew-x-12 text-white">
-                            <span className="text-gradient-primary">OUR GOAL.</span>
+                            <span className="text-gradient-primary">OUR VISION.</span>
                         </h2>
 
                         <p className="text-[#94A3B8] text-xl font-bold uppercase tracking-widest leading-relaxed italic opacity-40 border-l border-[#6C5CE7]/30 pl-10 max-w-lg">
@@ -53,7 +53,7 @@ const About = () => {
                             className="btn-premium px-8 md:px-12 py-4 md:py-6 rounded-2xl shadow-2xl"
                         >
                             <span className="flex items-center gap-4 text-xs md:text-sm">
-                                SEE RIDES <ArrowRight size={18} />
+                                BOOK YOUR RIDE <ArrowRight size={18} />
                             </span>
                         </motion.button>
                     </motion.div>
@@ -82,10 +82,10 @@ const About = () => {
                                 <OptimizedImage
                                     src="/horizon picture.png"
                                     alt="Experience Efour"
-                                    className="w-full h-full object-cover grayscale opacity-80 group-hover/main:grayscale-0 group-hover/main:opacity-100 group-hover/main:scale-105 transition-all duration-[1s]"
+                                    className="w-full h-full object-cover group-hover/main:scale-105 transition-all duration-[1s]"
                                 />
-                                {/* Soft Bottom Image Gradient */}
-                                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#02040a]/40 to-transparent opacity-60 z-10" />
+                                {/* Bottom Image Gradient */}
+                                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/10 to-transparent opacity-30 z-10" />
                             </div>
                         </motion.div>
 
@@ -103,13 +103,10 @@ const About = () => {
                                 <OptimizedImage
                                     src="/horizon picture.png"
                                     alt="Thrill Seekers"
-                                    className="w-full h-full object-cover brightness-[0.75] group-hover/preview:brightness-[0.95] group-hover/preview:scale-105 transition-all duration-[1s]"
+                                    className="w-full h-full object-cover brightness-[1.1] group-hover/preview:brightness-[1.2] group-hover/preview:scale-105 transition-all duration-[1s]"
                                 />
-                                {/* Glass Blur Overlay instead of dark mask */}
-                                <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-[1px] group-hover/preview:backdrop-blur-0 transition-all duration-700" />
-                                
-                                {/* Bottom Accent Gradient */}
-                                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                                {/* Soft Accent Gradient */}
+                                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
                             </div>
                         </motion.div>
 

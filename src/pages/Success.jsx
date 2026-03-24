@@ -146,7 +146,7 @@ const Success = () => {
                     </div>
 
                     <div className="space-y-6">
-                        {(orderDetails?.items || []).map((item, idx) => (
+                        {(orderDetails?.items || []).filter(item => item.id !== 'tax-gst-9').map((item, idx) => (
                             <motion.div
                                 key={item.id || item._id}
                                 initial={{ opacity: 0, x: -30 }}

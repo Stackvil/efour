@@ -286,14 +286,21 @@ const YourTickets = () => {
 
     const tickets = useMemo(() => {
         if (!rawTickets || rawTickets.length === 0) return [];
-        return rawTickets.filter(Boolean).flatMap(ticket =>
-            (ticket.items || []).map(item => ({
-                ...item,
-                ticketId: ticket.id || ticket._id,
-                purchaseDate: ticket.date || ticket.createdAt,
-                originalTicket: ticket
-            }))
-        );
+        const validStatuses = ['success', 'confirmed', 'paid', 'captured'];
+        return rawTickets
+            .filter(Boolean)
+            .filter(ticket => {
+                const status = (ticket.status || ticket.orderStatus || '').toLowerCase();
+                return validStatuses.includes(status);
+            })
+            .flatMap(ticket =>
+                (ticket.items || []).filter(item => item.id !== 'tax-gst-9').map(item => ({
+                    ...item,
+                    ticketId: ticket.id || ticket._id,
+                    purchaseDate: ticket.date || ticket.createdAt,
+                    originalTicket: ticket
+                }))
+            );
     }, [rawTickets]);
 
     const filteredTickets = useMemo(() => {
@@ -346,7 +353,7 @@ const YourTickets = () => {
                 <h2 className="text-6xl md:text-9xl font-black text-white mb-8 uppercase italic tracking-tighter transform -skew-x-12 leading-[0.85]">NO TICKETS <br /> <span className="text-gradient-primary">YET</span></h2>
                 <p className="text-slate-600 mb-16 max-w-lg font-black uppercase tracking-[0.4em] text-[12px] italic opacity-60 leading-relaxed border-l-2 border-[#6C5CE7]/20 pl-10 mx-auto">You haven't bought any tickets yet. <br />Go to our food or rides to start booking.</p>
                 <Link to="/" className="btn-premium px-20 py-8 rounded-[2.5rem] font-black uppercase tracking-[0.6em] text-[12px] shadow-4xl hover:-translate-y-2 transition-all duration-700">
-                    SEE RIDES & FOOD
+                    BOOK YOUR RIDE & FOOD
                 </Link>
             </div>
         );

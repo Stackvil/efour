@@ -402,7 +402,10 @@ const AdminDashboard = () => {
 
 
     // --- Helpers (match backend API: orders use amount, bookings use totalPrice) ---
-    const totalRevenue = orders.reduce((acc, curr) => acc + (curr.amount ?? curr.totalAmount ?? 0), 0) + bookings.reduce((acc, curr) => acc + (curr.totalPrice ?? 0), 0);
+    // Only count paid/confirmed orders in total revenue
+    const isPaid = (o) => ['success', 'confirmed', 'paid', 'captured'].includes((o.status || o.orderStatus || '').toLowerCase());
+    const totalRevenue = orders.filter(isPaid).reduce((acc, curr) => acc + (curr.amount ?? curr.totalAmount ?? 0), 0) + 
+                         bookings.filter(isPaid).reduce((acc, curr) => acc + (curr.totalPrice ?? 0), 0);
     const activeRidesCount = products.filter(p => p.category === 'play' && (p.status || 'on').toLowerCase() === 'on').length;
     const tabs = [
         { id: 'analytics', label: 'Analytics', icon: LayoutDashboard },
@@ -798,6 +801,7 @@ const AdminDashboard = () => {
                                         const label = i === 13 ? 'Today' : d.getDate().toString().padStart(2, '0');
                                         const val = allLocal
                                             .filter(o => new Date(o.createdAt || o.date || 0).toDateString() === d.toDateString())
+                                            .filter(o => ['success', 'confirmed', 'paid', 'captured'].includes((o.status || o.orderStatus || '').toLowerCase()))
                                             .reduce((s, o) => s + (o.amount ?? o.totalAmount ?? o.totalPrice ?? 0), 0);
                                         return { label, val };
                                     });
@@ -1115,7 +1119,7 @@ const AdminDashboard = () => {
                                                             const itemLabel = b.items?.map(it => `${it.quantity || 1}x ${it.name}`).join(', ') || b.facility || '—';
                                                             const dateStr = new Date(b.createdAt || b.date || 0).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
                                                             const amt = b.amount ?? b.totalAmount ?? b.totalPrice ?? 0;
-                                                            const st = (b.status || b.orderStatus || 'confirmed').toLowerCase();
+                                                            const st = (b.status || b.orderStatus || 'pending').toLowerCase();
                                                             return (
                                                                 <tr key={b._id || b.id || i} className="border-b border-white/5 hover:bg-white/3 transition-colors">
                                                                     <td className="px-5 py-3.5 font-mono text-sm font-bold text-white/60">#{(b._id || b.id || '').toString().slice(-6)}</td>
@@ -1156,7 +1160,8 @@ const AdminDashboard = () => {
                                                 key={item.id}
                                                 initial={{ opacity: 0, scale: 0.9 }}
                                                 animate={{ opacity: 1, scale: 1 }}
-                                                className="group relative bg-[#0F172A]/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-700 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[#FF7A18]/10 hover:-translate-y-3"
+                                                className="group relative bg-[#0F172A]/40 backdrop-blur-xl rounded-[2.5rem] border border-white/10 overflow-hidden hover:border-[#FF7A18]/50 transition-all duration-700 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[#FF7A18]/10 hover:-translate-y-3"
+                                                style={{ willChange: "transform, opacity" }}
                                             >
                                                 {/* Image Section with Advanced Overlay */}
                                                 <div className="relative h-48 overflow-hidden">
@@ -1268,7 +1273,7 @@ const AdminDashboard = () => {
                                     <div className="flex justify-between items-center bg-[#0F172A]/40 backdrop-blur-3xl p-6 rounded-[2rem] border border-white/10 shadow-2xl">
                                         <div>
                                             <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] italic">Employees</h2>
-                                            <p className="text-[#AAB2C5]/50 text-xs font-bold uppercase tracking-widest mt-1">Manage Ethree Food Court operations</p>
+                                            <p className="text-[#AAB2C5]/50 text-xs font-bold uppercase tracking-widest mt-1">Manage EFOUR ELURU operations</p>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <button
@@ -1400,7 +1405,7 @@ const AdminDashboard = () => {
                                                                         ₹{item.totalPrice || item.totalAmount}
                                                                     </td>
                                                                     <td className="px-10 py-8">
-                                                                        <StatusBadge status={item.status || item.orderStatus || 'confirmed'} />
+                                                                        <StatusBadge status={item.status || item.orderStatus || 'pending'} />
                                                                     </td>
                                                                     <td className="px-10 py-8 text-right">
                                                                         <button

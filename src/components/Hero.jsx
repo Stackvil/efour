@@ -6,29 +6,23 @@ import { ArrowDown, Zap, Activity, Shield, Target, Plus, Star } from 'lucide-rea
 import * as THREE from 'three'
 
 // --- Layer 1 Components ---
-const BackgroundSystem = ({ mousePos }) => {
+const BackgroundSystem = React.memo(({ mouseX, mouseY }) => {
+    const lightX = useTransform(mouseX, x => x * 0.5);
+    const lightY = useTransform(mouseY, y => y * 0.5);
+
     return (
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            {/* Animated Deep Mesh Gradient */}
-            <motion.div
-                animate={{
-                    background: [
-                        'radial-gradient(circle at 20% 30%, rgba(108,92,231,0.15) 0%, transparent 50%)',
-                        'radial-gradient(circle at 80% 70%, rgba(108,92,231,0.15) 0%, transparent 50%)',
-                        'radial-gradient(circle at 20% 30%, rgba(108,92,231,0.15) 0%, transparent 50%)'
-                    ]
-                }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 opacity-40 blur-[100px]"
-            />
+            {/* Animated Deep Mesh Gradient - Simplified Animation for performance */}
+            <div className="absolute inset-0 opacity-40 blur-[60px] bg-gradient-to-br from-[#6C5CE7]/10 via-transparent to-[#FF7A00]/5" />
             
             {/* Dynamic Focal Point Light Source */}
             <motion.div 
                 style={{ 
-                    x: mousePos.x * 0.5, 
-                    y: mousePos.y * 0.5,
+                    x: lightX, 
+                    y: lightY,
+                    willChange: "transform"
                 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-gradient-to-r from-[#6C5CE7]/10 via-[#FF7A00]/5 to-transparent rounded-full blur-[180px] opacity-40"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-gradient-to-r from-[#6C5CE7]/10 via-[#FF7A00]/5 to-transparent rounded-full blur-[140px] opacity-40"
             />
 
             {/* Cinematic Vignette */}
@@ -37,9 +31,9 @@ const BackgroundSystem = ({ mousePos }) => {
             {/* Grain / Noise Texture */}
             <div className="absolute inset-0 noise-overlay opacity-[0.03] z-20" />
 
-            {/* Particle Field (Foreground of BG) */}
+            {/* Optimized Particle Field */}
             <div className="absolute inset-0 z-30">
-                {[...Array(30)].map((_, i) => (
+                {[...Array(20)].map((_, i) => (
                     <motion.div
                         key={i}
                         className="absolute w-[1px] h-[1px] bg-white rounded-full"
@@ -49,33 +43,38 @@ const BackgroundSystem = ({ mousePos }) => {
                             opacity: Math.random() * 0.4 
                         }}
                         animate={{ 
-                            y: ["0%", "-20%"],
+                            y: ["0%", "-15%"],
                             opacity: [0.1, 0.4, 0.1]
                         }}
                         transition={{ 
-                            duration: 10 + Math.random() * 20, 
+                            duration: 15 + Math.random() * 15, 
                             repeat: Infinity, 
                             ease: "linear" 
                         }}
                         style={{ 
-                            filter: `blur(${Math.random() * 2}px)`
+                            willChange: "transform, opacity"
                         }}
                     />
                 ))}
             </div>
         </div>
     )
-}
+});
 
 // --- Layer 2 Components ---
-const FloatingShapes = ({ mousePos }) => {
+const FloatingShapes = React.memo(({ mouseX, mouseY }) => {
+    const shape1X = useTransform(mouseX, x => x * 3);
+    const shape1Y = useTransform(mouseY, y => y * 3);
+    const shape2X = useTransform(mouseX, x => -x * 2);
+    const shape2Y = useTransform(mouseY, y => -y * 2);
+
     return (
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
             <motion.div
-                style={{ x: mousePos.x * 3, y: mousePos.y * 3 }}
+                style={{ x: shape1X, y: shape1Y, willChange: "transform" }}
                 animate={{ 
                     rotate: 360,
-                    y: [0, -50, 0]
+                    y: [0, -30, 0]
                 }}
                 transition={{ 
                     rotate: { duration: 60, repeat: Infinity, ease: "linear" },
@@ -84,10 +83,10 @@ const FloatingShapes = ({ mousePos }) => {
                 className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] border border-white/[0.03] rounded-full blur-sm opacity-20"
             />
             <motion.div
-                style={{ x: -mousePos.x * 2, y: -mousePos.y * 2 }}
+                style={{ x: shape2X, y: shape2Y, willChange: "transform" }}
                 animate={{ 
                     rotate: -360,
-                    y: [0, 60, 0]
+                    y: [0, 40, 0]
                 }}
                 transition={{ 
                     rotate: { duration: 80, repeat: Infinity, ease: "linear" },
@@ -95,15 +94,9 @@ const FloatingShapes = ({ mousePos }) => {
                 }}
                 className="absolute bottom-[20%] right-[10%] w-[25rem] h-[25rem] border border-[#6C5CE7]/[0.05] rounded-[4rem] blur-md opacity-20"
             />
-            <motion.div
-                style={{ x: mousePos.x, y: -mousePos.y }}
-                className="absolute top-[40%] right-[20%] text-[#FF7A00]/10 blur-[2px]"
-            >
-                <Plus size={120} strokeWidth={0.5} />
-            </motion.div>
         </div>
     )
-}
+});
 
 const Balloon = ({ position, color, popped }) => {
     const mesh = useRef()
@@ -532,13 +525,21 @@ const Sculpture = () => {
     )
 }
 
+import { useMotionValue, useSpring } from 'framer-motion';
+
 const Hero = () => {
     const containerRef = useRef(null)
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+    const mouseX = useMotionValue(0)
+    const mouseY = useMotionValue(0)
+    
+    // Smooth the mouse motion
+    const springConfig = { damping: 25, stiffness: 150 };
+    const smoothedMouseX = useSpring(mouseX, springConfig);
+    const smoothedMouseY = useSpring(mouseY, springConfig);
+
     const isInView = useInView(containerRef, { margin: "200px" })
     const { scrollY } = useScroll()
     
-    // Parallax transforms - Refined for subtle effect
     const y1 = useTransform(scrollY, [0, 800], [0, 300])
     const y2 = useTransform(scrollY, [0, 800], [0, -150])
     const opacity = useTransform(scrollY, [0, 600], [1, 0])
@@ -550,7 +551,8 @@ const Hero = () => {
         const { innerWidth, innerHeight } = window
         const x = (clientX / innerWidth - 0.5) * 15
         const y = (clientY / innerHeight - 0.5) * 15
-        setMousePos({ x, y })
+        mouseX.set(x)
+        mouseY.set(y)
     }
 
     return (
@@ -560,10 +562,10 @@ const Hero = () => {
             className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#02040a] pt-24 md:pt-[140px]"
         >
             {/* Layer 1: Advanced Background System */}
-            <BackgroundSystem mousePos={mousePos} />
+            <BackgroundSystem mouseX={smoothedMouseX} mouseY={smoothedMouseY} />
 
             {/* Layer 2: Floating Midground Elements */}
-            <FloatingShapes mousePos={mousePos} />
+            <FloatingShapes mouseX={smoothedMouseX} mouseY={smoothedMouseY} />
 
             {/* Layer 2.5: 3D Scene Assembly */}
             <motion.div 
@@ -572,14 +574,17 @@ const Hero = () => {
             >
                 {isInView && (
                     <Canvas
-                        dpr={[1, 2]}
+                        dpr={[1, 1.5]}
+                        performance={{ min: 0.5 }}
                         camera={{
                             position: [0, 0, typeof window !== 'undefined' && window.innerWidth < 768 ? 16 : 10],
                             fov: typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 35
                         }}
                         gl={{ 
                             powerPreference: "high-performance", 
-                            antialias: true,
+                            antialias: false,
+                            depth: true,
+                            stencil: false,
                             alpha: true
                         }}
                     >
@@ -588,11 +593,6 @@ const Hero = () => {
                         <pointLight position={[-15, -10, -10]} intensity={20} color="#FF7A00" />
                         
                         <group 
-                            rotation={[
-                                -mousePos.y * 0.003,
-                                mousePos.x * 0.003,
-                                0
-                            ]}
                             scale={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.75 : 1.35}
                         >
                             <Sculpture />
@@ -659,7 +659,7 @@ const Hero = () => {
                                 <div className="absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover/btn:left-[150%] transition-all duration-[1.5s] ease-in-out" />
                                 
                                 <span className="relative z-10 flex items-center gap-6 text-sm font-black uppercase tracking-[0.4em] text-white italic">
-                                    EXPLORE RIDES 
+                                    BOOK YOUR RIDE 
                                     <motion.div
                                         animate={{ y: [0, 5, 0] }}
                                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
